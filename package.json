@@ -1,0 +1,10 @@
+{
+  "name": "DanceRevolution",
+  "uuid": "3064b136-a135-4019-ad15-f50694863775",
+  "creator": {
+    "version": "3.8.4"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.8.3"
+  }
+}
