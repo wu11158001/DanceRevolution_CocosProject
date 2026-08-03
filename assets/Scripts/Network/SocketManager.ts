@@ -4,7 +4,9 @@ import type { Socket } from 'socket.io-client';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { SceneLoader } from 'db://assets/Scripts/Manager/SceneLoader';
+import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
+import { MessagePopupView } from '../View/Common/MessagePopupView';
 
 const { ccclass, property } = _decorator;
 
@@ -27,7 +29,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         // 初始化 Socket 連線
         this.socket = io(this.serverUrl, {
             transports: ['websocket'], // 指定使用原生的 WebSocket 協議傳輸，效能最好
-            reconnection: true,        // 允許自動重連
+            reconnection: false,        // 允許自動重連
         });
 
         // 監聽:"connect"[連線成功]
@@ -43,6 +45,8 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         // 監聽: "connect_error"[連線錯誤]
         this.socket.on('connect_error', (error: Error) => {
             console.error(`連線伺服器失敗:`, error.message);
+
+            this.onConnectError();
         });
 
         // 監聽: "init_player"[玩家初始化]
@@ -56,6 +60,22 @@ export class SocketManager extends SingletonComponent<SocketManager> {
             // 切換場景
             SceneLoader.getInstance().loadScene("LobbyScene");
         });
+    }
+
+    /**
+     * 連線伺服器失敗
+     */
+    private async onConnectError() {
+        const messagePopupView = await ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest")
+        if(messagePopupView) {
+            messagePopupView.setData(
+                "連線伺服器失敗!", 
+                () => this.connectToServer(),
+                null,
+                false,
+                "重新連接"
+            )
+        }
     }
 
     /**

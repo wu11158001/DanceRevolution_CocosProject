@@ -2,7 +2,7 @@ import { _decorator, Component, Node, director} from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
-import { LobbyView } from '../View/LobbyScene/LobbyView';
+import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
 
 const { ccclass, property } = _decorator;
 
@@ -32,18 +32,12 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
     private async onLoadComplete(sceneType: SceneType) {
         switch (sceneType) {
             case 'LobbyScene':
-                await ViewManager.getInstance().openView<LobbyView>('LobbyView');
+                await ViewManager.getInstance().openView<LobbyView>('LobbyView', "HUD");
                 break;
 
             case 'GameScene':
 
                 break;
-
-            default: {
-                const _exhaustiveCheck: never = sceneType;
-                console.error(`未處理的場景類型: ${_exhaustiveCheck}`);
-                break;
-            }
         }
     }
 }

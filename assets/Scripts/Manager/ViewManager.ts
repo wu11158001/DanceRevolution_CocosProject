@@ -4,45 +4,44 @@ import { BaseView } from 'db://assets/Scripts/View/BaseView';
 
 const { ccclass, property } = _decorator;
 
-export type ViewType = 'LobbyView';
+/**
+ * Cancas類型
+ */
+export type CanvasType = 
+'HUD' |
+'Highest';
+
+/**
+ * 介面類型
+ */
+export type ViewType = 
+'BackgroundMaskView' |
+'MessagePopupView' |
+'LobbyView';
 
 /**
  * 介面管理中心
  */
 @ccclass('ViewManager')
 export class ViewManager extends SingletonComponent<ViewManager> {
+    @property(Node)
+    private canvas_HUD: Node;
+    @property(Node)
+    private canvas_Highest: Node;
+
     // 預設預載 Prefab 的資料夾路徑
     private uiPrefabPath: string = 'View/';
 
-    // 保存當前已開啟的 UI 實例 (ViewName -> BaseView)
+    // 保存當前已開啟的介面實例 (ViewName -> BaseView)
     private openViews: Map<ViewType, BaseView> = new Map();
 
-    // 畫布根節點 (UI 會被放到這個 Node 下)
-    private uiCanvasNode: Node | null = null;
-
     /**
-     * 獲取畫布根節點 (如果找不到會自動搜尋當前 Scene 的 Canvas)
-     */
-    private getCanvasNode(): Node {
-        if (!this.uiCanvasNode || !this.uiCanvasNode.isValid) {
-            // 自動尋找場景中的 Canvas 節點
-            const canvas = find('Canvas');
-            if (canvas) {
-                this.uiCanvasNode = canvas;
-            } else {
-                console.error('[UIManager] 場景中找不到 Canvas 節點！');
-            }
-        }
-        return this.uiCanvasNode!;
-    }
-
-    /**
-     * 開啟 / 創建 UI 介面，並獲取其 Component (核心 API)
-     * @param viewName Prefab 名稱與 Component 名稱 (例如 "LobbyView")
-     * @param params 傳遞給 UI 的初始化資料 (選填)
+     * 開啟介面
+     * @param viewType
+     * @param params 傳遞給 UI 的初始化資料
      * @returns Promise<T> 回傳泛型組件
      */
-    public async openView<T extends BaseView>(viewType: ViewType, params?: any): Promise<T | null> {
+    public async openView<T extends BaseView>(viewType: ViewType, canvasType: CanvasType, params?: any): Promise<T | null> {
         // 檢查是否已經開啟過
         if (this.openViews.has(viewType)) {
             const existingView = this.openViews.get(viewType) as T;
@@ -57,14 +56,25 @@ export class ViewManager extends SingletonComponent<ViewManager> {
         return new Promise<T | null>((resolve) => {
             resources.load(prefabPath, Prefab, (err, prefab) => {
                 if (err) {
-                    console.error(`[UIManager] 載入 UI Prefab 失敗: ${prefabPath}`, err);
+                    console.error(`[ViewManager] 載入介面失敗: ${prefabPath}`, err);
                     resolve(null);
                     return;
                 }
 
+                let canvasNode: Node | null = null
+                switch(canvasType) {
+                    case 'HUD':
+                        canvasNode = this.canvas_HUD;
+                        break;
+                    case 'Highest':
+                        canvasNode = this.canvas_Highest;
+                        break;
+
+                }
+
                 // 實例化 Prefab 並掛載到 Canvas
                 const uiNode = instantiate(prefab);
-                const parentNode = this.getCanvasNode();
+                const parentNode = canvasNode;
                 uiNode.parent = parentNode;
 
                 // 獲取 View 組件
@@ -77,8 +87,10 @@ export class ViewManager extends SingletonComponent<ViewManager> {
                 }
 
                 // 初始化 View
-                this.openViews.set(viewType, viewComponent);
+                viewComponent.viewType = viewType;
                 viewComponent.onOpen(params);
+
+                this.openViews.set(viewType, viewComponent);
 
                 resolve(viewComponent);
             });

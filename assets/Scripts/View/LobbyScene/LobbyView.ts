@@ -13,16 +13,21 @@ export class LobbyView extends BaseView {
     @property(Button)
     private btn_updateNickname: Button = null;
 
-    public onClose() {
+    onDestroy() {
         this.btn_updateNickname.node.off(Button.EventType.CLICK, this.onUpdateNicknameClick, this);
 
         PlayerData.off('nickname', this.showNickname);
     }
 
-    public onOpen(params?: any) {
+    start() {
         this.btn_updateNickname.node.on(Button.EventType.CLICK, this.onUpdateNicknameClick, this);
 
         PlayerData.on('nickname', this.showNickname, this);
+    }
+
+    public async onOpen(params?: any) {
+        super.onOpen(params);
+
         this.showNickname();
     }
 
