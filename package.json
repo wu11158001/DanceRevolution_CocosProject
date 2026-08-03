@@ -5,6 +5,7 @@
     "version": "3.8.4"
   },
   "dependencies": {
+    "rxjs": "^6.6.7",
     "socket.io-client": "^4.8.3"
   }
 }

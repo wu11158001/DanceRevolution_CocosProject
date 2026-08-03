@@ -1,36 +1,24 @@
 import { _decorator, Component, Node, director} from 'cc';
 import io from 'socket.io-client/dist/socket.io.js';
 import type { Socket } from 'socket.io-client';
+import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 
 const { ccclass, property } = _decorator;
 
+/**
+ * Socket管理中心
+ */
 @ccclass('SocketManager')
-export class SocketManager extends Component {
-    // 定義 Server 連線網址 (本地測試使用 3000 port)
+export class SocketManager extends SingletonComponent<SocketManager> {
     private serverUrl: string = 'http://localhost:3000';
     
-    // 保存 Socket 實例與玩家 ID
     public socket: Socket | null = null;
     public playerId: string = '';
-
-    public static instance: SocketManager | null = null;
-
-    onLoad() {
-        if (SocketManager.instance === null) {
-            SocketManager.instance = this;
-            director.addPersistRootNode(this.node);
-        } else {
-            this.destroy();
-            return;
-        }
-
-        this.connectToServer();
-    }
 
     /**
      * 建立 Socket.IO 連線
      */
-    private connectToServer() {
+    public connectToServer() {
         console.log(`正在嘗試連線至 Server: ${this.serverUrl}`);
 
         // 初始化 Socket 連線
@@ -61,12 +49,6 @@ export class SocketManager extends Component {
             console.log(`拿到當前遊戲 session 的 PlayerID: ${this.playerId}`);
             console.log(`伺服器訊息: ${data.message}`);
         });
-    }
-
-    onDestroy() {
-        if (this.socket) {
-            this.socket.disconnect();
-        }
     }
 }
 
