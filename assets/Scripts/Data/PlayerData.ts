@@ -3,6 +3,7 @@ export type PlayerDataMap = {
     nickname: string;
     roomId: string;
     isHost: boolean;
+    isReady: boolean;
 };
 
 export type PlayerDataKey = keyof PlayerDataMap;
@@ -16,6 +17,7 @@ export class PlayerData {
         nickname: '',
         roomId: '',
         isHost: false,
+        isReady: false
     };
 
     // 使用交叉型別/函數型別讓 listeners 支援更精確的定義
@@ -32,6 +34,9 @@ export class PlayerData {
 
     public static get isHost(): boolean { return this._data.isHost; }
     public static set isHost(val: boolean) { this.setValue('isHost', val); }
+
+    public static get isReady(): boolean { return this._data.isReady; }
+    public static set isReady(val: boolean) { this.setValue('isReady', val); }
 
     private static setValue<K extends PlayerDataKey>(key: K, val: PlayerDataMap[K]) {
         if (this._data[key] === val) return;
@@ -94,5 +99,6 @@ export class PlayerData {
         this.nickname = '';
         this.roomId = '';
         this.isHost = false;
+        this.isReady = false;
     }
 }

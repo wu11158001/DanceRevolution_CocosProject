@@ -18,7 +18,9 @@ export type ViewType =
 'BackgroundMaskView' |
 'MessagePopupView' |
 'LobbyView' |
-'UpdateNicknameView';
+'UpdateNicknameView' |
+'RoomView' |
+'UpdateRoomNameView';
 
 /**
  * 介面管理中心

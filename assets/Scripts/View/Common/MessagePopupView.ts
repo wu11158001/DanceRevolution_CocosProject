@@ -4,6 +4,9 @@ import { BaseView } from 'db://assets/Scripts/View/BaseView';
 
 const { ccclass, property } = _decorator;
 
+/**
+ * 訊息彈窗介面
+ */
 @ccclass('MessagePopupView')
 export class MessagePopupView extends BaseView {
     
