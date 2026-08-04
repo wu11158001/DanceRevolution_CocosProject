@@ -17,7 +17,8 @@ export type CanvasType =
 export type ViewType = 
 'BackgroundMaskView' |
 'MessagePopupView' |
-'LobbyView';
+'LobbyView' |
+'UpdateNicknameView';
 
 /**
  * 介面管理中心

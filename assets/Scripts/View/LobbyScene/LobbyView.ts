@@ -1,8 +1,9 @@
 import { _decorator, Component, Node, Label, Button } from 'cc';
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
-import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
+import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
+import { UpdateNicknameView } from './UpdateNicknameView';
 
 const { ccclass, property } = _decorator;
 
@@ -13,9 +14,7 @@ export class LobbyView extends BaseView {
     @property(Button)
     private btn_updateNickname: Button = null;
 
-    onDestroy() {
-        this.btn_updateNickname.node.off(Button.EventType.CLICK, this.onUpdateNicknameClick, this);
-
+    onDestroy() {        
         PlayerData.off('nickname', this.showNickname);
     }
 
@@ -41,7 +40,7 @@ export class LobbyView extends BaseView {
     /**
      * 修改暱稱按鈕點擊
      */
-    private onUpdateNicknameClick() {
-        SocketManager.getInstance().sendUpdateNickname("新玩家");
+    private async onUpdateNicknameClick() {
+        await ViewManager.getInstance().openView<UpdateNicknameView>('UpdateNicknameView', 'HUD');
     }
 }

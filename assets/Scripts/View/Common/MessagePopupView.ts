@@ -23,15 +23,6 @@ export class MessagePopupView extends BaseView {
     private confirmCallback: (() => void) | null = null;
     private cancalCallback: (() => void) | null = null;
 
-    onDestroy() {
-        if (this.btn_cancel && this.btn_cancel.node) {
-            this.btn_cancel.node.off(Button.EventType.CLICK, this.onCancelClick, this);
-        }
-        if (this.btn_confirm && this.btn_confirm.node) {
-            this.btn_confirm.node.off(Button.EventType.CLICK, this.onConfirmClick, this);
-        }
-    }
-
     start() {
         this.btn_cancel.node.on(Button.EventType.CLICK, this.onCancelClick, this);
         this.btn_confirm.node.on(Button.EventType.CLICK, this.onConfirmClick, this);
