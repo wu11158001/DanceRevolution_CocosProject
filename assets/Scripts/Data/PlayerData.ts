@@ -1,9 +1,12 @@
+import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
+
 export type PlayerDataMap = {
     playerId: string;
     nickname: string;
     roomId: string;
     isHost: boolean;
     isReady: boolean;
+    characterId: number;
 };
 
 export type PlayerDataKey = keyof PlayerDataMap;
@@ -17,7 +20,8 @@ export class PlayerData {
         nickname: '',
         roomId: '',
         isHost: false,
-        isReady: false
+        isReady: false,
+        characterId: 0
     };
 
     // 使用交叉型別/函數型別讓 listeners 支援更精確的定義
@@ -37,6 +41,12 @@ export class PlayerData {
 
     public static get isReady(): boolean { return this._data.isReady; }
     public static set isReady(val: boolean) { this.setValue('isReady', val); }
+
+    public static get characterId(): number { return this._data.characterId; }
+    public static set characterId(val: number) { 
+        this.setValue('characterId', val);
+        SocketManager.getInstance().sendChangeCharacter(val);
+    }
 
     private static setValue<K extends PlayerDataKey>(key: K, val: PlayerDataMap[K]) {
         if (this._data[key] === val) return;
@@ -100,5 +110,6 @@ export class PlayerData {
         this.roomId = '';
         this.isHost = false;
         this.isReady = false;
+        this.characterId = 0;
     }
 }

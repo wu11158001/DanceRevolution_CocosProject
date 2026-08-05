@@ -8,5 +8,19 @@
       "fitWidth": true
     },
     "highQuality": true
-  }
+  },
+  "layer": [
+    {
+      "name": "HUD",
+      "value": 1
+    },
+    {
+      "name": "Popup",
+      "value": 2
+    },
+    {
+      "name": "Heghest",
+      "value": 4
+    }
+  ]
 }

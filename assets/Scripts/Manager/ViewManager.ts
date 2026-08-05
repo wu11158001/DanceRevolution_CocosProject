@@ -1,4 +1,4 @@
-import { _decorator, Node, instantiate, resources, Prefab, find, Canvas } from 'cc';
+import { _decorator, Node, instantiate, resources, Prefab, find, Canvas, Layers } from 'cc';
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 
@@ -9,6 +9,7 @@ const { ccclass, property } = _decorator;
  */
 export type CanvasType = 
 'HUD' |
+'Popup' |
 'Highest';
 
 /**
@@ -29,6 +30,8 @@ export type ViewType =
 export class ViewManager extends SingletonComponent<ViewManager> {
     @property(Node)
     private canvas_HUD: Node;
+    @property(Node)
+    private canvas_Popup: Node;
     @property(Node)
     private canvas_Highest: Node;
 
@@ -65,12 +68,21 @@ export class ViewManager extends SingletonComponent<ViewManager> {
                 }
 
                 let canvasNode: Node | null = null
+                let targetLayer = Layers.Enum.UI_2D;
                 switch(canvasType) {
                     case 'HUD':
                         canvasNode = this.canvas_HUD;
+                        targetLayer = Layers.BitMask['HUD'] ?? Layers.Enum.UI_2D;;
                         break;
+
+                    case 'Popup':
+                        canvasNode = this.canvas_Popup;
+                        targetLayer = Layers.BitMask['Popup'] ?? Layers.Enum.UI_2D;;
+                        break;
+
                     case 'Highest':
                         canvasNode = this.canvas_Highest;
+                        targetLayer = Layers.BitMask['Highest'] ?? Layers.Enum.UI_2D;;
                         break;
 
                 }
@@ -79,6 +91,11 @@ export class ViewManager extends SingletonComponent<ViewManager> {
                 const uiNode = instantiate(prefab);
                 const parentNode = canvasNode;
                 uiNode.parent = parentNode;
+
+                // 設置Layer
+                uiNode.walk((node) => {
+                    node.layer = targetLayer;
+                });
 
                 // 獲取 View 組件
                 const viewComponent = uiNode.getComponent(viewType) as T;
@@ -119,7 +136,6 @@ export class ViewManager extends SingletonComponent<ViewManager> {
             view.onClose();
             view.node.destroy();
             this.openViews.delete(viewType);
-            console.log(`[UIManager] 已關閉 UI: ${viewType}`);
         }
     }
 

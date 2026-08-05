@@ -4,7 +4,8 @@ import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 export interface IRoomPlayer {
     playerId: string;
     nickname: string;
-    slotId: number;      // 0~3 號位
+    slotId: number;         // 0~3 號位
+    characterId: number;    // 角色編號
     isHost: boolean;
     isReady: boolean;
 }

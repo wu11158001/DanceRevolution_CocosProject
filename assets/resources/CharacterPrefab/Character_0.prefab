@@ -8115,7 +8115,7 @@
     "nestedPrefabInstanceRoots": null
   },
   {
-    "__type__": "cc.SkeletalAnimation",
+    "__type__": "cc.animation.AnimationController",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -8126,16 +8126,19 @@
     "__prefab": {
       "__id__": 272
     },
-    "playOnLoad": false,
-    "_clips": [],
-    "_defaultClip": null,
-    "_useBakedAnimation": true,
-    "_sockets": [],
+    "_graph": {
+      "__uuid__": "d73a65fb-cdb7-445a-a1c9-8025227b06e4",
+      "__expectedType__": "cc.animation.AnimationGraph"
+    },
+    "graph": {
+      "__uuid__": "d73a65fb-cdb7-445a-a1c9-8025227b06e4",
+      "__expectedType__": "cc.animation.AnimationGraph"
+    },
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "3eJbiO+KBYQp9suZsZCGFU"
+    "fileId": "f9XBE4RF1FmIVsLccj1hOY"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -8146,6 +8149,7 @@
       "__id__": 0
     },
     "fileId": "64vTF3XW5cjYS++5I4OQJL",
+    "instance": null,
     "targetOverrides": null
   }
 ]

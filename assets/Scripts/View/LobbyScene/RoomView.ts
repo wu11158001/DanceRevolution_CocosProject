@@ -1,8 +1,9 @@
-import { _decorator, Button, Component, Label, Node } from 'cc';
+import { _decorator, director, Button, Component, Label, Node, Vec3 } from 'cc';
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
+import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
 import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
@@ -26,11 +27,21 @@ export class RoomView extends BaseView {
     @property(Label)
     private label_readyOrStart: Label = null;
 
+    // 角色位置
+    private readonly characterSeatPos: Vec3[] = [
+        new Vec3(-0.5, 0.2, 0), 
+        new Vec3(0.5, 0.2, 0), 
+        new Vec3(-1.5, 0.2, 0), 
+        new Vec3(1.5, 0.2, 0), 
+    ];
+
+    private characters: Node[] = [];
+
     start() {
         // 更新房間名稱按鈕
         this.btn_updateRoomName.node.on(Button.EventType.CLICK, 
             () =>{
-                ViewManager.getInstance().openView<UpdateRoomNameView>('UpdateRoomNameView', 'HUD');
+                ViewManager.getInstance().openView<UpdateRoomNameView>('UpdateRoomNameView', 'Popup');
             }, this);
 
         // 離開按鈕
@@ -55,11 +66,13 @@ export class RoomView extends BaseView {
 
     public onClose(): void {
         RoomData.onRoomUpdated = null;
+        this.clearCharacter();
     }
 
     public async onOpen(params?: any) {
         super.onOpen(params);
 
+        // 監聽:房間資料變更
         RoomData.onRoomUpdated = (data: IRoomUpdatedData) => {
             this.refreshRoom(data);
         }
@@ -76,6 +89,16 @@ export class RoomView extends BaseView {
     }
 
     /**
+     * 清除角色
+     */
+    private clearCharacter() {
+        this.characters.forEach((characterNode) => {
+            characterNode.destroy();
+        });
+        this.characters = [];
+    }
+
+    /**
      * 刷新房間
      * @param data 
      */
@@ -84,11 +107,27 @@ export class RoomView extends BaseView {
 
         let isCanStart = true;
 
+        // 清除角色
+        this.clearCharacter();
+
         // 所有玩家狀態
+        let index = 0;
         data.players.forEach(player => {
             console.log(`Slot ${player.slotId}: ${player.nickname} | 房主:${player.isHost} | 準備:${player.isReady}`);
            
             if(!player.isReady) isCanStart = false;
+
+            const character = CharacterDataManager.getInstance().create(player.characterId);
+            if (character) {
+                this.characters[index] = character;
+                const currentScene = director.getScene();
+                if (currentScene) {
+                    currentScene.addChild(this.characters[index]);
+                    this.characters[index].setPosition(this.characterSeatPos[index]);
+                }
+            }
+
+            index++;
         });
 
         // 按鈕設置

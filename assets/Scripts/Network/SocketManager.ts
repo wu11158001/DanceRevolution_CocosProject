@@ -124,36 +124,39 @@ export class SocketManager extends SingletonComponent<SocketManager> {
 
     /**
      * 發送:創建房間
-     * @param roomName 
-     * @param callback 
      */
-    public sendCeateRoom(roomName: string, callback?: (res: any) => void) {
-        this.socket?.emit('create_room', { roomName }, callback);
+    public sendCeateRoom(data: { roomName: string; characterId: number }, callback?: (res: any) => void) {
+        this.socket?.emit('create_room', data, callback);
     }
 
     /**
      * 發送:加入指定房間
-     * @param roomId 
-     * @param callback 
      */
-    public sendJoinRoom(roomId: string, callback?: (res: any) => void) {
-        this.socket?.emit('join_room', { roomId }, callback);
+    public sendJoinRoom(data: { roomId: string; characterId: number }, callback?: (res: any) => void) {
+        this.socket?.emit('join_room', data, callback);
     }
 
     /**
      * 發送:快速加入房間
-     * @param callback 
      */
-    public sendQuickJoin(callback?: (res: any) => void) {
-        this.socket?.emit('quick_join', {}, callback);
+    public sendQuickJoin(data: { characterId: number }, callback?: (res: any) => void) {
+        this.socket?.emit('quick_join', data, callback);
     }
-
     /**
      * 發送:切換準備狀態
      * @param callback 
      */
     public sendToggleReady(callback?: (res: any) => void) {
         this.socket?.emit('toggle_ready', callback);
+    }
+
+    /**
+     * 發送：切換角色模型
+     * @param characterId 角色模型編號 (int)
+     * @param callback 伺服器回應
+     */
+    public sendChangeCharacter(characterId: number, callback?: (res: { success: boolean; characterId?: number }) => void) {
+        this.socket?.emit('change_character', { characterId }, callback);
     }
 
     /**
@@ -164,6 +167,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     public sendUpdateRoomName(newRoomName: string, callback?: (res: { success: boolean; roomName?: string; message?: string }) => void) {
         this.socket?.emit('update_room_name', { newRoomName }, callback);
     }
+
     /**
      * 發送:踢出玩家(僅限房主)
      * @param targetPlayerId 

@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Vec3, tween, Tween, UIOpacity, instantiate, Prefab, resources, Enum } from 'cc';
 
 import { ViewManager, ViewType } from 'db://assets/Scripts/Manager/ViewManager';
+import { GameTool } from 'db://assets/Scripts/Tools/GameTool';
 import { BackgroundMaskView } from 'db://assets/Scripts/View/Common/BackgroundMaskView';
 
 const { ccclass, property } = _decorator;
@@ -109,7 +110,7 @@ export class BaseView extends Component {
         if (this.uiOpacity) this.uiOpacity.opacity = 0;
 
         try {
-            const prefab = await this.loadPrefab('View/BackgroundMaskView');
+            const prefab = await GameTool.getInstance().loadPrefab('View/BackgroundMaskView');
             if (!prefab) {
                 console.error('背景遮罩產生錯誤!');
                 return;
@@ -120,6 +121,11 @@ export class BaseView extends Component {
             
             maskNode.setSiblingIndex(0);
 
+            // 設置Layer
+            maskNode.walk((node) => {
+                node.layer = this.node.layer;
+            });
+
             const maskView = maskNode.getComponent(BackgroundMaskView);
             maskView?.setClickAction(this.isCanClickMask, () => this.onClickMask());
 
@@ -129,24 +135,6 @@ export class BaseView extends Component {
             if (this.uiOpacity) this.uiOpacity.opacity = 255;
         }
     }
-
-    /**
-     * 動態載入 Prefab
-     * @param path 
-     * @returns 
-     */
-    private loadPrefab(path: string): Promise<Prefab | null> {
-    return new Promise((resolve) => {
-        resources.load(path, Prefab, (err, prefab) => {
-            if (err) {
-                console.error(`[loadPrefab 失敗] 路徑: ${path}`, err);
-                resolve(null);
-            } else {
-                resolve(prefab);
-            }
-        });
-    });
-}
 
     /**
      * 點擊遮罩按鈕
