@@ -4,8 +4,8 @@
     "designResolution": {
       "width": 1920,
       "height": 911,
-      "fitHeight": true,
-      "fitWidth": true
+      "fitHeight": false,
+      "fitWidth": false
     },
     "highQuality": true
   },
@@ -22,5 +22,6 @@
       "name": "Heghest",
       "value": 4
     }
-  ]
+  ],
+  "custom_joint_texture_layouts": []
 }
