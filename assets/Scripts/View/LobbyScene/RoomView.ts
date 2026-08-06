@@ -9,6 +9,7 @@ import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
 import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
 import { UpdateRoomNameView } from 'db://assets/Scripts/View/LobbyScene/UpdateRoomNameView';
+import { SelectSongView } from './SelectSongView/SelectSongView';
 
 const { ccclass, property } = _decorator;
 
@@ -78,6 +79,12 @@ export class RoomView extends BaseView {
         this.btn_updateRoomName.node.on(Button.EventType.CLICK, 
             () =>{
                 ViewManager.getInstance().openView<UpdateRoomNameView>('UpdateRoomNameView', 'Popup');
+            }, this);
+
+        // 選擇歌曲按鈕
+        this.btn_selectSong.node.on(Button.EventType.CLICK,
+            () => {
+                ViewManager.getInstance().openView<SelectSongView>('SelectSongView', 'Popup');
             }, this);
 
         // 離開按鈕

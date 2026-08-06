@@ -15,7 +15,7 @@ export interface ISongData {
     id: string;
     name: string,
     bpm: number,
-    duration: never;
+    duration: number;
     offset: number;
 }
 
@@ -53,11 +53,15 @@ export class RoomData {
 
     /**
      * 更新歌單
-     * @param data 
+     * @param res 後端傳回來的 Response 物件
      */
-    public static updateSongs(data: ISongData[]) {
-        console.log(`更新歌單: ${JSON.stringify(data, null, 2)}`);
-        this.songs = data;
+    public static updateSongs(res: { success: boolean; songs: Record<string, ISongData> }) {
+        console.log(`更新歌單原始資料:`, res);
+        if (res && res.songs) {
+            this.songs = Object.keys(res.songs).map(key => res.songs[key]);
+        } else {
+            this.songs = [];
+        }
     }
 
     /**

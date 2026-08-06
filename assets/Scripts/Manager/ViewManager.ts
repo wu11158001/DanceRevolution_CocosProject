@@ -21,7 +21,8 @@ export type ViewType =
 'LobbyView' |
 'UpdateNicknameView' |
 'RoomView' |
-'UpdateRoomNameView';
+'UpdateRoomNameView' |
+'SelectSongView';
 
 /**
  * 介面管理中心
