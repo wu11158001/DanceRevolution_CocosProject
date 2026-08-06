@@ -5,6 +5,7 @@ import type { Socket } from 'socket.io-client';
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { SceneLoader } from 'db://assets/Scripts/Manager/SceneLoader';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
+import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
@@ -20,6 +21,16 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     
     public socket: Socket | null = null;
     public playerId: string = '';
+
+    /**
+     * 初始化完成
+     */
+    private async onInitComplete() {
+        // 載入角色資料
+        await CharacterDataManager.getInstance().preloadAllCharacters();
+        // 切換場景
+        SceneLoader.getInstance().loadScene("LobbyScene");
+    }
 
     /**
      * 建立 Socket.IO 連線
@@ -57,9 +68,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
             PlayerData.nickname = data.nickname;
 
             console.log(`[玩家初始化完成] 收到 Server 原始 JSON 資料:\n${JSON.stringify(data, null, 2)}`);
-
-            // 切換場景
-            SceneLoader.getInstance().loadScene("LobbyScene");
+            this.onInitComplete();
         });
 
         // 監聽:"room_updated" [房間資訊更新]
@@ -148,6 +157,22 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      */
     public sendToggleReady(callback?: (res: any) => void) {
         this.socket?.emit('toggle_ready', callback);
+    }
+
+    /**
+     * 發送:獲取歌單
+     * @param callback 
+     */
+    public sendGetSongs(callback?: (res: any) => void) {
+        this.socket.emit('get_songs', callback);
+    }
+
+    /**
+     * 發送:切換歌曲
+     * @param callback 
+     */
+    public sendSelectSong(songId: string,  callback?: (res: any) => void) {
+        this.socket.emit('select_song', { songId: songId }, callback);
     }
 
     /**

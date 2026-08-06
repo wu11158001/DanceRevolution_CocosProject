@@ -118,7 +118,7 @@
     "__prefab": null,
     "_projection": 1,
     "_priority": 300,
-    "_fov": 15,
+    "_fov": 18,
     "_fovAxis": 0,
     "_orthoHeight": 2.5,
     "_near": 1,

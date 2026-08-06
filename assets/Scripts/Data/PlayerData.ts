@@ -1,4 +1,5 @@
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
+import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 
 export type PlayerDataMap = {
     playerId: string;
@@ -104,6 +105,24 @@ export class PlayerData {
         }
     }
 
+    /**
+     * 切換角色
+     * @param switchIndex
+     */
+    public static switchCharacterId(switchIndex: number) {
+        let currentIndex = this.characterId;
+        currentIndex += switchIndex;
+
+        let maxIndex = CharacterDataManager.getInstance().characterCount - 1;
+        if(currentIndex < 0) currentIndex = maxIndex;
+        if(currentIndex > maxIndex ) currentIndex = 0;
+
+        this.characterId = currentIndex;
+    }
+
+    /**
+     * 重製資料
+     */
     public static reset() {
         this.playerId = '';
         this.nickname = '';

@@ -85,10 +85,10 @@ export class LobbyView extends BaseView {
         }, this);
 
         // 更換角色按鈕(左)
-        this.btn_switchCharacterLeft.node.on(Button.EventType.CLICK, () => { this.switchCharacter(-1) }, this);
+        this.btn_switchCharacterLeft.node.on(Button.EventType.CLICK, () => { PlayerData.switchCharacterId(-1) }, this);
 
         // 更換角色按鈕(右)
-        this.btn_switchCharacterRight.node.on(Button.EventType.CLICK, () => { this.switchCharacter(1) }, this);
+        this.btn_switchCharacterRight.node.on(Button.EventType.CLICK, () => { PlayerData.switchCharacterId(1) }, this);
     }
 
     public async onOpen(params?: any) {
@@ -101,7 +101,6 @@ export class LobbyView extends BaseView {
 
         this.showNickname();
 
-        await CharacterDataManager.getInstance().preloadAllCharacters();
         this.onCharacterChange();
     }
 
@@ -110,21 +109,6 @@ export class LobbyView extends BaseView {
      */
     private showNickname() {
         this.label_nickname.string = `暱稱: ${PlayerData.nickname}`;
-    }
-
-    /**
-     * 切換角色
-     * @param switchIndex 
-     */
-    private switchCharacter(switchIndex: number) {
-        let currentIndex = PlayerData.characterId;
-        currentIndex += switchIndex;
-
-        let maxIndex = CharacterDataManager.getInstance().characterCount - 1;
-        if(currentIndex < 0) currentIndex = maxIndex;
-        if(currentIndex > maxIndex ) currentIndex = 0;
-
-        PlayerData.characterId = currentIndex;
     }
 
     /**
