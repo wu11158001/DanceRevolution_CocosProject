@@ -5,6 +5,27 @@ import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComp
 const { ccclass, property } = _decorator;
 
 /**
+ * 音樂類型
+ */
+export enum BGM_TYPE {
+    LobbyBGM,
+
+    Song_0,
+    Song_1
+}
+Enum(BGM_TYPE);
+
+@ccclass('BGMMataMap')
+export class BGMDataMap {
+    @property({ type: Enum(BGM_TYPE), tooltip: '音樂類型' })
+    bgmType: BGM_TYPE = BGM_TYPE.LobbyBGM;
+
+    @property({ type: AudioClip, tooltip: '音樂檔案' })
+    clip: AudioClip = null!;
+}
+
+
+/**
  * 音效類型
  */
 export enum SFX_TYPE {
@@ -13,12 +34,15 @@ export enum SFX_TYPE {
 }
 Enum(SFX_TYPE);
 
+/**
+ * 音效資料
+ */
 @ccclass('SFXDataMap')
 export class SFXDataMap {
     @property({ type: Enum(SFX_TYPE), tooltip: '音效類型' })
     sfxType: SFX_TYPE = SFX_TYPE.ButtonClick;
 
-    @property({ type: AudioClip, tooltip: '對應的音效檔案' })
+    @property({ type: AudioClip, tooltip: '音效檔案' })
     clip: AudioClip = null!;
 }
 
@@ -32,11 +56,14 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     @property(Node)
     private sfx_pool: Node = null;
 
+    @property({ type: [BGMDataMap], tooltip: '音樂對照表'})
+    private bgmList: BGMDataMap[] = [];
     @property({ type: [SFXDataMap], tooltip: '音效對照表' })
     private sfxList: SFXDataMap[] = [];
 
     // BGM
     private activeBgmTween: Tween<AudioSource> | null = null;
+    private bgmMap: Map<BGM_TYPE, AudioClip> = new Map();
 
     // SFX 物件池
     private initialSfxPoolSize: number = 5;
@@ -62,6 +89,12 @@ export class AudioManager extends SingletonComponent<AudioManager> {
                 this.sfxMap.set(data.sfxType, data.clip);
             }
         }
+
+        for (const data of this.bgmList) {
+            if (data.clip) {
+                this.bgmMap.set(data.bgmType, data.clip);
+            }
+        }
     }
 
     /**
@@ -72,12 +105,22 @@ export class AudioManager extends SingletonComponent<AudioManager> {
      * @param fadeTime 
      * @returns 
      */
-    public playBGM(clip: AudioClip, volume: number = 1.0, isLoop: boolean, fadeTime: number = 0.5) {
-        if (!clip) return;
-        if (this.bgmSource.clip === clip && this.bgmSource.playing) return;
-        if (this.activeBgmTween) this.activeBgmTween.stop();
+    public playBGM(
+        type: BGM_TYPE, 
+        volume: number = 1.0, 
+        isLoop: boolean = true, 
+        currentTime: number = 0, 
+        fadeTime: number = 0.5
+    ) {
+        const clip = this.bgmMap.get(type);
+        if (!clip) {
+            console.error(`[AudioManager] 找不到音樂類型: ${BGM_TYPE[type]}`);
+            return
+        }
 
         // 淡出舊的，淡入新的
+        if (this.activeBgmTween) this.activeBgmTween.stop();
+
         tween(this.bgmSource)
             .to(fadeTime, { volume: 0 })
             .call(() => this.bgmSource.stop())
@@ -87,6 +130,7 @@ export class AudioManager extends SingletonComponent<AudioManager> {
             .to(fadeTime, { volume: volume })
             .call(() => {
                 this.bgmSource.clip = clip;
+                this.bgmSource.currentTime = currentTime;
                 this.bgmSource.loop = isLoop;
                 this.bgmSource.play();
             })

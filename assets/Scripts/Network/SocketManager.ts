@@ -22,6 +22,9 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     public socket: Socket | null = null;
     public playerId: string = '';
 
+    // 伺服器時間 - 本地時間
+    public serverTimeOffset: number = 0;
+
     /**
      * 初始化完成
      */
@@ -29,7 +32,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         // 載入角色資料
         await CharacterDataManager.getInstance().preloadAllCharacters();
         // 切換場景
-        SceneLoader.getInstance().loadScene("LobbyScene");
+        SceneLoader.getInstance().loadScene('LobbyScene');
     }
 
     /**
@@ -74,15 +77,12 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         // 監聽:"room_updated" [房間資訊更新]
         this.socket.on('room_updated', (data: IRoomUpdatedData) => {
             console.log(`[Socket 事件] 收到房間更新廣播:`, data);
-
-            // 更新全域房間資料並觸發事件
+            // 更新全域房間資料
             RoomData.update(data);
         });
 
         // 監聽:"kicked_from_room" [被踢出房間]
-        this.socket.on('kicked_from_room', (data: { message: string }) => {
-            console.warn(`[Socket 事件] ${data.message}`);
-            
+        this.socket.on('kicked_from_room', (data: { message: string }) => { 
             // 清除房間資料
             RoomData.reset();
 
@@ -95,6 +95,13 @@ export class SocketManager extends SingletonComponent<SocketManager> {
                     false
                 );
             });
+        });
+
+        // 監聽:"prepare_game" [準備正式開始遊戲]
+        this.socket.on('prepare_game', (data: any) => {
+            console.log("收到準備正式開始遊戲");
+            RoomData.updateSongs(data);
+            SceneLoader.getInstance().loadScene('GameScene');
         });
     }
 
@@ -111,6 +118,47 @@ export class SocketManager extends SingletonComponent<SocketManager> {
                 "重新連接"
             );
         });
+    }
+
+    /**
+     * 連續對時採樣，選擇 RTT 最小的一組計算 Offset
+     * @param sampleCount 採樣次數（預設 5 次）
+     */
+    public async syncServerTime(sampleCount: number = 5): Promise<void> {
+        if (!this.socket) return;
+
+        const samples: { rtt: number; offset: number }[] = [];
+
+        for (let i = 0; i < sampleCount; i++) {
+            await new Promise<void>((resolve) => {
+                const start = Date.now();
+                this.socket!.emit('sync_time', start, (res: { clientTime: number; serverTime: number }) => {
+                    const now = Date.now();
+                    const rtt = now - res.clientTime;
+                    const estimatedServerTime = res.serverTime + (rtt / 2);
+                    const offset = estimatedServerTime - now;
+
+                    samples.push({ rtt, offset });
+                    
+                    // 每採樣一次微小間隔 50ms，避免併發封包干擾
+                    setTimeout(resolve, 50);
+                });
+            });
+        }
+
+        // 剔除極端值，選擇 RTT 最低（網路最乾淨）的那次對時結果
+        samples.sort((a, b) => a.rtt - b.rtt);
+        const bestSample = samples[0];
+
+        this.serverTimeOffset = bestSample.offset;
+        console.log(`[精確對時完成] 最佳 RTT: ${bestSample.rtt}ms, 最終時間偏差: ${this.serverTimeOffset}ms`);
+    }
+
+    /**
+     * 獲取當前校正後的伺服器時間
+     */
+    public getCorrectedServerTime(): number {
+        return Date.now() + this.serverTimeOffset;
     }
 
     /**
@@ -172,6 +220,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      * @param callback 
      */
     public sendSelectSong(songId: string,  callback?: (res: any) => void) {
+        console.log(`切換歌曲: ${songId}`);
         this.socket.emit('select_song', { songId: songId }, callback);
     }
 
@@ -209,6 +258,15 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     public sendStartGame(callback?: (res: any) => void) {
         this.socket?.emit('start_game', callback);
     }
+
+    /**
+     * 發送:本地玩家正式遊戲準備完成
+     * @param callback 
+     */
+    public sendPrepareGame(callback?: (res: any) => void) {
+        this.socket?.emit('player_loaded', callback);
+    }
+
 
     /**
      * 發送:主動離開房間

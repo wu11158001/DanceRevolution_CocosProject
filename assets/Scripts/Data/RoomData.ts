@@ -1,4 +1,5 @@
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
+import { BGM_TYPE } from '../Manager/AudioManager';
 
 // 房間內單一玩家的資料結構
 export interface IRoomPlayer {
@@ -12,7 +13,7 @@ export interface IRoomPlayer {
 
 // 歌曲資料結構
 export interface ISongData {
-    id: string;
+    id: keyof typeof BGM_TYPE;
     name: string,
     bpm: number,
     duration: number;

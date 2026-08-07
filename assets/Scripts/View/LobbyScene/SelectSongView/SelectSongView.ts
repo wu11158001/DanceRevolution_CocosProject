@@ -28,7 +28,7 @@ export class SelectSongView extends BaseView {
      */
     private createSongList() {
         const songsData = RoomData.songs;
-        console.log(`歌:${songsData.length}`);
+
         this.songBtnPrefab.active = false;
         songsData.forEach((song) => {
             const songNode = instantiate(this.songBtnPrefab);
