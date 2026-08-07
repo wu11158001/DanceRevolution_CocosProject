@@ -1,4 +1,5 @@
 import { _decorator, Node, instantiate, resources, Prefab, find, Canvas, Layers } from 'cc';
+
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 
