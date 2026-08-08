@@ -58,9 +58,16 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     }
 
     /**
+     * 音樂停止
+     */
+    public stopBGM() {
+         this.bgmSource.stop();
+    }
+
+    /**
      * 播放BGM
      */
-    public playBGM(
+    public playBGM (
         type: BGM_TYPE, 
         volume: number = 1.0, 
         isLoop: boolean = true, 
@@ -68,13 +75,13 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     ) {
         const bgmName = typeof type === 'number' ? BGM_TYPE[type] : String(type);
 
-        // 1. 若快取中已有該音樂，直接播放
+        // 若快取中已有該音樂，直接播放
         if (this.clipCache.has(bgmName)) {
             this.startPlayBGM(this.clipCache.get(bgmName)!, volume, isLoop, currentTime);
             return;
         }
 
-        // 2. 若快取無資源，從 resources/audio/bgm/ 動態下載並解碼
+        // 若快取無資源，從 resources/audio/bgm/ 動態下載並解碼
         resources.load(`audio/bgm/${bgmName}`, AudioClip, (err, clip) => {
             if (err || !clip) {
                 console.error(`[AudioManager] Web 載入音樂失敗: audio/bgm/${bgmName}`, err);
@@ -90,7 +97,7 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     /**
      * 開始播放BGM
      */
-    private startPlayBGM(
+    private startPlayBGM (
         clip: AudioClip, 
         volume: number, 
         isLoop: boolean, 

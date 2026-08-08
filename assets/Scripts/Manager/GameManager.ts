@@ -43,7 +43,8 @@ export interface IPlayHitResult {
 @ccclass('GameManager')
 export class GameManager extends Component {
     private targetStartTime: number = 0;
-    private isGameStarted: boolean = false;
+    private isWaitingStart: boolean = false;  // 等待音樂倒數啟動標記
+    private isGamePlaying: boolean = false;   // 整場遊戲進行中標記
 
     // 單小節毫秒數
     private barIntervalMs: number = 0;
@@ -52,12 +53,17 @@ export class GameManager extends Component {
     private gameVIew: GameView = null;
 
     protected onDestroy(): void {
+        document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+
         SocketManager.getInstance().socket?.off('game_started');
         SocketManager.getInstance().socket?.off('new_note_sequence');
         SocketManager.getInstance().socket?.off('bar_hit_results');
     }
 
     protected onLoad(): void {
+        // 監聽頁面可見性變化
+        document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+
         // 監聽:"game_started" [正式遊戲開始]
         SocketManager.getInstance().socket?.on('game_started', this.onGameStarted.bind(this));
         // 監聽:"new_note_sequence" [譜面與打擊時間]
@@ -75,23 +81,79 @@ export class GameManager extends Component {
     }
 
     update(deltaTime: number) {
-        if (!this.isGameStarted) return;
+        if (!this.isWaitingStart) return;
 
         // 當前校正後的伺服器時間
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
         const remainingTime = (this.targetStartTime - currentServerTime) / 1000; // 轉秒
 
         if (remainingTime <= 0) {
-            this.isGameStarted = false; // 防止重複觸發
+            this.isWaitingStart = false; // 防止重複觸發
             this.playMusicSynchronized(Math.abs(remainingTime));
         }
+    }
+
+    /**
+     * 切回視窗
+     */
+    private onVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            console.log('[GameManager] 玩家切回視窗，觸發同步與音樂校正...');
+            this.resyncGameAndAudio();
+        } 
+    }
+
+    /**
+     * 重新校正伺服器時間差
+     * @returns 
+     */
+    private async resyncGameAndAudio() {
+        if (!this.isGamePlaying) return;
+
+        // 重新同步伺服器時間 (計算最新 RTT 與 timeOffset)
+        await SocketManager.getInstance().syncServerTime();
+
+        // 執行音樂與遊戲進度強校正
+        this.correctAudioPosition();
+    }
+
+    /**
+     * 執行音樂與遊戲進度強校正
+     * @returns 
+     */
+    private correctAudioPosition() {
+        const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
+        const song = RoomData.currentSong;
+        if (!song) return;
+
+        // 計算音樂理論上應該播放到的位置（秒）
+        const songStartTime = this.targetStartTime + (song.offset * 1000);
+        const expectedCurrentTimeSec = (currentServerTime - songStartTime) / 1000;
+
+        // 歌曲還沒開始
+        if (expectedCurrentTimeSec < 0) {
+            return; 
+        }
+
+        // 歌曲已經播完了
+        if (expectedCurrentTimeSec >= song.duration) {
+            AudioManager.getInstance().stopBGM();
+            return;
+        }
+
+        // 情遊戲進行中，強制將 AudioManager 播放位置跳轉 (Seek) 到 expectedCurrentTimeSec
+        console.log(`[切回視窗強校正] 音樂重置並跳轉至: ${expectedCurrentTimeSec.toFixed(3)}s`);
+        
+        // 重新播放 BGM，並從 expectedCurrentTimeSec 開始播放
+        this.playMusicSynchronized(expectedCurrentTimeSec);
     }
 
     // 接收:遊戲正式開始
     private onGameStarted(data: { song: any; startTime: number }) {
         RoomData.updateSongs(data.song);
         this.targetStartTime = data.startTime;
-        this.isGameStarted = true;
+        this.isGamePlaying = true;
+        this.isWaitingStart = true;
 
         console.log(`[GameManager] 收到開始指令，目標伺服器時間: ${this.targetStartTime}`);
     }
