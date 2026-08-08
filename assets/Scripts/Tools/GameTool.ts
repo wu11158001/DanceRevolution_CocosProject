@@ -50,6 +50,9 @@ export class GameTool extends SingletonComponent<GameTool> {
         // 強制更新 3D 物件與相機的世界矩陣
         target3D.updateWorldTransform();
         camera3D.node.updateWorldTransform();
+        if (uiNode.parent) {
+            uiNode.parent.updateWorldTransform();
+        }
 
         // 計算目標 3D 位置
         target3D.getWorldPosition(this._tempWPos);

@@ -9,6 +9,8 @@ import { PlayerData } from '../../../Data/PlayerData';
 import { GameTool } from '../../../Tools/GameTool';
 import { CharacterDataManager } from '../../../Manager/CharacterDataManager';
 import { CharacterControl } from '../../../Game/CharacterControl';
+import { ViewManager } from '../../../Manager/ViewManager';
+import { BeatResultVIew } from '../BeatResultVIew';
 
 const { ccclass, property } = _decorator;
 
@@ -37,18 +39,23 @@ export class GameView extends BaseView {
     @property(Node)
     private nicknamePrefab: Node = null;
 
+    @property(Node)
+    private selfTarget: Node = null;
+
     // 角色位置
     private readonly characterSeatPos: Vec3[] = [
         new Vec3(-0.5, 0.1, 0), 
-        new Vec3(0.5, 0.1, 0), 
-        new Vec3(-1.5, 0.1, 0), 
-        new Vec3(1.5, 0.1, 0), 
+        new Vec3(0.5, 0.3, -1.8), 
+        new Vec3(-1.5, 0.3, -1.8), 
+        new Vec3(1.5, 0.3, -1.8), 
     ];
 
-    private nicknamePosOffset = v3(0, -50, 0);
+    private nicknamePosOffset = v3(0, -0.35, 0);
+    private selfTargetPosOffest = v3(0, 1.85, 0);
 
     private camera3D: Camera = null;
 
+    private selfCharacterNode: Node = null;
     private nicknameMap: Map<CharacterControl, Node> = new Map();
     private characterMap: Map<string, CharacterControl> = new Map();
     private scoreNodeMap: Map<string, ScoreNodePrefab> = new Map();
@@ -72,6 +79,7 @@ export class GameView extends BaseView {
     update(dt: number) {
         this.updateSongProgress();
         this.updateNicknamePos();
+        this.updateSelfTargetPos();
     }
 
     /**
@@ -83,23 +91,28 @@ export class GameView extends BaseView {
     }
 
     /**
+     * 更新本地玩家指標位置
+     */
+    private updateSelfTargetPos() {
+        GameTool.getInstance().follow3DNode(
+            this.camera3D,
+            this.selfCharacterNode,
+            this.selfTarget,
+            this.selfTargetPosOffest
+        );
+    }
+
+    /**
      * 更新暱稱位置
      */
     private updateNicknamePos() {
         this.nicknameMap.forEach((nicknameNode, character) => {
-            const nicknameLabelPos = GameTool.getInstance().follow3DNode(
+            GameTool.getInstance().follow3DNode(
                 this.camera3D,
                 character.node,
                 nicknameNode,
-                Vec3.ZERO
+                this.nicknamePosOffset
             );
-
-            // 更新 UI 位置
-            if (nicknameLabelPos) { 
-                const finalPos = v3();
-                Vec3.add(finalPos, nicknameLabelPos, this.nicknamePosOffset);
-                nicknameNode.setPosition(finalPos);
-            }
         });    
     }
 
@@ -128,6 +141,11 @@ export class GameView extends BaseView {
                         nicknameLabel.string = player.nickname;
                         this.nicknameMap.set(characterControl, nicknameObj);
                     }
+                }
+
+                // 本地玩家角色
+                if(player.playerId == PlayerData.playerId) {
+                    this.selfCharacterNode = character;
                 }
             }
         });
@@ -160,14 +178,15 @@ export class GameView extends BaseView {
      */
     public UpdateScore(data: IPlayHitResult, barIntervalMs: number) {
         if (!data || !data.scores) return;
+
         // 角色動畫撥放
         const hitCharacter = this.characterMap.get(data.hitPlayerId);
         if(hitCharacter) {
-            if(data.rating == 'MISS') hitCharacter.playAnimation('Idle', barIntervalMs);
-            else hitCharacter.playAnimation(data.danceAnim, barIntervalMs);
+            if(data.rating == 'MISS') hitCharacter.playAnimation('Idle', barIntervalMs * 2);
+            else hitCharacter.playAnimation(data.danceAnim, barIntervalMs * 2);
         }
 
-        // 轉為陣列並依分數「由高到低」排序 (b - a)
+        // 轉為陣列並依分數「由高到低」排序
         const sortedPlayers = Object.keys(data.scores)
             .map(playerId => ({
                 playerId: playerId,
@@ -191,11 +210,11 @@ export class GameView extends BaseView {
                     })
                     .start();
 
-                // 記錄當前分數供下次動畫作為起始值
+                // 記錄當前分數
                 scoreNode.currentScore = item.score;
                 scoreNode.node.setSiblingIndex(index);
             }
-
+            
             // 本地玩家個人總分
             if (item.playerId === PlayerData.playerId && this.label_selfScore) {
                 const currentSelfScore = parseInt(this.label_selfScore.string.replace(/,/g, ''), 10) || 0;
@@ -209,6 +228,12 @@ export class GameView extends BaseView {
                     })
                     .start();
             }
+
+            // 顯示打擊結果介面
+            ViewManager.getInstance().openView<BeatResultVIew>('BeatResultVIew', 'Popup',).then(beatResultVIew => {
+                const isSelf = data.hitPlayerId == PlayerData.playerId;
+                beatResultVIew.showResult(data.rating, data.perfectCombo, isSelf, hitCharacter.node);
+            });
         });
     }
 }

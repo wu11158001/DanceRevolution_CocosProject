@@ -64,15 +64,10 @@ export class RoomView extends BaseView {
 
     private camera3D: Camera = null;
 
-    private switchBtnPos = v3();
-    private switchBtnPosOffset = v3(0, -100, 0);
-
-    private isHostNodePos = v3();
-    private isHostNodeOffset = v3(0, 540, 0);
-
-    private nicknamePosOffset = v3(0, -50, 0);
-
-    private kickPosOffset = v3(0, -100, 0);
+    private switchBtnPosOffset = v3(0, -0.2, 0);
+    private isHostNodeOffset = v3(0, 1.85, 0);
+    private nicknamePosOffset = v3(0, -0.35, 0);
+    private kickPosOffset = v3(0, -0.2, 0);
 
     start() {
         // 更新房間名稱按鈕
@@ -204,17 +199,12 @@ export class RoomView extends BaseView {
                 // 暱稱
                 this.nicknameLabels[index].node.active = true;
                 this.nicknameLabels[index].string = player.nickname;
-                const nicknameLabelPos = GameTool.getInstance().follow3DNode(
+                GameTool.getInstance().follow3DNode(
                     this.camera3D,
                     character,
                     this.nicknameLabels[index].node,
-                    Vec3.ZERO
+                    this.nicknamePosOffset
                 );
-                if (nicknameLabelPos) { 
-                    const finalPos = v3();
-                    Vec3.add(finalPos, nicknameLabelPos, this.nicknamePosOffset);
-                    this.nicknameLabels[index].node.setPosition(finalPos);
-                }
 
                 // 僅限房主
                 if(isHost && !player.isHost) {
@@ -223,45 +213,34 @@ export class RoomView extends BaseView {
                     this.kickBtns[index].node.on(Button.EventType.CLICK, () => {
                         SocketManager.getInstance().sendKickPlayer(player.playerId);
                     }, this);
-                    const kickBtnPos = GameTool.getInstance().follow3DNode(
+                    GameTool.getInstance().follow3DNode(
                         this.camera3D,
                         character,
                         this.kickBtns[index].node,
-                        Vec3.ZERO
+                        this.kickPosOffset
                     );
-                    if (kickBtnPos) { 
-                        const finalPos = v3();
-                        Vec3.add(finalPos, kickBtnPos, this.kickPosOffset);
-                        this.kickBtns[index].node.setPosition(finalPos);
-                    }
                 }
 
                 // 房主玩家
                 if(player.isHost) {
                     // 房主顯示節點
-                    if(GameTool.getInstance().follow3DNode(
+                    GameTool.getInstance().follow3DNode(
                         this.camera3D,
                         character,
                         this.isHostNode,
-                        Vec3.ZERO,
-                        this.isHostNodePos
-                    )) {
-                        this.isHostNode.setPosition(this.isHostNodePos.add(this.isHostNodeOffset));
-                    }
+                        this.isHostNodeOffset,
+                    )
                 }
 
                 // 本地玩家
                 if(isSelf) {
                     // 切換角色按鈕
-                    if(GameTool.getInstance().follow3DNode(
+                    GameTool.getInstance().follow3DNode(
                         this.camera3D,
                         character,
                         this.switchBtnNode,
-                        Vec3.ZERO,
-                        this.switchBtnPos
-                    )) {
-                        this.switchBtnNode.setPosition(this.switchBtnPos.add(this.switchBtnPosOffset));
-                    }
+                        this.switchBtnPosOffset
+                    )
                 }
             }
 

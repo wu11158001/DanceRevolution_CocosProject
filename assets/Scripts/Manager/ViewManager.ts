@@ -25,7 +25,8 @@ export type ViewType =
 'UpdateRoomNameView' |
 'SelectSongView'|
 'HitNodeView' |
-'GameView';
+'GameView' |
+'BeatResultVIew';
 
 /**
  * 介面管理中心

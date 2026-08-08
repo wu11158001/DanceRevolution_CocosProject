@@ -19,6 +19,9 @@
       },
       "Dance_1": {
         "__id__": 33
+      },
+      "DanceSpeed": {
+        "__id__": 34
       }
     }
   },
@@ -176,7 +179,7 @@
       "__id__": 11
     },
     "speed": 1,
-    "speedMultiplier": "",
+    "speedMultiplier": "DanceSpeed",
     "speedMultiplierEnabled": true,
     "transitionInEventBinding": {
       "__id__": 12
@@ -220,8 +223,8 @@
       "__id__": 15
     },
     "speed": 1,
-    "speedMultiplier": "",
-    "speedMultiplierEnabled": false,
+    "speedMultiplier": "DanceSpeed",
+    "speedMultiplierEnabled": true,
     "transitionInEventBinding": {
       "__id__": 16
     },
@@ -388,5 +391,10 @@
   {
     "__type__": "cc.animation.TriggerVariable",
     "_flags": 2
+  },
+  {
+    "__type__": "cc.animation.PlainVariable",
+    "_type": 0,
+    "_value": 1
   }
 ]

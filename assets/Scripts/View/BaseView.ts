@@ -146,7 +146,7 @@ export class BaseView extends Component {
     /**
      * 執行由下至上彈出效果
      */
-    private doDownToUpPopupEffect() {
+    protected doDownToUpPopupEffect() {
         Tween.stopAllByTarget(this.popupObj);
         this.popupObj.setPosition(0, -911, 0);
         tween(this.popupObj)
@@ -158,7 +158,7 @@ export class BaseView extends Component {
     /**
      * 執行小至大縮放彈出效果
      */
-    private doScalingPopupEffect() {
+    protected doScalingPopupEffect() {
         Tween.stopAllByTarget(this.popupObj);
         this.popupObj.setScale(Vec3.ZERO);
         tween(this.popupObj)

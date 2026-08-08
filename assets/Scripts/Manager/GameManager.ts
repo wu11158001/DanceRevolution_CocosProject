@@ -7,6 +7,8 @@ import { SceneLoader } from './SceneLoader';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
 import { ViewManager } from './ViewManager';
 import { GameView } from '../View/GameScene/GameView/GameView';
+import { PlayerData } from '../Data/PlayerData';
+import { BeatResultVIew } from '../View/GameScene/BeatResultVIew';
 
 const { ccclass, property } = _decorator;
 
@@ -32,6 +34,7 @@ export interface IPlayHitResult {
     scoreGained: number;            // 該玩家此拍獲得的分數
     scores: Record<string, number>; // 所有玩家的最新總分對照表{ [playerId]: totalScore }
     danceAnim: string;              // 當前小節舞步動畫名稱
+    perfectCombo: number;           // perfect連續次數
 }
 
 /**
@@ -104,8 +107,8 @@ export class GameManager extends Component {
     /**
      * 接收: 所有玩家打擊判定資料
      */
-    private onBarHitResults(data: IPlayHitResult) {
-        this.gameVIew.UpdateScore(data, this.barIntervalMs);        
+    private async onBarHitResults(data: IPlayHitResult) {
+        this.gameVIew.UpdateScore(data, this.barIntervalMs);               
     }
 
     /**

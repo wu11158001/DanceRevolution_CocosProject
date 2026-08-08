@@ -25,7 +25,10 @@ export class CharacterControl extends Component {
 
         // 計算目標長度 (秒) 與所需的播放倍數 (Speed)
         const targetDurationSec = barIntervalMs / 1000;
-        const requiredSpeed = originalDurationSec / targetDurationSec;
+        let requiredSpeed = originalDurationSec / targetDurationSec;
+
+        // 不超過速度上限
+        if(requiredSpeed > 2) requiredSpeed = 1.8;
 
         // 寫入速度變數與觸發狀態
         this.animController.setValue('DanceSpeed', requiredSpeed);
