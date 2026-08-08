@@ -48,11 +48,18 @@ export class ViewManager extends SingletonComponent<ViewManager> {
 
     /**
      * 開啟介面
-     * @param viewType
-     * @param params 傳遞給 UI 的初始化資料
-     * @returns Promise<T> 回傳泛型組件
+     * @param viewType 
+     * @param canvasType 
+     * @param isrecode // 是否要記錄在開啟的介面實例
+     * @param params 
+     * @returns 
      */
-    public async openView<T extends BaseView>(viewType: ViewType, canvasType: CanvasType, params?: any): Promise<T | null> {
+    public async openView<T extends BaseView>(
+        viewType: ViewType, 
+        canvasType: CanvasType, 
+        isrecode: boolean = true, 
+        params?: any
+    ): Promise<T | null> {
         // 檢查是否已經開啟過
         if (this.openViews.has(viewType)) {
             const existingView = this.openViews.get(viewType) as T;
@@ -115,7 +122,7 @@ export class ViewManager extends SingletonComponent<ViewManager> {
                 viewComponent.viewType = viewType;
                 viewComponent.onOpen(params);
 
-                this.openViews.set(viewType, viewComponent);
+                if(isrecode) this.openViews.set(viewType, viewComponent);
 
                 resolve(viewComponent);
             });

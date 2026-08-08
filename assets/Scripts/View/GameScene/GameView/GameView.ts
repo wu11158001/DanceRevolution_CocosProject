@@ -273,8 +273,8 @@ export class GameView extends BaseView {
             }
         });
 
-        // 顯示打擊結果介面
-        ViewManager.getInstance().openView<BeatResultVIew>('BeatResultVIew', 'Popup').then(beatResultVIew => {
+        // 顯示打擊結果介面        
+        ViewManager.getInstance().openView<BeatResultVIew>('BeatResultVIew', 'Popup', false).then(beatResultVIew => {
             const isSelf = data.hitPlayerId == PlayerData.playerId;
             if (hitCharacter) {
                 beatResultVIew.showResult(data.rating, data.perfectCombo, isSelf, hitCharacter.node);

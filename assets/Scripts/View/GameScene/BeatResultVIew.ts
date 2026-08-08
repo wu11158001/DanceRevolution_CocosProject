@@ -24,10 +24,15 @@ export class BeatResultVIew extends BaseView {
 
     private posOffset = v3(0, 1.85, 0);
 
+    public closeSelf() {
+        this.unschedule(this.closeSelf);
+        this.target3D = null;
+        
+        this.node.destroy();
+    }
+
     public async onOpen(params?: any) {
         super.onOpen(params);
-
-        this.scheduleOnce(this.closeSelf, this.closeTime);
 
         // 尋找3D相機
         const cameraNode = find('Camera_3D'); 
@@ -94,5 +99,8 @@ export class BeatResultVIew extends BaseView {
             this.target3D = null;
             this.label_result.node.setPosition(0, 0, 0);
         }
+
+        this.unschedule(this.closeSelf);
+        this.scheduleOnce(this.closeSelf, this.closeTime);
     }
 }
