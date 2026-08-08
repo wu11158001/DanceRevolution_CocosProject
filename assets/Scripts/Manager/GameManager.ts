@@ -1,28 +1,51 @@
 import { _decorator, Component, Node } from 'cc';
+
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
 import { SceneLoader } from './SceneLoader';
+import { HitNodeView } from '../View/GameScene/HitNodeView';
+import { ViewManager } from './ViewManager';
 
 const { ccclass, property } = _decorator;
 
-// 定義從 Server 接收到的譜面資料格式
+/**
+ * 譜面資料
+ */
 export interface INoteSequenceData {
-    barIndex: number;
-    sequence: string[];
-    targetHitTime: number;
-    beatIntervalMs: number;
-    progress: number;
+    barIndex: number;           // 當前小節
+    sequence: string[];         // 箭頭陣列, 例如: ['UP', 'LEFT', 'DOWN', 'RIGHT']
+    targetHitTime: number;      // 第 4 拍 Space 鍵的精確伺服器時間點 (ms)
+    beatIntervalMs: number;     // 單拍毫秒數 (60000 / BPM)
+    barIntervalMs: number;      // 單小節毫秒數 (用於計算表演階段長度)
+    progress: number;           // 歌曲進行進度
 }
 
+/**
+ * 打擊判定資料
+ */
+export interface IPlayHitResult {
+    hitPlayerId: string;            // 打擊玩家 ID
+    nickname: string;               // 打擊玩家暱稱
+    rating: string;                 // 判定 ('PERFECT' / 'GREAT' / 'GOOD' / 'MISS')
+    scoreGained: number;            // 該玩家此拍獲得的分數
+    scores: Record<string, number>; // 所有玩家的最新總分對照表{ [playerId]: totalScore }
+}
+
+/**
+ * 遊戲控制中心
+ */
 @ccclass('GameManager')
 export class GameManager extends Component {
     private targetStartTime: number = 0;
     private isGameStarted: boolean = false;
 
+    private hitNodeView: HitNodeView = null;
+
     protected onDestroy(): void {
         SocketManager.getInstance().socket?.off('game_started');
         SocketManager.getInstance().socket?.off('new_note_sequence');
+        SocketManager.getInstance().socket?.off('bar_hit_results');
     }
 
     protected onLoad(): void {
@@ -30,10 +53,14 @@ export class GameManager extends Component {
         SocketManager.getInstance().socket?.on('game_started', this.onGameStarted.bind(this));
         // 監聽: 譜面與打擊時間
         SocketManager.getInstance().socket?.on('new_note_sequence', this.onNewNodeSequence.bind(this));
+        // 監聽: 所有玩家打擊判定
+        SocketManager.getInstance().socket?.on('player_hit_result', this.onBarHitResults.bind(this));
     }
 
     async start() {
         await SocketManager.getInstance().syncServerTime();
+        this.hitNodeView = await ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup')
+
         SocketManager.getInstance().sendPrepareGame();
     }
 
@@ -50,7 +77,7 @@ export class GameManager extends Component {
         }
     }
 
-    // 接收: 遊戲正式開始
+    // 接收:遊戲正式開始
     private onGameStarted(data: { song: any; startTime: number }) {
         RoomData.updateSongs(data.song);
         this.targetStartTime = data.startTime;
@@ -60,10 +87,10 @@ export class GameManager extends Component {
     }
 
     /**
-     * 接收: 每小節的譜面與打擊時間資訊
+     * 接收:每小節的譜面與打擊時間資訊
      */
     private onNewNodeSequence(data: INoteSequenceData) {
-        console.log(`[GameManager] 收到小節 #${data.barIndex} 譜面:`, data.sequence);
+        //console.log(`[GameManager] 收到小節 #${data.barIndex} 譜面:`, data.sequence);
 
         // 1. 取得校正後的伺服器當前時間
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
@@ -78,8 +105,26 @@ export class GameManager extends Component {
         // 第 4 拍 = targetHitTime (按下 Space)
         const barStartTime = data.targetHitTime - (3 * data.beatIntervalMs);
 
-        // 4. 將資料傳遞給負責渲染 UI / 箭頭節點的管理器 (例如 NoteManager)
-        // NoteManager.getInstance().renderBarSequence(data, timeToHitMs);
+        this.hitNodeView.reciveData(data);
+    }
+
+    /**
+     * 接收: 所有玩家打擊判定資料
+     */
+    private onBarHitResults(data: IPlayHitResult) {
+        console.log(`玩家 ${data.nickname} 獲得 ${data.rating}`);
+
+        // 取得打擊玩家的最新總分
+        const myScore = data.scores[data.hitPlayerId];
+
+        // 遍歷所有玩家的總分並更新 UI 
+        for (const playerId in data.scores) {
+            if (Object.prototype.hasOwnProperty.call(data.scores, playerId)) {
+                const totalScore = data.scores[playerId];
+                //console.log(`玩家 ID: ${playerId}, 當前總分: ${totalScore}`);
+                // TODO: 更新對應玩家的分數 UI
+            }
+        }
     }
 
     /**
@@ -96,7 +141,6 @@ export class GameManager extends Component {
             overshootSeconds,            
         );
         
-        console.log(`${RoomData.currentSong.id} | ${bgmType}`);
         console.log(`[音樂同步啟動] 修正補償時間: ${overshootSeconds.toFixed(3)}s`);
     }
 }

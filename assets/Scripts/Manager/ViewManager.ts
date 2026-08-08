@@ -23,7 +23,8 @@ export type ViewType =
 'UpdateNicknameView' |
 'RoomView' |
 'UpdateRoomNameView' |
-'SelectSongView';
+'SelectSongView'|
+'HitNodeView';
 
 /**
  * 介面管理中心

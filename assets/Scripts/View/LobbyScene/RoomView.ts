@@ -1,4 +1,4 @@
-import { _decorator, director, Button, Component, Label, Node, Vec3, v3, Camera, find} from 'cc';
+import { _decorator, director, Button, Component, Label, Node, Vec3, v3, Camera, find, isValid} from 'cc';
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
@@ -151,7 +151,9 @@ export class RoomView extends BaseView {
     private clearRoomData() {
         // 角色3D
         this.characters.forEach((characterNode) => {
-            characterNode.destroy();
+            if(isValid(characterNode, true)) {
+                characterNode.destroy();
+            }
         });
         this.characters = [];
 

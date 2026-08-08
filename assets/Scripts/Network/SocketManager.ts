@@ -267,13 +267,21 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         this.socket?.emit('player_loaded', callback);
     }
 
-
     /**
      * 發送:主動離開房間
      * @param callback 
      */
     public sendLeaveRoom(callback?: (res: any) => void) {
         this.socket?.emit('leave_room', callback);
+    }
+
+    /**
+     * 發送:玩家打擊發送
+     * @param data 
+     * @param callback 
+     */
+    public sendPlayerHit(data: { hitTime: number, completedCount: number, sequenceLength: number }) {
+        this.socket?.emit('player_hit', data);
     }
 }
 
