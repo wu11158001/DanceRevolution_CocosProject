@@ -75,4 +75,29 @@ export class GameTool extends SingletonComponent<GameTool> {
         }
         return this._tempUIPos.clone();
     }
+
+    /**
+     * 格式化秒數為 02:30 的字串
+     * @param seconds 
+     * @returns 
+     */
+    public formatTime(seconds: number): string {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+
+        // 先串接 "0"，再取最後兩位數
+        const minsStr = ('0' + mins).slice(-2);
+        const secsStr = ('0' + secs).slice(-2);
+
+        return `${minsStr}:${secsStr}`;
+    }
+
+    /**
+     * 格式化數字千分位
+     * @param num 
+     * @returns 
+     */
+    public formatNumber(num: number): string {
+        return Math.floor(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
 }

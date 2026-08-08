@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, AudioSource, AudioClip, tween, Tween, director, Enum } from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
+import { GameTool } from '../Tools/GameTool';
 
 const { ccclass, property } = _decorator;
 
@@ -23,7 +24,6 @@ export class BGMDataMap {
     @property({ type: AudioClip, tooltip: '音樂檔案' })
     clip: AudioClip = null!;
 }
-
 
 /**
  * 音效類型
@@ -187,6 +187,34 @@ export class AudioManager extends SingletonComponent<AudioManager> {
         } else {
             return this.createSfxSource();
         }
+    }
+
+    /**
+     * 獲取歌曲剩餘時間(0~1)
+     */
+    public getSongTimeLeftProgress(): number {
+        if (!this.bgmSource || !this.bgmSource.playing) return;
+
+        const currentTime = this.bgmSource.currentTime;
+        const totalDuration = this.bgmSource.duration;
+
+        return currentTime / totalDuration;
+    }
+
+    /**
+     * 獲取歌曲剩餘時間(MM:SS)
+     * @returns
+     */
+    public getSongTimeLeft(): string {
+        if (!this.bgmSource || !this.bgmSource.playing) return;
+
+        const currentTime = this.bgmSource.currentTime;
+        const totalDuration = this.bgmSource.duration;
+
+        if (totalDuration <= 0) return;
+
+        const timeLeft = Math.max(0, totalDuration - currentTime);
+        return GameTool.getInstance().formatTime(timeLeft);
     }
 
     /**

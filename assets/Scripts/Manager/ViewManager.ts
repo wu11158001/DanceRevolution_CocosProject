@@ -24,7 +24,8 @@ export type ViewType =
 'RoomView' |
 'UpdateRoomNameView' |
 'SelectSongView'|
-'HitNodeView';
+'HitNodeView' |
+'GameView';
 
 /**
  * 介面管理中心

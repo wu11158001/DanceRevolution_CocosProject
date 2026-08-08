@@ -6,6 +6,7 @@ import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
 import { SceneLoader } from './SceneLoader';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
 import { ViewManager } from './ViewManager';
+import { GameView } from '../View/GameScene/GameView/GameView';
 
 const { ccclass, property } = _decorator;
 
@@ -41,6 +42,7 @@ export class GameManager extends Component {
     private isGameStarted: boolean = false;
 
     private hitNodeView: HitNodeView = null;
+    private gameVIew: GameView = null;
 
     protected onDestroy(): void {
         SocketManager.getInstance().socket?.off('game_started');
@@ -59,7 +61,8 @@ export class GameManager extends Component {
 
     async start() {
         await SocketManager.getInstance().syncServerTime();
-        this.hitNodeView = await ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup')
+        this.hitNodeView = await ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup');
+        this.gameVIew = await ViewManager.getInstance().openView<GameView>('GameView', 'HUD');
 
         SocketManager.getInstance().sendPrepareGame();
     }
@@ -90,21 +93,6 @@ export class GameManager extends Component {
      * 接收:每小節的譜面與打擊時間資訊
      */
     private onNewNodeSequence(data: INoteSequenceData) {
-        //console.log(`[GameManager] 收到小節 #${data.barIndex} 譜面:`, data.sequence);
-
-        // 1. 取得校正後的伺服器當前時間
-        const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
-
-        // 2. 計算倒數時間 (距離第 4 拍 hitTime 還有多少毫秒)
-        const timeToHitMs = data.targetHitTime - currentServerTime;
-
-        // 3. 計算前 3 拍的出現時間（若有需要作箭頭逐個登場動畫）
-        // 第 1 拍 = targetHitTime - (3 * beatIntervalMs)
-        // 第 2 拍 = targetHitTime - (2 * beatIntervalMs)
-        // 第 3 拍 = targetHitTime - (1 * beatIntervalMs)
-        // 第 4 拍 = targetHitTime (按下 Space)
-        const barStartTime = data.targetHitTime - (3 * data.beatIntervalMs);
-
         this.hitNodeView.reciveData(data);
     }
 
@@ -112,19 +100,7 @@ export class GameManager extends Component {
      * 接收: 所有玩家打擊判定資料
      */
     private onBarHitResults(data: IPlayHitResult) {
-        console.log(`玩家 ${data.nickname} 獲得 ${data.rating}`);
-
-        // 取得打擊玩家的最新總分
-        const myScore = data.scores[data.hitPlayerId];
-
-        // 遍歷所有玩家的總分並更新 UI 
-        for (const playerId in data.scores) {
-            if (Object.prototype.hasOwnProperty.call(data.scores, playerId)) {
-                const totalScore = data.scores[playerId];
-                //console.log(`玩家 ID: ${playerId}, 當前總分: ${totalScore}`);
-                // TODO: 更新對應玩家的分數 UI
-            }
-        }
+        this.gameVIew.UpdateScore(data);        
     }
 
     /**
