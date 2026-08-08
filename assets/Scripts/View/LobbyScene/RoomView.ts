@@ -10,6 +10,7 @@ import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
 import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
 import { UpdateRoomNameView } from 'db://assets/Scripts/View/LobbyScene/UpdateRoomNameView';
 import { SelectSongView } from './SelectSongView/SelectSongView';
+import { MessagePopupView } from '../Common/MessagePopupView';
 
 const { ccclass, property } = _decorator;
 
@@ -68,6 +69,33 @@ export class RoomView extends BaseView {
     private isHostNodeOffset = v3(0, 1.85, 0);
     private nicknamePosOffset = v3(0, -0.35, 0);
     private kickPosOffset = v3(0, -0.2, 0);
+
+    protected onDestroy(): void {
+        SocketManager.getInstance().socket?.off('kicked_from_room');
+    }
+
+    protected onLoad() {
+        // 監聽:"kicked_from_room" [被踢出房間]
+        SocketManager.getInstance().socket?.on('kicked_from_room', this.onKicked.bind(this));
+    }
+
+    private onKicked(data) {
+        // 清除房間資料
+        RoomData.reset();
+
+        // 彈出提示並切換回大廳 View
+        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+            popup?.setData(
+                data.message, 
+                () => {
+                    ViewManager.getInstance().openView<LobbyView>('LobbyView', 'HUD');
+                    this.closeSelf();
+                }, 
+                null, 
+                false
+            );
+        });
+    }
 
     start() {
         // 更新房間名稱按鈕

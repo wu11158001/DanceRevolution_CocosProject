@@ -91,6 +91,7 @@ export class BeatResultVIew extends BaseView {
             this.target3D = character3D;
             this.updateUIPosition();
         } else {
+            this.target3D = null;
             this.label_result.node.setPosition(0, 0, 0);
         }
     }

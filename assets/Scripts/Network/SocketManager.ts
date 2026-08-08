@@ -81,22 +81,6 @@ export class SocketManager extends SingletonComponent<SocketManager> {
             RoomData.update(data);
         });
 
-        // 監聽:"kicked_from_room" [被踢出房間]
-        this.socket.on('kicked_from_room', (data: { message: string }) => { 
-            // 清除房間資料
-            RoomData.reset();
-
-            // 彈出提示並切換回大廳 View
-            ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
-                popup?.setData(
-                    data.message, 
-                    null, 
-                    null, 
-                    false
-                );
-            });
-        });
-
         // 監聽:"prepare_game" [準備正式開始遊戲]
         this.socket.on('prepare_game', (data: any) => {
             console.log("收到準備正式開始遊戲");

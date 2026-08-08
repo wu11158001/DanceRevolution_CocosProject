@@ -11,6 +11,7 @@ import { CharacterDataManager } from '../../../Manager/CharacterDataManager';
 import { CharacterControl } from '../../../Game/CharacterControl';
 import { ViewManager } from '../../../Manager/ViewManager';
 import { BeatResultVIew } from '../BeatResultVIew';
+import { SceneLoader } from '../../../Manager/SceneLoader';
 
 const { ccclass, property } = _decorator;
 
@@ -60,6 +61,11 @@ export class GameView extends BaseView {
     private characterMap: Map<string, CharacterControl> = new Map();
     private scoreNodeMap: Map<string, ScoreNodePrefab> = new Map();
 
+    private playerSeatMap: Map<string, number> = new Map();
+    private seatTweenMap: Map<string, any> = new Map();
+
+    private isStart: boolean = false;
+
     public async onOpen(params?: any) {
         super.onOpen(params);
 
@@ -71,6 +77,9 @@ export class GameView extends BaseView {
 
         this.label_selfScore.string = '0';
         this.label_songName.string = RoomData.currentSong.name;
+
+        this.progressBar_song.progress = 0;
+        this.label_songTimeLeft.string = "00:00";
 
         this.createCharacter();
         this.createAllScoreNode();
@@ -86,6 +95,11 @@ export class GameView extends BaseView {
      * 更新音樂進度
      */
     private updateSongProgress() {
+        if(AudioManager.getInstance().getSongTimeLeftProgress() > 0 && !this.isStart) {
+            this.isStart = true;
+            SceneLoader.getInstance().closeLoadBg();
+        }
+
         this.progressBar_song.progress = AudioManager.getInstance().getSongTimeLeftProgress();
         this.label_songTimeLeft.string = AudioManager.getInstance().getSongTimeLeft();
     }
@@ -129,6 +143,9 @@ export class GameView extends BaseView {
                     character.setPosition(this.characterSeatPos[index]);
                 }
 
+                // 初始化記錄玩家初始座位
+                this.playerSeatMap.set(player.playerId, index);
+
                 let characterControl = character.getComponent(CharacterControl);
                 if(characterControl) {
                     this.characterMap.set(player.playerId, characterControl);
@@ -149,7 +166,6 @@ export class GameView extends BaseView {
                 }
             }
         });
-
     }
 
     /**
@@ -194,11 +210,39 @@ export class GameView extends BaseView {
             }))
             .sort((a, b) => b.score - a.score);
 
+        // 第一名交換位置
+        if (sortedPlayers.length > 0) {
+            const currentRank1PlayerId = sortedPlayers[0].playerId; // 當前最高分的玩家 ID
+            
+            // 找出原本在第 0 個位置（第一名）的玩家 ID
+            let oldRank1PlayerId: string | null = null;
+            this.playerSeatMap.forEach((seatIndex, pId) => {
+                if (seatIndex === 0) {
+                    oldRank1PlayerId = pId;
+                }
+            });
+
+            // 如果當前第一名不是原本的第一名，進行交換
+            if (oldRank1PlayerId && currentRank1PlayerId !== oldRank1PlayerId) {
+                const newRank1Seat = 0; // 第一名位置
+                const oldRank1Seat = this.playerSeatMap.get(currentRank1PlayerId)!; // 新第一名原本的位置
+
+                // 更新內部 Seat Map 紀錄
+                this.playerSeatMap.set(currentRank1PlayerId, newRank1Seat);
+                this.playerSeatMap.set(oldRank1PlayerId, oldRank1Seat);
+
+                // 讓新第一名 Tween 移動到 characterSeatPos[0]
+                this.moveCharacterToSeat(currentRank1PlayerId, newRank1Seat);
+
+                // 讓舊第一名 Tween 移動到新第一名原本的位置
+                this.moveCharacterToSeat(oldRank1PlayerId, oldRank1Seat);
+            }
+        }
+
         // 依照排序結果更新分數與 UI 層級順序
         sortedPlayers.forEach((item, index) => {
             const scoreNode = this.scoreNodeMap.get(item.playerId);
             if (scoreNode) {
-                // 各玩家分數
                 const startScore = scoreNode.currentScore || 0;
                 const animObj = { value: startScore };
 
@@ -210,7 +254,6 @@ export class GameView extends BaseView {
                     })
                     .start();
 
-                // 記錄當前分數
                 scoreNode.currentScore = item.score;
                 scoreNode.node.setSiblingIndex(index);
             }
@@ -228,14 +271,39 @@ export class GameView extends BaseView {
                     })
                     .start();
             }
+        });
 
-            // 顯示打擊結果介面
-            ViewManager.getInstance().openView<BeatResultVIew>('BeatResultVIew', 'Popup',).then(beatResultVIew => {
-                const isSelf = data.hitPlayerId == PlayerData.playerId;
+        // 顯示打擊結果介面
+        ViewManager.getInstance().openView<BeatResultVIew>('BeatResultVIew', 'Popup').then(beatResultVIew => {
+            const isSelf = data.hitPlayerId == PlayerData.playerId;
+            if (hitCharacter) {
                 beatResultVIew.showResult(data.rating, data.perfectCombo, isSelf, hitCharacter.node);
-            });
+            }
         });
     }
+
+    /**
+     * 角色移動至指定的座位
+     */
+    private moveCharacterToSeat(playerId: string, targetSeatIndex: number) {
+        const characterCtrl = this.characterMap.get(playerId);
+        if (!characterCtrl) return;
+
+        const targetPos = this.characterSeatPos[targetSeatIndex];
+        if (!targetPos) return;
+
+        // 如果該角色已有正在進行的位移動畫，先停止
+        if (this.seatTweenMap.has(playerId)) {
+            this.seatTweenMap.get(playerId).stop();
+        }
+
+        const tw = tween(characterCtrl.node)
+            .to(0.5, { position: targetPos }, { easing: 'linear' })
+            .call(() => {
+                this.seatTweenMap.delete(playerId);
+            })
+            .start();
+
+        this.seatTweenMap.set(playerId, tw);
+    }
 }
-
-

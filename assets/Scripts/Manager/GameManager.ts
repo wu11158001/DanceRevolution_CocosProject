@@ -58,11 +58,11 @@ export class GameManager extends Component {
     }
 
     protected onLoad(): void {
-        // 監聽: 正式遊戲開始
+        // 監聽:"game_started" [正式遊戲開始]
         SocketManager.getInstance().socket?.on('game_started', this.onGameStarted.bind(this));
-        // 監聽: 譜面與打擊時間
+        // 監聽:"new_note_sequence" [譜面與打擊時間]
         SocketManager.getInstance().socket?.on('new_note_sequence', this.onNewNodeSequence.bind(this));
-        // 監聽: 所有玩家打擊判定
+        // 監聽:"player_hit_result" [所有玩家打擊判定]
         SocketManager.getInstance().socket?.on('player_hit_result', this.onBarHitResults.bind(this));
     }
 
@@ -114,16 +114,28 @@ export class GameManager extends Component {
     /**
      * 播放音樂時間校對
      */
-    private playMusicSynchronized(overshootSeconds: number) {        
-        SceneLoader.getInstance().closeLoadBg();
-        
-        const bgmType = BGM_TYPE[RoomData.currentSong.id];
-        AudioManager.getInstance().playBGM(
-            bgmType,
-            1,
-            false,
-            overshootSeconds,            
-        );
+    private playMusicSynchronized(overshootSeconds: number) {    
+        // 安全地取得 BGM_TYPE (確保傳進去的是 Enum 數字而非字串)
+        const songId = RoomData.currentSong.id;
+        let bgmType: BGM_TYPE;
+
+        if (typeof songId === 'number') {
+            bgmType = songId as BGM_TYPE;
+        } else {
+            // 若 id 是字串如 "Song_0"，需對應至 Enum 數值
+            bgmType = BGM_TYPE[songId as keyof typeof BGM_TYPE];
+        }
+
+        if (bgmType !== undefined) {
+            AudioManager.getInstance().playBGM(
+                bgmType,
+                1,
+                false,
+                overshootSeconds,            
+            );
+        } else {
+            console.error(`[GameManager] 無法對應歌曲 BGM_TYPE, songId: ${songId}`);
+        }
         
         console.log(`[音樂同步啟動] 修正補償時間: ${overshootSeconds.toFixed(3)}s`);
     }
