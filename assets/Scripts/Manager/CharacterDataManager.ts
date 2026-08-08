@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, resources, Prefab, instantiate } from 'cc';
+import { _decorator, Component, Node, resources, Prefab, instantiate, AnimationClip } from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 
@@ -9,6 +9,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('CharacterDataManager')
 export class CharacterDataManager extends SingletonComponent<CharacterDataManager> {
+    @property([AnimationClip])
+    private danceClips: AnimationClip[] = [];
 
     // 角色數量
     private _characterCount: number = 0;
@@ -16,8 +18,16 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
         return this._characterCount;
     }
 
-    // 角色Prefab列表
+    // 角色Prefab字典
     private _characterPrefabs: Map<number, Prefab> = new Map();
+    // 舞步動畫字典
+    private clipsMap: Map<string, number> = new Map();
+
+    protected start() {
+        this.danceClips.forEach((clip) => {
+            this.clipsMap.set(clip.name, clip.duration);
+        });
+    }
 
     /**
      * 預載入所有角色 Prefab
@@ -61,5 +71,13 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
             return null;
         }
         return instantiate(prefab);
+    }
+
+    /**
+     * 獲取動畫長度
+     * @param key 
+     */
+    public getAnimationClipDuration(key: string): number {
+        return this.clipsMap.get(key);
     }
 }

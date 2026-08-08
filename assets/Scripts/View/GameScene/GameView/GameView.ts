@@ -1,4 +1,5 @@
-import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween } from 'cc';
+import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director} from 'cc';
+
 import { BaseView } from '../../BaseView';
 import { AudioManager } from '../../../Manager/AudioManager';
 import { RoomData } from '../../../Data/RoomData';
@@ -6,6 +7,9 @@ import { ScoreNodePrefab } from './scoreNodePrefab';
 import { IPlayHitResult } from '../../../Manager/GameManager';
 import { PlayerData } from '../../../Data/PlayerData';
 import { GameTool } from '../../../Tools/GameTool';
+import { CharacterDataManager } from '../../../Manager/CharacterDataManager';
+import { CharacterControl } from '../../../Game/CharacterControl';
+
 const { ccclass, property } = _decorator;
 
 /**
@@ -28,20 +32,106 @@ export class GameView extends BaseView {
     @property(Label)
     private label_songTimeLeft: Label = null;
 
+    @property(Node)
+    private nicknameNode: Node = null;
+    @property(Node)
+    private nicknamePrefab: Node = null;
+
+    // 角色位置
+    private readonly characterSeatPos: Vec3[] = [
+        new Vec3(-0.5, 0.1, 0), 
+        new Vec3(0.5, 0.1, 0), 
+        new Vec3(-1.5, 0.1, 0), 
+        new Vec3(1.5, 0.1, 0), 
+    ];
+
+    private nicknamePosOffset = v3(0, -50, 0);
+
+    private camera3D: Camera = null;
+
+    private nicknameMap: Map<CharacterControl, Node> = new Map();
+    private characterMap: Map<string, CharacterControl> = new Map();
     private scoreNodeMap: Map<string, ScoreNodePrefab> = new Map();
 
     public async onOpen(params?: any) {
         super.onOpen(params);
 
+        // 尋找3D相機
+        const cameraNode = find('Camera_3D'); 
+        this.camera3D = cameraNode ? cameraNode.getComponent(Camera) : null;
+
+        this.nicknamePrefab.active = false;
+
         this.label_selfScore.string = '0';
         this.label_songName.string = RoomData.currentSong.name;
 
+        this.createCharacter();
         this.createAllScoreNode();
     }
 
     update(dt: number) {
+        this.updateSongProgress();
+        this.updateNicknamePos();
+    }
+
+    /**
+     * 更新音樂進度
+     */
+    private updateSongProgress() {
         this.progressBar_song.progress = AudioManager.getInstance().getSongTimeLeftProgress();
         this.label_songTimeLeft.string = AudioManager.getInstance().getSongTimeLeft();
+    }
+
+    /**
+     * 更新暱稱位置
+     */
+    private updateNicknamePos() {
+        this.nicknameMap.forEach((nicknameNode, character) => {
+            const nicknameLabelPos = GameTool.getInstance().follow3DNode(
+                this.camera3D,
+                character.node,
+                nicknameNode,
+                Vec3.ZERO
+            );
+
+            // 更新 UI 位置
+            if (nicknameLabelPos) { 
+                const finalPos = v3();
+                Vec3.add(finalPos, nicknameLabelPos, this.nicknamePosOffset);
+                nicknameNode.setPosition(finalPos);
+            }
+        });    
+    }
+
+    /**
+     * 創建角色
+     */
+    private createCharacter() {
+        RoomData.players.forEach((player, index) => {
+            const character = CharacterDataManager.getInstance().create(player.characterId);
+            if(character) {
+                const currentScene = director.getScene();
+                if (currentScene) {
+                    currentScene.addChild(character);
+                    character.setPosition(this.characterSeatPos[index]);
+                }
+
+                let characterControl = character.getComponent(CharacterControl);
+                if(characterControl) {
+                    this.characterMap.set(player.playerId, characterControl);
+
+                    let nicknameObj = instantiate(this.nicknamePrefab);
+                    nicknameObj.active = true;
+                    nicknameObj.setParent(this.nicknameNode);
+                    let nicknameLabel = nicknameObj.getComponent(Label);
+                    if(nicknameLabel) {
+                        nicknameLabel.string = player.nickname;
+                        this.nicknameMap.set(characterControl, nicknameObj);
+                    }
+                }
+            }
+        });
+
     }
 
     /**
@@ -68,8 +158,14 @@ export class GameView extends BaseView {
      * 更新分數
      * @param data 
      */
-    public UpdateScore(data: IPlayHitResult) {
+    public UpdateScore(data: IPlayHitResult, barIntervalMs: number) {
         if (!data || !data.scores) return;
+        // 角色動畫撥放
+        const hitCharacter = this.characterMap.get(data.hitPlayerId);
+        if(hitCharacter) {
+            if(data.rating == 'MISS') hitCharacter.playAnimation('Idle', barIntervalMs);
+            else hitCharacter.playAnimation(data.danceAnim, barIntervalMs);
+        }
 
         // 轉為陣列並依分數「由高到低」排序 (b - a)
         const sortedPlayers = Object.keys(data.scores)
@@ -83,14 +179,13 @@ export class GameView extends BaseView {
         sortedPlayers.forEach((item, index) => {
             const scoreNode = this.scoreNodeMap.get(item.playerId);
             if (scoreNode) {
-                // 1. 各玩家分數 0.5 秒滾動動畫
+                // 各玩家分數
                 const startScore = scoreNode.currentScore || 0;
                 const animObj = { value: startScore };
 
                 tween(animObj)
                     .to(0.5, { value: item.score }, {
                         onUpdate: () => {
-                            // 每一幀更新，並帶入千分位格式
                             scoreNode.updateScore(GameTool.getInstance().formatNumber(animObj.value));
                         }
                     })
@@ -101,9 +196,8 @@ export class GameView extends BaseView {
                 scoreNode.node.setSiblingIndex(index);
             }
 
-            // 2. 本地玩家個人總分 0.5 秒滾動動畫
+            // 本地玩家個人總分
             if (item.playerId === PlayerData.playerId && this.label_selfScore) {
-                // 解析當前 Label 文字數字（消除既有的逗號）
                 const currentSelfScore = parseInt(this.label_selfScore.string.replace(/,/g, ''), 10) || 0;
                 const selfAnimObj = { value: currentSelfScore };
 

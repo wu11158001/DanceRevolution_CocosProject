@@ -177,7 +177,7 @@
     },
     "speed": 1,
     "speedMultiplier": "",
-    "speedMultiplierEnabled": false,
+    "speedMultiplierEnabled": true,
     "transitionInEventBinding": {
       "__id__": 12
     },
@@ -379,14 +379,14 @@
   },
   {
     "__type__": "cc.animation.TriggerVariable",
-    "_flags": 0
+    "_flags": 2
   },
   {
     "__type__": "cc.animation.TriggerVariable",
-    "_flags": 0
+    "_flags": 2
   },
   {
     "__type__": "cc.animation.TriggerVariable",
-    "_flags": 0
+    "_flags": 2
   }
 ]

@@ -31,6 +31,7 @@ export interface IPlayHitResult {
     rating: string;                 // 判定 ('PERFECT' / 'GREAT' / 'GOOD' / 'MISS')
     scoreGained: number;            // 該玩家此拍獲得的分數
     scores: Record<string, number>; // 所有玩家的最新總分對照表{ [playerId]: totalScore }
+    danceAnim: string;              // 當前小節舞步動畫名稱
 }
 
 /**
@@ -40,6 +41,9 @@ export interface IPlayHitResult {
 export class GameManager extends Component {
     private targetStartTime: number = 0;
     private isGameStarted: boolean = false;
+
+    // 單小節毫秒數
+    private barIntervalMs: number = 0;
 
     private hitNodeView: HitNodeView = null;
     private gameVIew: GameView = null;
@@ -93,6 +97,7 @@ export class GameManager extends Component {
      * 接收:每小節的譜面與打擊時間資訊
      */
     private onNewNodeSequence(data: INoteSequenceData) {
+        this.barIntervalMs = data.barIntervalMs;
         this.hitNodeView.reciveData(data);
     }
 
@@ -100,7 +105,7 @@ export class GameManager extends Component {
      * 接收: 所有玩家打擊判定資料
      */
     private onBarHitResults(data: IPlayHitResult) {
-        this.gameVIew.UpdateScore(data);        
+        this.gameVIew.UpdateScore(data, this.barIntervalMs);        
     }
 
     /**

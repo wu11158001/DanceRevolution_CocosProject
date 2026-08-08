@@ -77,7 +77,6 @@ export class HitNodeView extends BaseView {
 
         // 未打擊
         if (this.currentProgress >= 1.0) {
-            this.onSpaceHit();
             this.resetState();
         }
     }
@@ -89,12 +88,17 @@ export class HitNodeView extends BaseView {
         this.isRunning = false;
         this.beatBar.active = false;
         this.nodePanel.active = false;
+
+        this.currentInputIndex = 0;
+        this.currentSequence = [];
     }
 
     /**
      * 接收到資料
      */
     public reciveData(data: INoteSequenceData) {
+        this.resetState();
+
         this.targetHitTime = data.targetHitTime;
         this.barIntervalMs = data.barIntervalMs || (data.beatIntervalMs * 4);
 

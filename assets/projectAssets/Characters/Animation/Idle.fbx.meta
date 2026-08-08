@@ -116,7 +116,7 @@
       "uuid": "486a4861-f606-487e-805c-0f03910a4154@18d6f",
       "displayName": "",
       "id": "18d6f",
-      "name": "mixamo.com.animation",
+      "name": "Idle.animation",
       "userData": {
         "gltfIndex": 0,
         "wrapMode": 2,
@@ -914,7 +914,7 @@
         "fps": 30,
         "splits": [
           {
-            "name": "mixamo.com",
+            "name": "Idle",
             "from": 0,
             "to": 6,
             "wrapMode": 2,
