@@ -3,7 +3,8 @@ import { _decorator, Component, instantiate, Node } from 'cc';
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { RoomData } from 'db://assets/Scripts/Data/RoomData';
-import { SongBtnPrefab } from './SongBtnPrefab';
+import { SongBtnItem } from './SongBtnItem';
+
 
 const { ccclass, property } = _decorator;
 
@@ -35,9 +36,9 @@ export class SelectSongView extends BaseView {
             songNode.active = true;
             songNode.setParent(this.songBtnParent);
 
-            const songBtnPrefab = songNode.getComponent(SongBtnPrefab)
-            if(songBtnPrefab) {
-                songBtnPrefab.setData(
+            const songBtnItem = songNode.getComponent(SongBtnItem)
+            if(songBtnItem) {
+                songBtnItem.setData(
                     `${song.name} (${song.bpm}BPM)`,
                     () => {
                         SocketManager.getInstance().sendSelectSong(song.id);

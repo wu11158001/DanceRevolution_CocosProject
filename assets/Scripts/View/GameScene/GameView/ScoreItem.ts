@@ -2,10 +2,10 @@ import { _decorator, Component, Label, Node } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
- * 所有玩家分數Prefab
+ * 所有玩家分數項目
  */
-@ccclass('ScoreNodePrefab')
-export class ScoreNodePrefab extends Component {
+@ccclass('ScoreItem')
+export class ScoreItem extends Component {
     @property(Label)
     private label_nickname: Label = null;
     @property(Label)

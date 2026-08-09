@@ -400,7 +400,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 12,
-      "height": 411
+      "height": 410.9999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -686,7 +686,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 820,
-      "height": 411
+      "height": 410.9999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -818,7 +818,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "songBtnPrefab",
+    "_name": "songBtnItemPrefab",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1436,7 +1436,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 820,
-      "height": 411
+      "height": 410.9999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1558,7 +1558,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 920,
-      "height": 511
+      "height": 510.9999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1729,7 +1729,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1920,
-      "height": 911
+      "height": 910.9999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

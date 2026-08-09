@@ -3,7 +3,7 @@ import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Ve
 import { BaseView } from '../../BaseView';
 import { AudioManager } from '../../../Manager/AudioManager';
 import { RoomData } from '../../../Data/RoomData';
-import { ScoreNodePrefab } from './scoreNodePrefab';
+import { ScoreItem } from './ScoreItem';
 import { IGameResult, IPlayHitResult } from '../../../Manager/GameManager';
 import { PlayerData } from '../../../Data/PlayerData';
 import { GameTool } from '../../../Tools/GameTool';
@@ -26,7 +26,7 @@ export class GameView extends BaseView {
     @property(Node)
     private allScorePanel: Node = null;
     @property(Node)
-    private scoreNodePrefabNode: Node = null;
+    private scoreItemPrefab: Node = null;
 
     @property(Label)
     private label_songName: Label = null;
@@ -59,7 +59,7 @@ export class GameView extends BaseView {
     private selfCharacterNode: Node = null;
     private nicknameMap: Map<CharacterControl, Node> = new Map();
     private characterMap: Map<string, CharacterControl> = new Map();
-    private scoreNodeMap: Map<string, ScoreNodePrefab> = new Map();
+    private scoreNodeMap: Map<string, ScoreItem> = new Map();
 
     private playerSeatMap: Map<string, number> = new Map();
     private seatTweenMap: Map<string, any> = new Map();
@@ -172,14 +172,14 @@ export class GameView extends BaseView {
      * 創建所有玩家分數UI
      */
     private createAllScoreNode() {
-        this.scoreNodePrefabNode.active = false;
+        this.scoreItemPrefab.active = false;
 
         RoomData.players.forEach((player) => {
-            let obj = instantiate(this.scoreNodePrefabNode);
+            let obj = instantiate(this.scoreItemPrefab);
             obj.active = true;
             obj.setParent(this.allScorePanel);
 
-            let scoreNodePrefab = obj.getComponent(ScoreNodePrefab);
+            let scoreNodePrefab = obj.getComponent(ScoreItem);
             if(scoreNodePrefab) {
                 scoreNodePrefab.setData(player.nickname);
 

@@ -2,10 +2,10 @@ import { _decorator, Button, Component, Label, Node } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
- * 歌曲列表按鈕
+ * 歌曲列表按鈕項目
  */
-@ccclass('songBtnPrefab')
-export class SongBtnPrefab extends Component {
+@ccclass('SongBtnItem')
+export class SongBtnItem extends Component {
     @property(Button)
     private mainBtn: Button = null;
     @property(Label)

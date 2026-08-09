@@ -335,7 +335,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "scoreNodePrefab",
+    "_name": "scoreItemPrefab",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -2522,7 +2522,7 @@
     "allScorePanel": {
       "__id__": 10
     },
-    "scoreNodePrefabNode": {
+    "scoreItemPrefab": {
       "__id__": 11
     },
     "label_songName": {

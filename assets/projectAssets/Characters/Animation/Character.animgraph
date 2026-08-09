@@ -12,16 +12,16 @@
     ],
     "_variables": {
       "Idle": {
-        "__id__": 37
+        "__id__": 31
       },
       "Dance_0": {
-        "__id__": 38
+        "__id__": 32
       },
       "Dance_1": {
-        "__id__": 39
+        "__id__": 33
       },
       "DanceSpeed": {
-        "__id__": 40
+        "__id__": 34
       }
     }
   },
@@ -75,12 +75,6 @@
       },
       {
         "__id__": 30
-      },
-      {
-        "__id__": 31
-      },
-      {
-        "__id__": 34
       }
     ],
     "_entryState": {
@@ -99,8 +93,8 @@
       "name": "",
       "id": "35337d21-ebea-46a6-8247-b4d93e11a9f1",
       "clone": null,
-      "centerX": 301.04166666666674,
-      "centerY": 181.25
+      "centerX": 326.04166666666674,
+      "centerY": 48.958333333333314
     },
     "name": "Entry"
   },
@@ -176,8 +170,8 @@
       "name": "Dance_0",
       "id": "bc7edffb-c1b3-4c49-b53c-96682f53f71c",
       "clone": null,
-      "centerX": 30.62204618689566,
-      "centerY": -9.82999849302388
+      "centerX": 95.20537952022892,
+      "centerY": 182.8783348403095
     },
     "name": "Dance_0",
     "_components": [],
@@ -220,8 +214,8 @@
       "name": "Dance_1",
       "id": "00f1746e-9512-4f4e-8ebc-7ffd1f7dd18d",
       "clone": null,
-      "centerX": 32.40776047261022,
-      "centerY": 29.54970075509641
+      "centerX": 94.90776047261022,
+      "centerY": 222.25803408842978
     },
     "name": "Dance_1",
     "_components": [],
@@ -385,68 +379,6 @@
       "__id__": 6
     },
     "conditions": []
-  },
-  {
-    "__type__": "cc.animation.AnimationTransition",
-    "__editorExtras__": null,
-    "from": {
-      "__id__": 10
-    },
-    "to": {
-      "__id__": 6
-    },
-    "conditions": [],
-    "destinationStart": 0,
-    "relativeDestinationStart": false,
-    "startEventBinding": {
-      "__id__": 32
-    },
-    "endEventBinding": {
-      "__id__": 33
-    },
-    "duration": 0.3,
-    "relativeDuration": false,
-    "exitConditionEnabled": true,
-    "_exitCondition": 1
-  },
-  {
-    "__type__": "cc.animation.AnimationGraphEventBinding",
-    "methodName": ""
-  },
-  {
-    "__type__": "cc.animation.AnimationGraphEventBinding",
-    "methodName": ""
-  },
-  {
-    "__type__": "cc.animation.AnimationTransition",
-    "__editorExtras__": null,
-    "from": {
-      "__id__": 14
-    },
-    "to": {
-      "__id__": 6
-    },
-    "conditions": [],
-    "destinationStart": 0,
-    "relativeDestinationStart": false,
-    "startEventBinding": {
-      "__id__": 35
-    },
-    "endEventBinding": {
-      "__id__": 36
-    },
-    "duration": 0.3,
-    "relativeDuration": false,
-    "exitConditionEnabled": true,
-    "_exitCondition": 1
-  },
-  {
-    "__type__": "cc.animation.AnimationGraphEventBinding",
-    "methodName": ""
-  },
-  {
-    "__type__": "cc.animation.AnimationGraphEventBinding",
-    "methodName": ""
   },
   {
     "__type__": "cc.animation.TriggerVariable",

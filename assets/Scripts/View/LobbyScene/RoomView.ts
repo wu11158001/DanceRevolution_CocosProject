@@ -190,6 +190,9 @@ export class RoomView extends BaseView {
             kickBtn.node.active = false;
             kickBtn.node.targetOff(this);
         });
+
+        // 選擇歌曲按鈕
+        this.btn_selectSong.node.active = false;
     }
 
     /**
@@ -258,6 +261,8 @@ export class RoomView extends BaseView {
                         this.isHostNode,
                         this.isHostNodeOffset,
                     )
+                    // 選擇歌曲按鈕
+                    this.btn_selectSong.node.active = true;
                 }
 
                 // 本地玩家
