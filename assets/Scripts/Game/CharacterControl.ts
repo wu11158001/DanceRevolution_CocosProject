@@ -27,9 +27,6 @@ export class CharacterControl extends Component {
         const targetDurationSec = barIntervalMs / 1000;
         let requiredSpeed = originalDurationSec / targetDurationSec;
 
-        // 不超過速度上限
-        if(requiredSpeed > 2) requiredSpeed = 1.8;
-
         // 寫入速度變數與觸發狀態
         this.animController.setValue('DanceSpeed', requiredSpeed);
         this.animController.setValue(key, true);

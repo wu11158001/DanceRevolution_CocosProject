@@ -79,7 +79,7 @@ export class RoomView extends BaseView {
 
     private switchBtnPosOffset = v3(0, -0.2, 0);
     private isHostNodeOffset = v3(0, 1.85, 0);
-    private nicknamePosOffset = v3(0, -0.35, 0);
+    private nicknamePosOffset = v3(0, -0.1, 0);
     private kickPosOffset = v3(0, -0.2, 0);
     private readyPosOffset = v3(0, 1, 0);
 

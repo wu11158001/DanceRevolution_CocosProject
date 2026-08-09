@@ -158,12 +158,6 @@ export class HitNodeView extends BaseView {
 
         // 空白鍵處理 (Space)
         if (event.keyCode === KeyCode.SPACE) {
-            // 進度小於 50% (0.5) 時不處理
-            if (this.currentProgress < 0.5) {
-                console.log(`[Input] 太早按下 Space，進度未達 50% (${(this.currentProgress * 100).toFixed(1)}%)`);
-                return;
-            }
-
             this.onSpaceHit();
             return;
         }
@@ -225,6 +219,9 @@ export class HitNodeView extends BaseView {
      * 按下 Space 打擊觸發
      */
     private onSpaceHit() {
+        // 進度小於 50% || 沒有任何正確
+        if(this.currentProgress < 0.5 || this.currentInputIndex == 0) return;
+
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
 
         // 發送給 Server 判定

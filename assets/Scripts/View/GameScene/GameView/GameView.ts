@@ -12,6 +12,7 @@ import { CharacterControl } from '../../../Game/CharacterControl';
 import { ViewManager } from '../../../Manager/ViewManager';
 import { BeatResultVIew } from '../BeatResultVIew';
 import { SceneLoader } from '../../../Manager/SceneLoader';
+import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 
 const { ccclass, property } = _decorator;
 
@@ -28,8 +29,8 @@ export class GameView extends BaseView {
     @property(Node)
     private scoreItemPrefab: Node = null;
 
-    @property(Label)
-    private label_songName: Label = null;
+    @property(FixedMarqueeText)
+    private songNameMarquee: FixedMarqueeText = null;
     @property(ProgressBar)
     private progressBar_song: ProgressBar = null;
     @property(Label)
@@ -51,7 +52,7 @@ export class GameView extends BaseView {
         new Vec3(-2.8, 0, -1), 
     ];
 
-    private nicknamePosOffset = v3(0, -0.35, 0);
+    private nicknamePosOffset = v3(0, -0.15, 0);
     private selfTargetPosOffest = v3(0, 1.85, 0);
 
     private camera3D: Camera = null;
@@ -76,7 +77,7 @@ export class GameView extends BaseView {
         this.nicknamePrefab.active = false;
 
         this.label_selfScore.string = '0';
-        this.label_songName.string = RoomData.currentSong.name;
+        this.songNameMarquee.setTitle(RoomData.currentSong.name);
 
         this.progressBar_song.progress = 0;
         this.label_songTimeLeft.string = "00:00";
@@ -174,16 +175,18 @@ export class GameView extends BaseView {
     private createAllScoreNode() {
         this.scoreItemPrefab.active = false;
 
-        RoomData.players.forEach((player) => {
+        RoomData.players.forEach((player, index) => {
             let obj = instantiate(this.scoreItemPrefab);
             obj.active = true;
             obj.setParent(this.allScorePanel);
 
-            let scoreNodePrefab = obj.getComponent(ScoreItem);
-            if(scoreNodePrefab) {
-                scoreNodePrefab.setData(player.nickname);
+            let scoreItem = obj.getComponent(ScoreItem);
+            if(scoreItem) {
+                const isLocal = player.playerId == PlayerData.playerId;
 
-                this.scoreNodeMap.set(player.playerId, scoreNodePrefab);
+                scoreItem.setData(player.nickname);
+                scoreItem.updateIcon(index == 0, isLocal);
+                this.scoreNodeMap.set(player.playerId, scoreItem);
             }
         });
     }
@@ -198,7 +201,7 @@ export class GameView extends BaseView {
         // 角色動畫撥放
         const hitCharacter = this.characterMap.get(data.hitPlayerId);
         if(hitCharacter) {
-            if(data.rating == 'MISS') hitCharacter.playAnimation('Idle', barIntervalMs * 2);
+            if(data.rating == 'MISS') hitCharacter.playAnimation('Angry', barIntervalMs * 2);
             else hitCharacter.playAnimation(data.danceAnim, barIntervalMs * 2);
         }
 
@@ -254,7 +257,11 @@ export class GameView extends BaseView {
                     })
                     .start();
 
+                const isLocal = item.playerId === PlayerData.playerId;
+                const isFirstPlace = index == 0;
+
                 scoreNode.currentScore = item.score;
+                scoreNode.updateIcon(isFirstPlace, isLocal);
                 scoreNode.node.setSiblingIndex(index);
             }
             
