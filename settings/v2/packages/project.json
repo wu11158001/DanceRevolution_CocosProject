@@ -21,6 +21,10 @@
     {
       "name": "Heghest",
       "value": 4
+    },
+    {
+      "name": "3DBg",
+      "value": 32
     }
   ],
   "custom_joint_texture_layouts": []

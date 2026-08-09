@@ -45,10 +45,10 @@ export class GameView extends BaseView {
 
     // 角色位置
     private readonly characterSeatPos: Vec3[] = [
-        new Vec3(-0.5, 0.1, 0), 
-        new Vec3(0.5, 0.3, -1.8), 
-        new Vec3(-1.5, 0.3, -1.8), 
-        new Vec3(1.5, 0.3, -1.8), 
+        new Vec3(0, 0, 1.5), 
+        new Vec3(-1.5, 0, 0), 
+        new Vec3(1.5, 0, -0.5), 
+        new Vec3(-2.8, 0, -1), 
     ];
 
     private nicknamePosOffset = v3(0, -0.35, 0);

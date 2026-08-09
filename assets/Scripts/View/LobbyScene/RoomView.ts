@@ -1,4 +1,4 @@
-import { _decorator, director, Button, Component, Label, Node, Vec3, v3, Camera, find, isValid} from 'cc';
+import { _decorator, director, Button, Component, Label, Node, Vec3, v3, Camera, find, isValid, instantiate} from 'cc';
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
@@ -47,11 +47,20 @@ export class RoomView extends BaseView {
     @property(Node)
     private isHostNode: Node = null;
 
-    @property(Label)
-    private nicknameLabels: Label[] = [];
+    @property(Node)
+    private nicknameNode: Node = null;
+    @property(Node)
+    private label_nicknamePrefab: Node = null;
 
-    @property(Button)
-    private kickBtns: Button[] = [];
+    @property(Node)
+    private kickBtnNode: Node = null;
+    @property(Node)
+    private btn_kickPrefab: Node = null;
+
+    @property(Node)
+    private readyNode: Node = null;
+    @property(Node)
+    private label_readyPrefab: Node = null;
 
     // 角色位置
     private readonly characterSeatPos: Vec3[] = [
@@ -62,6 +71,9 @@ export class RoomView extends BaseView {
     ];
 
     private characters: Node[] = [];
+    private nicknameLabels: Label[] = [];
+    private kickBtns: Button[] = [];
+    private readyLabels: Node[] = [];
 
     private camera3D: Camera = null;
 
@@ -69,6 +81,7 @@ export class RoomView extends BaseView {
     private isHostNodeOffset = v3(0, 1.85, 0);
     private nicknamePosOffset = v3(0, -0.35, 0);
     private kickPosOffset = v3(0, -0.2, 0);
+    private readyPosOffset = v3(0, 1, 0);
 
     protected onDestroy(): void {
         SocketManager.getInstance().socket?.off('kicked_from_room');
@@ -77,24 +90,6 @@ export class RoomView extends BaseView {
     protected onLoad() {
         // 監聽:"kicked_from_room" [被踢出房間]
         SocketManager.getInstance().socket?.on('kicked_from_room', this.onKicked.bind(this));
-    }
-
-    private onKicked(data) {
-        // 清除房間資料
-        RoomData.reset();
-
-        // 彈出提示並切換回大廳 View
-        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
-            popup?.setData(
-                data.message, 
-                () => {
-                    ViewManager.getInstance().openView<LobbyView>('LobbyView', 'HUD');
-                    this.closeSelf();
-                }, 
-                null, 
-                false
-            );
-        });
     }
 
     start() {
@@ -156,6 +151,8 @@ export class RoomView extends BaseView {
             this.refreshRoom(data);
         }
 
+        this.init();
+
         // 初始化畫面
         if (RoomData.roomId) {
             this.refreshRoom({
@@ -165,6 +162,40 @@ export class RoomView extends BaseView {
                 currentSong: RoomData.currentSong,
                 players: RoomData.players
             });
+        }
+    }
+
+    /**
+     * 初始化
+     */
+    private init() {
+        this.label_nicknamePrefab.active = false;
+        this.btn_kickPrefab.active = false;
+        this.label_readyPrefab.active = false;
+        for (let i = 0; i < 4; i++) {
+            // 產生暱稱物件
+            const nicknameObj = instantiate(this.label_nicknamePrefab);
+            nicknameObj.setParent(this.nicknameNode);
+            nicknameObj.name = `label_nickname_${i}`;
+            const nicknameLabel = nicknameObj.getComponent(Label);
+            if(nicknameLabel) {
+                this.nicknameLabels.push(nicknameLabel);
+            }
+
+            // 產生踢人按鈕
+            const kickObj = instantiate(this.btn_kickPrefab);
+            kickObj.setParent(this.kickBtnNode);
+            kickObj.name = `btn_kick_${i}`;
+            const kickBtn = kickObj.getComponent(Button);
+            if(kickBtn) {
+                this.kickBtns.push(kickBtn);
+            }
+
+            // Ready準備完成物件
+            const readyObj = instantiate(this.label_readyPrefab);
+            readyObj.setParent(this.readyNode);
+            readyObj.name = `label_ready_${i}`;
+            this.readyLabels.push(readyObj);
         }
     }
 
@@ -191,8 +222,35 @@ export class RoomView extends BaseView {
             kickBtn.node.targetOff(this);
         });
 
+        // Ready字樣
+        this.readyLabels.forEach((readyLabel) => {
+            readyLabel.active = false;
+        });
+
         // 選擇歌曲按鈕
         this.btn_selectSong.node.active = false;
+    }
+
+    /**
+     * 被踢出房間
+     * @param data 
+     */
+    private onKicked(data) {
+        // 清除房間資料
+        RoomData.reset();
+
+        // 彈出提示並切換回大廳 View
+        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+            popup?.setData(
+                data.message, 
+                () => {
+                    ViewManager.getInstance().openView<LobbyView>('LobbyView', 'HUD');
+                    this.closeSelf();
+                }, 
+                null, 
+                false
+            );
+        });
     }
 
     /**
@@ -236,6 +294,17 @@ export class RoomView extends BaseView {
                     this.nicknameLabels[index].node,
                     this.nicknamePosOffset
                 );
+
+                // Ready字樣
+                if(!player.isHost && player.isReady) {
+                    this.readyLabels[index].active = true;
+                    GameTool.getInstance().follow3DNode(
+                        this.camera3D,
+                        character,
+                        this.readyLabels[index],
+                        this.readyPosOffset
+                );
+                }
 
                 // 僅限房主
                 if(isHost && !player.isHost) {
