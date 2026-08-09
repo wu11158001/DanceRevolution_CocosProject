@@ -4,7 +4,7 @@ import { BaseView } from '../../BaseView';
 import { AudioManager } from '../../../Manager/AudioManager';
 import { RoomData } from '../../../Data/RoomData';
 import { ScoreNodePrefab } from './scoreNodePrefab';
-import { IPlayHitResult } from '../../../Manager/GameManager';
+import { IGameResult, IPlayHitResult } from '../../../Manager/GameManager';
 import { PlayerData } from '../../../Data/PlayerData';
 import { GameTool } from '../../../Tools/GameTool';
 import { CharacterDataManager } from '../../../Manager/CharacterDataManager';
@@ -305,5 +305,14 @@ export class GameView extends BaseView {
             .start();
 
         this.seatTweenMap.set(playerId, tw);
+    }
+
+    /**
+     * 遊戲結束
+     */
+    public onGameOver() {
+        this.characterMap.forEach((character) => {
+            character.playAnimation('Idle', 0);
+        });
     }
 }

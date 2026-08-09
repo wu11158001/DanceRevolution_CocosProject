@@ -1404,7 +1404,7 @@
   {
     "__type__": "cc.Node",
     "_name": "AudioManager",
-    "_objFlags": 0,
+    "_objFlags": 512,
     "__editorExtras__": {},
     "_parent": {
       "__id__": 1
@@ -1456,7 +1456,7 @@
   {
     "__type__": "cc.Node",
     "_name": "sfx_pool",
-    "_objFlags": 0,
+    "_objFlags": 512,
     "__editorExtras__": {},
     "_parent": {
       "__id__": 39

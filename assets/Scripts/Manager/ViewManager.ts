@@ -26,7 +26,8 @@ export type ViewType =
 'SelectSongView'|
 'HitNodeView' |
 'GameView' |
-'BeatResultVIew';
+'BeatResultVIew' |
+'GameResultView';
 
 /**
  * 介面管理中心

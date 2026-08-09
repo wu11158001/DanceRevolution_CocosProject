@@ -12,7 +12,8 @@ export enum BGM_TYPE {
     LobbyBGM = 'LobbyBGM',
 
     Song_0 = 'Song_0',
-    Song_1 = 'Song_1'
+    Song_1 = 'Song_1',
+    Song_2 = 'Song_2'
 }
 Enum(BGM_TYPE);
 

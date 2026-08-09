@@ -9,6 +9,7 @@ import { ViewManager } from './ViewManager';
 import { GameView } from '../View/GameScene/GameView/GameView';
 import { PlayerData } from '../Data/PlayerData';
 import { BeatResultVIew } from '../View/GameScene/BeatResultVIew';
+import { GameResultView } from '../View/GameScene/GameResultView/GameResultView';
 
 const { ccclass, property } = _decorator;
 
@@ -37,6 +38,29 @@ export interface IPlayHitResult {
     perfectCombo: number;           // perfect連續次數
 }
 
+// 單一玩家的判定統計
+export interface IRatingStats {
+    PERFECT: number;
+    GREAT: number;
+    GOOD: number;
+    MISS: number;
+}
+
+// 單一玩家的遊戲結算成績
+export interface IPlayerGameResult {
+    playerId: string;         // 玩家 Socket/Player ID
+    nickname: string;         // 玩家暱稱
+    totalScore: number;       // 總分
+    maxPerfectCombo: number;  // 最高 PERFECT 連擊數
+    ratings: IRatingStats;    // 各判定累積次數
+    isDisconnected: boolean;  // 是否斷線了
+}
+
+// 遊戲結束事件發送的全體結算資料
+export interface IGameResult {
+    roomId: string;
+    results: IPlayerGameResult[]; // 依總分排序後的玩家成績陣列
+}
 /**
  * 遊戲控制中心
  */
@@ -58,6 +82,7 @@ export class GameManager extends Component {
         SocketManager.getInstance().socket?.off('game_started');
         SocketManager.getInstance().socket?.off('new_note_sequence');
         SocketManager.getInstance().socket?.off('bar_hit_results');
+        SocketManager.getInstance().socket?.off('game_ended');
     }
 
     protected onLoad(): void {
@@ -70,6 +95,8 @@ export class GameManager extends Component {
         SocketManager.getInstance().socket?.on('new_note_sequence', this.onNewNodeSequence.bind(this));
         // 監聽:"player_hit_result" [所有玩家打擊判定]
         SocketManager.getInstance().socket?.on('player_hit_result', this.onBarHitResults.bind(this));
+        // 監聽:"game_ended" [遊戲結束]
+        SocketManager.getInstance().socket?.on('game_ended', this.onGameEnd.bind(this));
     }
 
     async start() {
@@ -167,10 +194,22 @@ export class GameManager extends Component {
     }
 
     /**
-     * 接收: 所有玩家打擊判定資料
+     * 接收:所有玩家打擊判定資料
      */
     private async onBarHitResults(data: IPlayHitResult) {
         this.gameVIew.UpdateScore(data, this.barIntervalMs);               
+    }
+
+    /**
+     * 接收:遊戲結束
+     * @param data 
+     */
+    private onGameEnd(data: IGameResult) {
+        this.gameVIew.onGameOver();
+
+        ViewManager.getInstance().openView<GameResultView>('GameResultView', 'Popup').then((view) => {
+            view.setData(data);
+        });
     }
 
     /**

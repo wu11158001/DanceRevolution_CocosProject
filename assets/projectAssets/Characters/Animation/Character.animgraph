@@ -12,16 +12,16 @@
     ],
     "_variables": {
       "Idle": {
-        "__id__": 31
+        "__id__": 37
       },
       "Dance_0": {
-        "__id__": 32
+        "__id__": 38
       },
       "Dance_1": {
-        "__id__": 33
+        "__id__": 39
       },
       "DanceSpeed": {
-        "__id__": 34
+        "__id__": 40
       }
     }
   },
@@ -75,6 +75,12 @@
       },
       {
         "__id__": 30
+      },
+      {
+        "__id__": 31
+      },
+      {
+        "__id__": 34
       }
     ],
     "_entryState": {
@@ -93,8 +99,8 @@
       "name": "",
       "id": "35337d21-ebea-46a6-8247-b4d93e11a9f1",
       "clone": null,
-      "centerX": -125,
-      "centerY": 0
+      "centerX": 301.04166666666674,
+      "centerY": 181.25
     },
     "name": "Entry"
   },
@@ -115,8 +121,8 @@
       "name": "",
       "id": "812d5657-3230-4f8b-b565-26dc4f2f07d9",
       "clone": null,
-      "centerX": -125.00000000000009,
-      "centerY": 54.05405405405406
+      "centerX": 212.96768707482977,
+      "centerY": 182.90184316970033
     },
     "name": "Any"
   },
@@ -126,8 +132,8 @@
       "name": "Idle",
       "id": "63ebc577-f9ba-4ebd-9234-8c32dc006d87",
       "clone": null,
-      "centerX": 19.56330014224733,
-      "centerY": -1.6858156727863047
+      "centerX": 212.590511026601,
+      "centerY": 50.33374215034294
     },
     "name": "Idle",
     "_components": [],
@@ -170,8 +176,8 @@
       "name": "Dance_0",
       "id": "bc7edffb-c1b3-4c49-b53c-96682f53f71c",
       "clone": null,
-      "centerX": 20.73684210526301,
-      "centerY": 54.6257838199013
+      "centerX": 30.62204618689566,
+      "centerY": -9.82999849302388
     },
     "name": "Dance_0",
     "_components": [],
@@ -214,8 +220,8 @@
       "name": "Dance_1",
       "id": "00f1746e-9512-4f4e-8ebc-7ffd1f7dd18d",
       "clone": null,
-      "centerX": 20.736842105263065,
-      "centerY": 99.36262592516448
+      "centerX": 32.40776047261022,
+      "centerY": 29.54970075509641
     },
     "name": "Dance_1",
     "_components": [],
@@ -379,6 +385,68 @@
       "__id__": 6
     },
     "conditions": []
+  },
+  {
+    "__type__": "cc.animation.AnimationTransition",
+    "__editorExtras__": null,
+    "from": {
+      "__id__": 10
+    },
+    "to": {
+      "__id__": 6
+    },
+    "conditions": [],
+    "destinationStart": 0,
+    "relativeDestinationStart": false,
+    "startEventBinding": {
+      "__id__": 32
+    },
+    "endEventBinding": {
+      "__id__": 33
+    },
+    "duration": 0.3,
+    "relativeDuration": false,
+    "exitConditionEnabled": true,
+    "_exitCondition": 1
+  },
+  {
+    "__type__": "cc.animation.AnimationGraphEventBinding",
+    "methodName": ""
+  },
+  {
+    "__type__": "cc.animation.AnimationGraphEventBinding",
+    "methodName": ""
+  },
+  {
+    "__type__": "cc.animation.AnimationTransition",
+    "__editorExtras__": null,
+    "from": {
+      "__id__": 14
+    },
+    "to": {
+      "__id__": 6
+    },
+    "conditions": [],
+    "destinationStart": 0,
+    "relativeDestinationStart": false,
+    "startEventBinding": {
+      "__id__": 35
+    },
+    "endEventBinding": {
+      "__id__": 36
+    },
+    "duration": 0.3,
+    "relativeDuration": false,
+    "exitConditionEnabled": true,
+    "_exitCondition": 1
+  },
+  {
+    "__type__": "cc.animation.AnimationGraphEventBinding",
+    "methodName": ""
+  },
+  {
+    "__type__": "cc.animation.AnimationGraphEventBinding",
+    "methodName": ""
   },
   {
     "__type__": "cc.animation.TriggerVariable",
