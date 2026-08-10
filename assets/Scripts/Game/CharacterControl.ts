@@ -7,6 +7,9 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('CharacterControl')
 export class CharacterControl extends Component {
+    @property({tooltip: "角色編號"})
+    private characterIndex: number = 0;
+
     private anim: Animation | null = null;
 
     private isInit: boolean = false;
@@ -30,7 +33,7 @@ export class CharacterControl extends Component {
      * 設置所有角色動畫Clips
      */
     private setClips() {
-        CharacterDataManager.getInstance().characterClips.forEach((clip) => {
+        CharacterDataManager.getInstance().getAnimationClips(this.characterIndex)?.forEach((clip) => {
             this.anim.addClip(clip);
         });
     }

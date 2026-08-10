@@ -9,8 +9,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('CharacterDataManager')
 export class CharacterDataManager extends SingletonComponent<CharacterDataManager> {
-    // 角色動畫
-    public characterClips: AnimationClip[] = [];
+    // 角色動畫_0
+    private characterClips_0: AnimationClip[] = [];
 
     // 角色數量
     private _characterCount: number = 0;
@@ -27,7 +27,7 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
         // 載入所有角色動畫
         this.loadAllCharacterClips();
         // 預載入所有角色 Prefab
-        this.characterClips.forEach((clip) => {
+        this.characterClips_0.forEach((clip) => {
             this.clipsMap.set(clip.name, clip.duration);
         });
     }
@@ -37,6 +37,7 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
      * @returns 
      */
     private loadAllCharacterClips(): Promise<void> {
+        // 角色_0
         return new Promise((resolve) => {
             resources.loadDir('CharacterClips_0', AnimationClip, (err, clips) => {
                 if (err) {
@@ -44,12 +45,25 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
                     resolve();
                     return;
                 }
-
-                this.characterClips = clips;
+                this.characterClips_0 = clips;
                 console.log(`[CharacterControl] 成功載入CharacterClips_0: ${clips.length} 個動畫檔`);
                 resolve();
             });
         });
+    }
+
+    /**
+     * 獲取角色動畫
+     * @param index 
+     */
+    public getAnimationClips(index: number) : AnimationClip[] {
+        switch(index) {
+            case 0:
+                return this.characterClips_0;
+
+            default: 
+                return [];
+        }
     }
 
     /**
