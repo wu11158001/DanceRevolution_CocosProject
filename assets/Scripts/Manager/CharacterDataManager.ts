@@ -9,8 +9,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('CharacterDataManager')
 export class CharacterDataManager extends SingletonComponent<CharacterDataManager> {
-    @property([AnimationClip])
-    private danceClips: AnimationClip[] = [];
+    // 角色動畫
+    public characterClips: AnimationClip[] = [];
 
     // 角色數量
     private _characterCount: number = 0;
@@ -24,8 +24,31 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
     private clipsMap: Map<string, number> = new Map();
 
     protected start() {
-        this.danceClips.forEach((clip) => {
+        // 載入所有角色動畫
+        this.loadAllCharacterClips();
+        // 預載入所有角色 Prefab
+        this.characterClips.forEach((clip) => {
             this.clipsMap.set(clip.name, clip.duration);
+        });
+    }
+
+    /**
+     * 載入所有角色動畫
+     * @returns 
+     */
+    private loadAllCharacterClips(): Promise<void> {
+        return new Promise((resolve) => {
+            resources.loadDir('characterClips', AnimationClip, (err, clips) => {
+                if (err) {
+                    console.error('[CharacterControl] 載入 characterClips 失敗:', err);
+                    resolve();
+                    return;
+                }
+
+                this.characterClips = clips;
+                console.log(`[CharacterControl] 成功載入 ${clips.length} 個動畫檔`);
+                resolve();
+            });
         });
     }
 

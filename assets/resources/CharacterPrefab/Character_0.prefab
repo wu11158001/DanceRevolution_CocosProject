@@ -8136,7 +8136,7 @@
     "fileId": "108jIVCYRNB4Vrm8ZtTbGh"
   },
   {
-    "__type__": "cc.animation.AnimationController",
+    "__type__": "cc.Animation",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -8147,19 +8147,14 @@
     "__prefab": {
       "__id__": 274
     },
-    "_graph": {
-      "__uuid__": "d73a65fb-cdb7-445a-a1c9-8025227b06e4",
-      "__expectedType__": "cc.animation.AnimationGraph"
-    },
-    "graph": {
-      "__uuid__": "d73a65fb-cdb7-445a-a1c9-8025227b06e4",
-      "__expectedType__": "cc.animation.AnimationGraph"
-    },
+    "playOnLoad": false,
+    "_clips": [],
+    "_defaultClip": null,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "f9XBE4RF1FmIVsLccj1hOY"
+    "fileId": "7erJHdKP9JW4VjssfwGXmc"
   },
   {
     "__type__": "cc.PrefabInfo",

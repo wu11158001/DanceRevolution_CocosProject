@@ -34,8 +34,11 @@ export interface IPlayHitResult {
     rating: string;                 // 判定 ('PERFECT' / 'GREAT' / 'GOOD' / 'MISS')
     scoreGained: number;            // 該玩家此拍獲得的分數
     scores: Record<string, number>; // 所有玩家的最新總分對照表{ [playerId]: totalScore }
-    danceAnim: string;              // 當前小節舞步動畫名稱
+    totalScore: number;             // 該玩家個人總分
+    danceAnim: number;              // 當前小節舞步動畫index
+    animPhase: number;
     perfectCombo: number;           // perfect連續次數
+    completedCount: number;         // 有正確輸入數量
 }
 
 // 單一玩家的判定統計

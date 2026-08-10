@@ -2,14 +2,14 @@
   "ver": "2.3.13",
   "importer": "fbx",
   "imported": true,
-  "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0",
+  "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b",
   "files": [
     "__original-animation-0.cconb"
   ],
   "subMetas": {
     "11088": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@11088",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@11088",
       "displayName": "",
       "id": "11088",
       "name": "DiffuseColor_Texture_4.image",
@@ -29,7 +29,7 @@
     },
     "28398": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@28398",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@28398",
       "displayName": "",
       "id": "28398",
       "name": "DiffuseColor_Texture_10.texture",
@@ -41,7 +41,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@44724"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@44724"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -52,7 +52,7 @@
     },
     "44724": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@44724",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@44724",
       "displayName": "",
       "id": "44724",
       "name": "DiffuseColor_Texture_10.image",
@@ -72,7 +72,7 @@
     },
     "63219": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@63219",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@63219",
       "displayName": "",
       "id": "63219",
       "name": "DiffuseColor_Texture_2.texture",
@@ -84,7 +84,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b0ccd"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@b0ccd"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -95,7 +95,7 @@
     },
     "a62fe": {
       "importer": "gltf-mesh",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a62fe",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@a62fe",
       "displayName": "",
       "id": "a62fe",
       "name": "Scene.mesh",
@@ -113,17 +113,17 @@
     },
     "18d6f": {
       "importer": "gltf-animation",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@18d6f",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@18d6f",
       "displayName": "",
       "id": "18d6f",
-      "name": "Dance_13.animation",
+      "name": "Dance_12.animation",
       "userData": {
         "gltfIndex": 0,
-        "wrapMode": 2,
+        "wrapMode": 0,
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 21.96666717529297
+          "to": 18.200000762939453
         },
         "events": []
       },
@@ -136,7 +136,7 @@
     },
     "438fe": {
       "importer": "gltf-skeleton",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@438fe",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@438fe",
       "displayName": "",
       "id": "438fe",
       "name": "UnnamedSkeleton.skeleton",
@@ -153,7 +153,7 @@
     },
     "fd73d": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@fd73d",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@fd73d",
       "displayName": "",
       "id": "fd73d",
       "name": "DiffuseColor_Texture.image",
@@ -173,7 +173,7 @@
     },
     "ca721": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@ca721",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@ca721",
       "displayName": "",
       "id": "ca721",
       "name": "DiffuseColor_Texture_1.image",
@@ -193,7 +193,7 @@
     },
     "b0ccd": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b0ccd",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@b0ccd",
       "displayName": "",
       "id": "b0ccd",
       "name": "DiffuseColor_Texture_2.image",
@@ -213,7 +213,7 @@
     },
     "088c7": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@088c7",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@088c7",
       "displayName": "",
       "id": "088c7",
       "name": "DiffuseColor_Texture_3.image",
@@ -233,7 +233,7 @@
     },
     "8738b": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@8738b",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@8738b",
       "displayName": "",
       "id": "8738b",
       "name": "DiffuseColor_Texture_5.image",
@@ -253,7 +253,7 @@
     },
     "02fc8": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@02fc8",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@02fc8",
       "displayName": "",
       "id": "02fc8",
       "name": "DiffuseColor_Texture_6.image",
@@ -273,7 +273,7 @@
     },
     "a868b": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a868b",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@a868b",
       "displayName": "",
       "id": "a868b",
       "name": "DiffuseColor_Texture_7.image",
@@ -293,7 +293,7 @@
     },
     "86bac": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@86bac",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@86bac",
       "displayName": "",
       "id": "86bac",
       "name": "DiffuseColor_Texture_8.image",
@@ -313,7 +313,7 @@
     },
     "b5cf3": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b5cf3",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@b5cf3",
       "displayName": "",
       "id": "b5cf3",
       "name": "DiffuseColor_Texture_9.image",
@@ -333,7 +333,7 @@
     },
     "695bd": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@695bd",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@695bd",
       "displayName": "",
       "id": "695bd",
       "name": "DiffuseColor_Texture_11.image",
@@ -353,7 +353,7 @@
     },
     "a71d0": {
       "importer": "gltf-embeded-image",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a71d0",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@a71d0",
       "displayName": "",
       "id": "a71d0",
       "name": "DiffuseColor_Texture_12.image",
@@ -373,7 +373,7 @@
     },
     "4f17a": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@4f17a",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@4f17a",
       "displayName": "",
       "id": "4f17a",
       "name": "DiffuseColor_Texture.texture",
@@ -385,7 +385,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@fd73d"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@fd73d"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -396,7 +396,7 @@
     },
     "05a41": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@05a41",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@05a41",
       "displayName": "",
       "id": "05a41",
       "name": "DiffuseColor_Texture_1.texture",
@@ -408,7 +408,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@ca721"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@ca721"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -419,7 +419,7 @@
     },
     "04f7a": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@04f7a",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@04f7a",
       "displayName": "",
       "id": "04f7a",
       "name": "DiffuseColor_Texture_3.texture",
@@ -431,7 +431,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@088c7"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@088c7"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -442,7 +442,7 @@
     },
     "3e1f9": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@3e1f9",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@3e1f9",
       "displayName": "",
       "id": "3e1f9",
       "name": "DiffuseColor_Texture_4.texture",
@@ -454,7 +454,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@11088"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@11088"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -465,7 +465,7 @@
     },
     "262be": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@262be",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@262be",
       "displayName": "",
       "id": "262be",
       "name": "DiffuseColor_Texture_5.texture",
@@ -477,7 +477,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@8738b"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@8738b"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -488,7 +488,7 @@
     },
     "0e414": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@0e414",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@0e414",
       "displayName": "",
       "id": "0e414",
       "name": "DiffuseColor_Texture_6.texture",
@@ -500,7 +500,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@02fc8"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@02fc8"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -511,7 +511,7 @@
     },
     "e874c": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@e874c",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@e874c",
       "displayName": "",
       "id": "e874c",
       "name": "DiffuseColor_Texture_7.texture",
@@ -523,7 +523,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a868b"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@a868b"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -534,7 +534,7 @@
     },
     "c599a": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@c599a",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@c599a",
       "displayName": "",
       "id": "c599a",
       "name": "DiffuseColor_Texture_8.texture",
@@ -546,7 +546,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@86bac"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@86bac"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -557,7 +557,7 @@
     },
     "ca25e": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@ca25e",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@ca25e",
       "displayName": "",
       "id": "ca25e",
       "name": "DiffuseColor_Texture_9.texture",
@@ -569,7 +569,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b5cf3"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@b5cf3"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -580,7 +580,7 @@
     },
     "d2ecc": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@d2ecc",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@d2ecc",
       "displayName": "",
       "id": "d2ecc",
       "name": "DiffuseColor_Texture_11.texture",
@@ -592,7 +592,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@695bd"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@695bd"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -603,7 +603,7 @@
     },
     "05606": {
       "importer": "texture",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@05606",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@05606",
       "displayName": "",
       "id": "05606",
       "name": "DiffuseColor_Texture_12.texture",
@@ -615,7 +615,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a71d0"
+        "imageUuidOrDatabaseUri": "c97d5006-122f-4d4c-bedc-25a31513789b@a71d0"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -626,7 +626,7 @@
     },
     "6ed91": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@6ed91",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@6ed91",
       "displayName": "",
       "id": "6ed91",
       "name": "N00_000_00_FaceMouth_00_FACE__Instance_.material",
@@ -642,7 +642,7 @@
     },
     "2fbbd": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@2fbbd",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@2fbbd",
       "displayName": "",
       "id": "2fbbd",
       "name": "N00_000_00_EyeIris_00_EYE__Instance_.material",
@@ -658,7 +658,7 @@
     },
     "3e7ba": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@3e7ba",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@3e7ba",
       "displayName": "",
       "id": "3e7ba",
       "name": "N00_000_00_EyeHighlight_00_EYE__Instance_.material",
@@ -674,7 +674,7 @@
     },
     "25d1a": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@25d1a",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@25d1a",
       "displayName": "",
       "id": "25d1a",
       "name": "N00_000_00_Face_00_SKIN__Instance_.material",
@@ -690,7 +690,7 @@
     },
     "1c313": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@1c313",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@1c313",
       "displayName": "",
       "id": "1c313",
       "name": "N00_000_00_EyeWhite_00_EYE__Instance_.material",
@@ -706,7 +706,7 @@
     },
     "61a2d": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@61a2d",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@61a2d",
       "displayName": "",
       "id": "61a2d",
       "name": "N00_000_00_FaceBrow_00_FACE__Instance_.material",
@@ -722,7 +722,7 @@
     },
     "3d575": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@3d575",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@3d575",
       "displayName": "",
       "id": "3d575",
       "name": "N00_000_00_FaceEyeline_00_FACE__Instance_.material",
@@ -738,7 +738,7 @@
     },
     "ef756": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@ef756",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@ef756",
       "displayName": "",
       "id": "ef756",
       "name": "N00_000_00_Body_00_SKIN__Instance_.material",
@@ -754,7 +754,7 @@
     },
     "b0df7": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b0df7",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@b0df7",
       "displayName": "",
       "id": "b0df7",
       "name": "N00_000_00_HairBack_00_HAIR__Instance_.material",
@@ -770,7 +770,7 @@
     },
     "81ea8": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@81ea8",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@81ea8",
       "displayName": "",
       "id": "81ea8",
       "name": "N00_001_02_Bottoms_01_CLOTH__Instance_.material",
@@ -786,7 +786,7 @@
     },
     "ecde3": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@ecde3",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@ecde3",
       "displayName": "",
       "id": "ecde3",
       "name": "N00_002_01_Tops_01_CLOTH__Instance_.material",
@@ -802,7 +802,7 @@
     },
     "1ccb6": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@1ccb6",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@1ccb6",
       "displayName": "",
       "id": "1ccb6",
       "name": "N00_002_01_Shoes_01_CLOTH__Instance_.material",
@@ -818,7 +818,7 @@
     },
     "5d33f": {
       "importer": "gltf-material",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@5d33f",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@5d33f",
       "displayName": "",
       "id": "5d33f",
       "name": "N00_000_Hair_00_HAIR__Instance_.material",
@@ -832,12 +832,12 @@
       ],
       "subMetas": {}
     },
-    "8bb87": {
+    "d962a": {
       "importer": "gltf-scene",
-      "uuid": "12139f77-99dc-4fff-9851-b75c2f66e8f0@8bb87",
+      "uuid": "c97d5006-122f-4d4c-bedc-25a31513789b@d962a",
       "displayName": "",
-      "id": "8bb87",
-      "name": "Dance_13.prefab",
+      "id": "d962a",
+      "name": "Dance_12.prefab",
       "userData": {
         "gltfIndex": 0
       },
@@ -853,55 +853,55 @@
     "imageMetas": [
       {
         "name": "DiffuseColor_Texture",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@fd73d"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@fd73d"
       },
       {
         "name": "DiffuseColor_Texture_1",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@ca721"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@ca721"
       },
       {
         "name": "DiffuseColor_Texture_2",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b0ccd"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@b0ccd"
       },
       {
         "name": "DiffuseColor_Texture_3",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@088c7"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@088c7"
       },
       {
         "name": "DiffuseColor_Texture_4",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@11088"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@11088"
       },
       {
         "name": "DiffuseColor_Texture_5",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@8738b"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@8738b"
       },
       {
         "name": "DiffuseColor_Texture_6",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@02fc8"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@02fc8"
       },
       {
         "name": "DiffuseColor_Texture_7",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a868b"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@a868b"
       },
       {
         "name": "DiffuseColor_Texture_8",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@86bac"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@86bac"
       },
       {
         "name": "DiffuseColor_Texture_9",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@b5cf3"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@b5cf3"
       },
       {
         "name": "DiffuseColor_Texture_10",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@44724"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@44724"
       },
       {
         "name": "DiffuseColor_Texture_11",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@695bd"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@695bd"
       },
       {
         "name": "DiffuseColor_Texture_12",
-        "uri": "12139f77-99dc-4fff-9851-b75c2f66e8f0@a71d0"
+        "uri": "c97d5006-122f-4d4c-bedc-25a31513789b@a71d0"
       }
     ],
     "fbx": {
@@ -910,14 +910,14 @@
     "animationImportSettings": [
       {
         "name": "mixamo.com",
-        "duration": 21.96666717529297,
+        "duration": 18.200000762939453,
         "fps": 30,
         "splits": [
           {
-            "name": "Dance_13",
+            "name": "Dance_12",
             "from": 0,
-            "to": 21.96666717529297,
-            "wrapMode": 2,
+            "to": 18.200000762939453,
+            "wrapMode": 0,
             "previousId": "18d6f"
           }
         ]
@@ -943,43 +943,43 @@
     },
     "assetFinder": {
       "meshes": [
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@a62fe"
+        "c97d5006-122f-4d4c-bedc-25a31513789b@a62fe"
       ],
       "skeletons": [
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@438fe"
+        "c97d5006-122f-4d4c-bedc-25a31513789b@438fe"
       ],
       "textures": [
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@4f17a",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@05a41",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@63219",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@04f7a",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@3e1f9",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@262be",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@0e414",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@e874c",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@c599a",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@ca25e",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@28398",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@d2ecc",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@05606"
+        "c97d5006-122f-4d4c-bedc-25a31513789b@4f17a",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@05a41",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@63219",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@04f7a",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@3e1f9",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@262be",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@0e414",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@e874c",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@c599a",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@ca25e",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@28398",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@d2ecc",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@05606"
       ],
       "materials": [
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@6ed91",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@2fbbd",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@3e7ba",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@25d1a",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@1c313",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@61a2d",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@3d575",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@ef756",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@b0df7",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@81ea8",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@ecde3",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@1ccb6",
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@5d33f"
+        "c97d5006-122f-4d4c-bedc-25a31513789b@6ed91",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@2fbbd",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@3e7ba",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@25d1a",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@1c313",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@61a2d",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@3d575",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@ef756",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@b0df7",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@81ea8",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@ecde3",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@1ccb6",
+        "c97d5006-122f-4d4c-bedc-25a31513789b@5d33f"
       ],
       "scenes": [
-        "12139f77-99dc-4fff-9851-b75c2f66e8f0@8bb87"
+        "c97d5006-122f-4d4c-bedc-25a31513789b@d962a"
       ]
     }
   }

@@ -1,41 +1,82 @@
-import { _decorator, animation, Component } from 'cc';
+import { _decorator, Animation, Component } from 'cc';
 import { CharacterDataManager } from '../Manager/CharacterDataManager';
 const { ccclass, property } = _decorator;
 
+/**
+ * 角色3D控制
+ */
 @ccclass('CharacterControl')
 export class CharacterControl extends Component {
-    private animController: animation.AnimationController | null = null;
+    private anim: Animation | null = null;
 
     start() {
-        this.animController = this.node.getComponent(animation.AnimationController);
+        this.anim = this.node.getComponent(Animation);
+        this.setClips();
+
+        if(this.anim) {
+            this.anim.play('Idle');
+        }
     }
 
+    /**
+     * 設置所有角色動畫Clips
+     */
+    private setClips() {
+        CharacterDataManager.getInstance().characterClips.forEach((clip) => {
+            this.anim.addClip(clip);
+        });
+    }
 
     /**
      * 播放舞蹈動畫並自動縮放到 1 小節長度
-     * @param key 動畫圖觸發鍵 / Clip 名稱 (例如 'Dance_0')
-     * @param barIntervalMs 伺服器傳來的 1 小節毫秒數 (例如 2000)
+     * @param index 舞步動畫index
+     * @param animPhase 該舞步的階段(1=重頭開始, 2=重一半位置開始)
+     * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
      */
-    public playAnimation(key: string, barIntervalMs: number) {
-        if (!this.animController) return;
+    public playDanceAnimation(index: number, animPhase: number, barIntervalMs: number) {
+        if (!this.anim) return;
 
-        // 取得 Clip 原始長度
-        const originalDurationSec = CharacterDataManager.getInstance().getAnimationClipDuration(key);
-        if (originalDurationSec <= 0) return;
+        const clipName = `Dance_${index}`;
+        const state = this.anim.getState(clipName);
 
-        // 計算目標長度 (秒) 與所需的播放倍數 (Speed)
+        if (!state) {
+            console.warn(`[CharacterControl] 找不到動畫 State: ${clipName}`);
+            return;
+        }
+
         const targetDurationSec = barIntervalMs / 1000;
-        let requiredSpeed = originalDurationSec / targetDurationSec;
+        state.speed = state.duration / targetDurationSec;
+        this.anim.play(clipName);
 
-        // 寫入速度變數與觸發狀態
-        this.animController.setValue('DanceSpeed', requiredSpeed);
-        this.animController.setValue(key, true);
+        // 如果是2則從一半進度開始撥放
+        const startProgress = animPhase === 2 ? 0.5 : 0;
+        state.time = state.duration * startProgress;
 
-        // 重置 Bool / Trigger 狀態
-        this.scheduleOnce(() => {
-            if (this.animController) {
-                this.animController.setValue(key, false);
-            }
-        }, 0.1);
+        // 強制採樣，確保當前畫格立刻更新至該時間點，防止出現 1 幀的閃爍
+        state.sample();
+    }
+
+    /**
+     * 撥放動畫並自動縮放到 1 小節長度
+     * @param key 動畫名稱/Clip名稱
+     * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
+     */
+    public playTriggerAnimation(key: string, barIntervalMs: number) {
+        if (!this.anim) return;
+
+        const state = this.anim.getState(key);
+
+        if (!state) {
+            console.warn(`[CharacterControl] 找不到動畫 State: ${key}`);
+            return;
+        }
+
+        // 計算並設定播放速率
+        const targetDurationSec = barIntervalMs / 1000;
+        state.speed = targetDurationSec > 0 ? state.duration / targetDurationSec : 1;
+
+        // 從頭開始播放
+        state.time = 0;
+        this.anim.play(key);
     }
 }
