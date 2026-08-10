@@ -30,14 +30,17 @@ export class GameResultView extends BaseView {
     }
 
     public setData(data: IGameResult) {
-        data.results.forEach((result) => {
+        // 由高到低排序
+        const sortedPlayers = [...data.results].sort((a, b) => b.totalScore - a.totalScore);
+
+        sortedPlayers.forEach((playerData, index) => {
             const obj = instantiate(this.itemPrefab);
             obj.active = true;
             obj.setParent(this.itemNode);
 
             const gameResultItem = obj.getComponent(GameResultItem);
             if(gameResultItem) {
-                gameResultItem.setData(result);
+                gameResultItem.setData(playerData, index);
             }
         });
     }

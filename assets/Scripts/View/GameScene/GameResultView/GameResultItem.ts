@@ -1,6 +1,7 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Color, Component, Label, Node, Sprite, SpriteFrame } from 'cc';
 import { IPlayerGameResult } from '../../../Manager/GameManager';
 import { GameTool } from '../../../Tools/GameTool';
+import { PlayerData } from '../../../Data/PlayerData';
 const { ccclass, property } = _decorator;
 
 /**
@@ -8,22 +9,38 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('GameResultItem')
 export class GameResultItem extends Component {
+    @property(Sprite)
+    private mainBg: Sprite = null;
+    @property([SpriteFrame])
+    private bgSpriteFrames: SpriteFrame[] = [];
+
+    @property(Node)
+    private selfNode: Node = null;
+    @property(Node)
+    private firstPlaceNode: Node = null;
+
     @property(Label)
     private label_nickname: Label = null;
-        @property(Label)
+    @property(Label)
     private label_score: Label = null;
-        @property(Label)
+    @property(Label)
     private label_combo: Label = null;
-        @property(Label)
+    @property(Label)
     private label_perfect: Label = null;
-        @property(Label)
+    @property(Label)
     private label_great: Label = null;
-        @property(Label)
+    @property(Label)
     private label_good: Label = null;
-        @property(Label)
+    @property(Label)
     private label_miss: Label = null;
 
-    public setData(data: IPlayerGameResult) {
+    public setData(data: IPlayerGameResult, index: number) {
+        let isSelf = data.playerId == PlayerData.playerId;
+
+        this.selfNode.active = isSelf;
+        this.firstPlaceNode.active = index == 0;
+        this.mainBg.spriteFrame = isSelf ? this.bgSpriteFrames[0] : this.bgSpriteFrames[1];
+
         this.label_nickname.string = data.nickname;
         this.label_score.string = GameTool.getInstance().formatNumber(data.totalScore);
         this.label_combo.string = GameTool.getInstance().formatNumber(data.maxPerfectCombo);

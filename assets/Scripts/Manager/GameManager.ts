@@ -207,8 +207,10 @@ export class GameManager extends Component {
      * 接收:遊戲結束
      * @param data 
      */
-    private onGameEnd(data: IGameResult) {
+    private async onGameEnd(data: IGameResult) {
         this.gameVIew.onGameOver();
+
+        await new Promise(resolve => setTimeout(resolve, 2500));
 
         ViewManager.getInstance().openView<GameResultView>('GameResultView', 'Popup').then((view) => {
             view.setData(data);
