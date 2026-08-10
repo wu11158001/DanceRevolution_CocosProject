@@ -84,7 +84,7 @@ export class GameManager extends Component {
 
         SocketManager.getInstance().socket?.off('game_started');
         SocketManager.getInstance().socket?.off('new_note_sequence');
-        SocketManager.getInstance().socket?.off('bar_hit_results');
+        SocketManager.getInstance().socket?.off('player_hit_result');
         SocketManager.getInstance().socket?.off('game_ended');
     }
 
