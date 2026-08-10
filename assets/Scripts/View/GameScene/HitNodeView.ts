@@ -1,10 +1,12 @@
 import { 
     _decorator, Component, instantiate, Node, Sprite, SpriteFrame, UITransform, Vec3, math,
-    input, Input, EventKeyboard, KeyCode 
+    input, Input, EventKeyboard, KeyCode, Color, tween,
+    color
 } from 'cc';
+
 import { BaseView } from '../BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
-import { INoteSequenceData } from '../../Manager/GameManager';
+import { GameManager, INoteSequenceData} from 'db://assets/Scripts/Manager/GameManager';
 
 const { ccclass, property } = _decorator;
 
@@ -13,17 +15,17 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('HitNodeView')
 export class HitNodeView extends BaseView {
-    @property(Node)
-    private beatBar: Node = null;
+    @property(Sprite)
+    private sprite_beatBar: Sprite = null;
     @property(Node)
     private cursor: Node = null;
-    @property(Node)
-    private hitZone: Node = null;
+    @property(Sprite)
+    private sprite_hitZone: Sprite = null;
     @property({ tooltip: "打擊點位於背景條的比例 (0.8 代表 80% 位置)" })
     private hitRatio: number = 0.8;
 
-    @property(Node)
-    private nodePanel: Node = null;
+    @property(Sprite)
+    private sprite_nodeBar: Sprite = null;
     @property(Node)
     private nodeArrowPrefab: Node = null;
     @property([SpriteFrame])
@@ -32,6 +34,7 @@ export class HitNodeView extends BaseView {
     private barWidth: number = 0;
     private barStartTime: number = 0;
     private barIntervalMs: number = 0;
+    private beatIntervalMs: number = 0; // 單拍毫秒數
     private targetHitTime: number = 0;
     private isRunning: boolean = false;
 
@@ -53,15 +56,15 @@ export class HitNodeView extends BaseView {
     public async onOpen(params?: any) {
         super.onOpen(params);
 
-        this.nodePanel.active = false;
+        this.sprite_nodeBar.node.active = false;
         this.nodeArrowPrefab.active = false;
 
-        const transform = this.beatBar.getComponent(UITransform);
-        this.barWidth = transform ? transform.width : 800;
+        const transform = this.sprite_beatBar.getComponent(UITransform);
+        this.barWidth = transform ? transform.width : 320;
         const hitZoneX = this.barWidth * this.hitRatio;
-        this.hitZone.setPosition(new Vec3(hitZoneX, 0, 0));
+        this.sprite_hitZone.node.setPosition(new Vec3(hitZoneX, 0, 0));
         this.cursor.setPosition(new Vec3(0, 0, 0));
-        this.beatBar.active = false;
+        this.sprite_beatBar.node.active = false;
     }
 
     protected update(deltaTime: number) {
@@ -75,19 +78,60 @@ export class HitNodeView extends BaseView {
         const currentX = math.clamp01(this.currentProgress) * this.barWidth;
         this.cursor.setPosition(new Vec3(currentX, 0, 0));
 
-        // 未打擊
+        // 依據節拍更新 hitZone 的 Alpha
+        this.updateHitZoneAlpha(currentServerTime);
+
+        // 未打擊 (超過當前小節時間)
         if (this.currentProgress >= 1.0) {
             this.resetState();
         }
     }
 
     /**
-     * 重製狀態
+     * 計算並更新 HitZone 依照節拍的 Alpha 變化
+     */
+    private updateHitZoneAlpha(currentServerTime: number) {
+        if (!this.sprite_hitZone || this.beatIntervalMs <= 0) return;
+
+        // 計算在當前單拍內的相對時間進度 (0.0 ~ 1.0)
+        const elapsedTime = currentServerTime - this.barStartTime;
+        const beatProgress = (elapsedTime % this.beatIntervalMs) / this.beatIntervalMs;
+
+        const minAlpha = 180;
+        const maxAlpha = 255;
+        const alphaRange = (maxAlpha - minAlpha) / 2;
+        const centerAlpha = minAlpha + alphaRange;
+
+        const calculatedAlpha = centerAlpha + alphaRange * Math.cos(beatProgress * Math.PI * 2);
+
+        // 更新 Sprite 顏色 Alpha
+        const color = this.sprite_hitZone.color;
+        this.sprite_hitZone.color = new Color(color.r, color.g, color.b, math.clamp(calculatedAlpha, minAlpha, maxAlpha));
+    }
+
+    /**
+     * 重置狀態與復原組件屬性
      */
     private resetState() {
         this.isRunning = false;
-        this.beatBar.active = false;
-        this.nodePanel.active = false;
+
+        if (this.sprite_beatBar) {
+            this.sprite_beatBar.node.active = false;
+            const c = this.sprite_beatBar.color;
+            this.sprite_beatBar.color = new Color(c.r, c.g, c.b, 255);
+        }
+
+        if (this.sprite_nodeBar) {
+            this.sprite_nodeBar.node.active = false;
+            const c = this.sprite_nodeBar.color;
+            this.sprite_nodeBar.color = new Color(c.r, c.g, c.b, 255);
+        }
+
+        if (this.sprite_hitZone) {
+            this.sprite_hitZone.node.setScale(new Vec3(1, 1, 1));
+            const color = this.sprite_hitZone.color;
+            this.sprite_hitZone.color = new Color(color.r, color.g, color.b, 255);
+        }
 
         this.currentInputIndex = 0;
         this.currentSequence = [];
@@ -101,8 +145,9 @@ export class HitNodeView extends BaseView {
 
         this.targetHitTime = data.targetHitTime;
         this.barIntervalMs = data.barIntervalMs || (data.beatIntervalMs * 4);
+        this.beatIntervalMs = data.beatIntervalMs || (this.barIntervalMs / 4);
 
-        this.beatBar.active = true;
+        this.sprite_beatBar.node.active = true;
         this.barStartTime = this.targetHitTime - (this.barIntervalMs * this.hitRatio);
         this.isRunning = true;
 
@@ -124,17 +169,18 @@ export class HitNodeView extends BaseView {
         });
         this.nodeArrows = [];
 
-        this.nodePanel.active = true;
+        this.sprite_nodeBar.node.active = true;
 
         // 產生新譜面
         sequence.forEach((sequenceString) => {
             let obj = instantiate(this.nodeArrowPrefab);
             obj.active = true;
-            obj.setParent(this.nodePanel);
+            obj.setParent(this.sprite_nodeBar.node);
 
             let sp = obj.getComponent(Sprite);
             if (sp && this.nodeArrowSprites.length > 0) {
                 sp.spriteFrame = this.nodeArrowSprites[0];
+                sp.color = new Color(255, 255, 255, 255);
             }
 
             let angle = 0;
@@ -192,15 +238,47 @@ export class HitNodeView extends BaseView {
         const targetDirection = this.currentSequence[this.currentInputIndex];
 
         if (pressedDirection === targetDirection) {
-            // 輸入正確：切換圖片為 nodeArrowSprites[1]
-            if (this.nodeArrows[this.currentInputIndex] && this.nodeArrowSprites[1]) {
-                this.nodeArrows[this.currentInputIndex].spriteFrame = this.nodeArrowSprites[1];
+            const currentArrow = this.nodeArrows[this.currentInputIndex];
+            if (currentArrow) {
+                tween(currentArrow.node).stop();
+
+                // 箭頭漸變效果
+                const startColor = currentArrow.color.clone();
+                const black = new Color(0, 0, 0, 255);
+                const white = new Color(255, 255, 255, 255);
+
+                tween(currentArrow.node)
+                    // 先變黑
+                    .to(0.1, {}, {
+                        onUpdate: (target, ratio) => {
+                            let r = math.lerp(startColor.r, black.r, ratio);
+                            let g = math.lerp(startColor.g, black.g, ratio);
+                            let b = math.lerp(startColor.b, black.b, ratio);
+                            currentArrow.color = new Color(r, g, b, 255); // 觸發 Sprite setter 刷新畫面
+                        }
+                    })
+                    // 換圖
+                    .call(() => {
+                        if (this.nodeArrowSprites[1]) {
+                            currentArrow.spriteFrame = this.nodeArrowSprites[1];
+                        }
+                    })
+                    // 再變白
+                    .to(0.1, {}, {
+                        onUpdate: (target, ratio) => {
+                            let r = math.lerp(black.r, white.r, ratio);
+                            let g = math.lerp(black.g, white.g, ratio);
+                            let b = math.lerp(black.b, white.b, ratio);
+                            currentArrow.color = new Color(r, g, b, 255); // 觸發 Sprite setter 刷新畫面
+                        }
+                    })
+                    .start();
             }
             this.currentInputIndex++;
         } else {
-            // 輸入錯誤：全部箭頭恢復為 nodeArrowSprites[0]，重置索引為 0
             this.resetInputSequence();
         }
+        
     }
 
     /**
@@ -210,6 +288,8 @@ export class HitNodeView extends BaseView {
         this.currentInputIndex = 0;
         this.nodeArrows.forEach((sp) => {
             if (sp && this.nodeArrowSprites[0]) {
+                tween(sp.node).stop();
+                sp.color = new Color(255, 255, 255, 255)
                 sp.spriteFrame = this.nodeArrowSprites[0];
             }
         });
@@ -220,7 +300,7 @@ export class HitNodeView extends BaseView {
      */
     private onSpaceHit() {
         // 進度小於 50% || 沒有任何正確
-        if(this.currentProgress < 0.5 || this.currentInputIndex == 0) return;
+        if (this.currentProgress < 0.5 || this.currentInputIndex === 0) return;
 
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
 
@@ -231,6 +311,38 @@ export class HitNodeView extends BaseView {
             sequenceLength: this.currentSequence.length // 總箭頭數
         });
 
-        this.resetState();
+        // 停止打擊判定 logic
+        this.isRunning = false;
+
+        // sprite_hitZone 寬度放大
+        if (this.sprite_hitZone) {
+            tween(this.sprite_hitZone.node)
+                .to(0.2, { scale: new Vec3(1.5, 1, 1) })
+                .start();
+        }
+
+        // sprite_beatBar 與 sprite_nodeBar 淡出至 Alpha 0 後隱藏
+        let fadeCompletedCount = 0;
+        const onFadeComplete = () => {
+            fadeCompletedCount++;
+            if (fadeCompletedCount >= 2) {
+                this.resetState();
+            }
+        };
+
+        const fadeOutSprite = (sprite: Sprite) => {
+            if (!sprite || !sprite.node.active) {
+                onFadeComplete();
+                return;
+            }
+            const curColor = sprite.color;
+            tween(sprite)
+                .to(0.35, { color: new Color(curColor.r, curColor.g, curColor.b, 0) })
+                .call(() => onFadeComplete())
+                .start();
+        };
+
+        fadeOutSprite(this.sprite_beatBar);
+        fadeOutSprite(this.sprite_nodeBar);
     }
 }

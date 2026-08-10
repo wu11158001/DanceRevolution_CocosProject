@@ -194,13 +194,32 @@
               "__uuid__": "ea854179-c696-40b1-b21e-17cba0159e87@6c48a",
               "__expectedType__": "cc.Texture2D"
             },
+            "mainColor": {
+              "__type__": "cc.Color",
+              "r": 187,
+              "g": 19,
+              "b": 19,
+              "a": 255
+            },
             "albedoScale": 0.800000011920929,
             "emissive": {
               "__type__": "cc.Color",
-              "r": 243,
-              "g": 41,
-              "b": 41,
+              "r": 126,
+              "g": 13,
+              "b": 13,
               "a": 255
+            },
+            "emissiveMap": {
+              "__uuid__": "8afdf801-43ac-4169-bb7f-b7420ee7075b@6c48a",
+              "__expectedType__": "cc.Texture2D"
+            },
+            "emissiveScaleMap": {
+              "__uuid__": "8afdf801-43ac-4169-bb7f-b7420ee7075b@6c48a",
+              "__expectedType__": "cc.Texture2D"
+            },
+            "specularGlossinessMap": {
+              "__uuid__": "8afdf801-43ac-4169-bb7f-b7420ee7075b@6c48a",
+              "__expectedType__": "cc.Texture2D"
             },
             "specularMap": {
               "__uuid__": "8afdf801-43ac-4169-bb7f-b7420ee7075b@6c48a",
