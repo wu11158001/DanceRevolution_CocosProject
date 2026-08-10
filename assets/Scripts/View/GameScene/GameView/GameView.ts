@@ -201,7 +201,7 @@ export class GameView extends BaseView {
         // 角色動畫撥放
         const hitCharacter = this.characterMap.get(data.hitPlayerId);
         if(hitCharacter) {
-            if(data.rating == 'MISS') hitCharacter.playTriggerAnimation('Angry', barIntervalMs * 2);
+            if(data.rating == 'MISS') hitCharacter.playAnimation('Angry', barIntervalMs * 2);
             else hitCharacter.playDanceAnimation(data.danceAnim, data.animPhase, barIntervalMs * 4);
         }
 
@@ -319,7 +319,7 @@ export class GameView extends BaseView {
      */
     public onGameOver() {
         this.characterMap.forEach((character) => {
-            character.playTriggerAnimation('Idle', 0);
+            character.playAnimation('Idle');
         });
     }
 }

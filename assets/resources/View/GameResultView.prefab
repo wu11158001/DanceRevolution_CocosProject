@@ -1283,7 +1283,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 310,
+      "width": 290,
       "height": 1
     },
     "_anchorPoint": {
@@ -1314,9 +1314,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 63,
-      "g": 63,
-      "b": 63,
+      "r": 66,
+      "g": 66,
+      "b": 66,
       "a": 255
     },
     "_spriteFrame": {
@@ -1356,8 +1356,8 @@
     },
     "_alignFlags": 40,
     "_target": null,
-    "_left": 20,
-    "_right": 20,
+    "_left": 30,
+    "_right": 30,
     "_top": 0,
     "_bottom": 0,
     "_horizontalCenter": 0,
@@ -5225,7 +5225,7 @@
     },
     "popupType": "DownToUp",
     "itemNode": {
-      "__id__": 3
+      "__id__": 12
     },
     "itemPrefab": {
       "__id__": 13

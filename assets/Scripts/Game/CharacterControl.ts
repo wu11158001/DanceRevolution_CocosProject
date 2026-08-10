@@ -1,4 +1,4 @@
-import { _decorator, Animation, Component } from 'cc';
+import { _decorator, Animation, Component, TiledObjectGroup } from 'cc';
 import { CharacterDataManager } from '../Manager/CharacterDataManager';
 const { ccclass, property } = _decorator;
 
@@ -9,12 +9,20 @@ const { ccclass, property } = _decorator;
 export class CharacterControl extends Component {
     private anim: Animation | null = null;
 
-    start() {
-        this.anim = this.node.getComponent(Animation);
-        this.setClips();
+    private isInit: boolean = false;
 
-        if(this.anim) {
-            this.anim.play('Idle');
+    protected start() {
+        this.init();
+    }
+
+    private init() {
+        if(!this.isInit) {
+            this.isInit = true;
+            this.anim = this.node.getComponent(Animation);
+            if(this.anim) {
+                this.setClips();
+                this.anim.play('Idle');
+            }
         }
     }
 
@@ -34,6 +42,7 @@ export class CharacterControl extends Component {
      * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
      */
     public playDanceAnimation(index: number, animPhase: number, barIntervalMs: number) {
+        if(!this.isInit) this.init();
         if (!this.anim) return;
 
         const clipName = `Dance_${index}`;
@@ -61,9 +70,10 @@ export class CharacterControl extends Component {
      * @param key 動畫名稱/Clip名稱
      * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
      */
-    public playTriggerAnimation(key: string, barIntervalMs: number) {
+    public playAnimation(key: string, barIntervalMs: number = 0) {
+        if(!this.isInit) this.init();
         if (!this.anim) return;
-
+        
         const state = this.anim.getState(key);
 
         if (!state) {

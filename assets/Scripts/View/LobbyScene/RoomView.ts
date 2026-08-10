@@ -11,6 +11,7 @@ import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
 import { UpdateRoomNameView } from 'db://assets/Scripts/View/LobbyScene/UpdateRoomNameView';
 import { SelectSongView } from './SelectSongView/SelectSongView';
 import { MessagePopupView } from '../Common/MessagePopupView';
+import { CharacterControl } from '../../Game/CharacterControl';
 
 const { ccclass, property } = _decorator;
 
@@ -298,13 +299,21 @@ export class RoomView extends BaseView {
                 // Ready字樣
                 if(!player.isHost && player.isReady) {
                     this.readyLabels[index].active = true;
+
                     GameTool.getInstance().follow3DNode(
                         this.camera3D,
                         character,
                         this.readyLabels[index],
                         this.readyPosOffset
-                );
+                    );
+
+                    // 撥放準備完成動畫
+                    const characterControl = character.getComponent(CharacterControl);
+                    if(characterControl) {
+                        characterControl.playAnimation('ReadyPose');
+                    }
                 }
+                
 
                 // 僅限房主
                 if(isHost && !player.isHost) {
