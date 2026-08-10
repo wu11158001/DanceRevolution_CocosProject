@@ -38,15 +38,15 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
      */
     private loadAllCharacterClips(): Promise<void> {
         return new Promise((resolve) => {
-            resources.loadDir('characterClips', AnimationClip, (err, clips) => {
+            resources.loadDir('CharacterClips_0', AnimationClip, (err, clips) => {
                 if (err) {
-                    console.error('[CharacterControl] 載入 characterClips 失敗:', err);
+                    console.error('[CharacterControl] 載入 CharacterClips_0 失敗:', err);
                     resolve();
                     return;
                 }
 
                 this.characterClips = clips;
-                console.log(`[CharacterControl] 成功載入 ${clips.length} 個動畫檔`);
+                console.log(`[CharacterControl] 成功載入CharacterClips_0: ${clips.length} 個動畫檔`);
                 resolve();
             });
         });
