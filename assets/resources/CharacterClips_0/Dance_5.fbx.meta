@@ -116,7 +116,7 @@
       "uuid": "0c7d34b4-fcfd-4d1d-acca-a78bc3f12317@18d6f",
       "displayName": "",
       "id": "18d6f",
-      "name": "mixamo.com.animation",
+      "name": "Dance_5.animation",
       "userData": {
         "gltfIndex": 0,
         "wrapMode": 2,
@@ -1040,7 +1040,7 @@
         "fps": 30,
         "splits": [
           {
-            "name": "mixamo.com",
+            "name": "Dance_5",
             "from": 0,
             "to": 15.433333396911621,
             "wrapMode": 2,
