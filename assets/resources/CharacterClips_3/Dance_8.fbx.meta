@@ -2,7 +2,7 @@
   "ver": "2.3.13",
   "importer": "fbx",
   "imported": true,
-  "uuid": "24b24382-da24-41bf-be85-f2a40987096c",
+  "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a",
   "files": [
     "__original-animation-0.cconb",
     "__original-animation-1.cconb"
@@ -10,7 +10,7 @@
   "subMetas": {
     "60616": {
       "importer": "gltf-scene",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@60616",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@60616",
       "displayName": "",
       "id": "60616",
       "name": "Dance_8.prefab",
@@ -26,7 +26,7 @@
     },
     "f74ad": {
       "importer": "gltf-mesh",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@f74ad",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@f74ad",
       "displayName": "",
       "id": "f74ad",
       "name": "RobotKile.mesh",
@@ -42,35 +42,12 @@
       ],
       "subMetas": {}
     },
-    "73b7f": {
-      "importer": "gltf-animation",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@73b7f",
-      "displayName": "",
-      "id": "73b7f",
-      "name": "Dance_8.animation",
-      "userData": {
-        "gltfIndex": 0,
-        "wrapMode": 2,
-        "sample": 30,
-        "span": {
-          "from": 0,
-          "to": 5
-        },
-        "events": []
-      },
-      "ver": "1.0.17",
-      "imported": true,
-      "files": [
-        ".cconb"
-      ],
-      "subMetas": {}
-    },
     "18d6f": {
       "importer": "gltf-animation",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@18d6f",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@18d6f",
       "displayName": "",
       "id": "18d6f",
-      "name": "mixamo.com.animation",
+      "name": "Dance_8.animation",
       "userData": {
         "gltfIndex": 1,
         "wrapMode": 2,
@@ -90,7 +67,7 @@
     },
     "438fe": {
       "importer": "gltf-skeleton",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@438fe",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@438fe",
       "displayName": "",
       "id": "438fe",
       "name": "UnnamedSkeleton.skeleton",
@@ -107,7 +84,7 @@
     },
     "43c71": {
       "importer": "gltf-embeded-image",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@43c71",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@43c71",
       "displayName": "",
       "id": "43c71",
       "name": "file1.image",
@@ -127,7 +104,7 @@
     },
     "adacb": {
       "importer": "gltf-embeded-image",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@adacb",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@adacb",
       "displayName": "",
       "id": "adacb",
       "name": "file2.image",
@@ -147,7 +124,7 @@
     },
     "dfe29": {
       "importer": "gltf-embeded-image",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@dfe29",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@dfe29",
       "displayName": "",
       "id": "dfe29",
       "name": "file3.image",
@@ -167,7 +144,7 @@
     },
     "d20e9": {
       "importer": "texture",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@d20e9",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@d20e9",
       "displayName": "",
       "id": "d20e9",
       "name": "file1.texture",
@@ -179,7 +156,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "24b24382-da24-41bf-be85-f2a40987096c@43c71"
+        "imageUuidOrDatabaseUri": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@43c71"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -190,7 +167,7 @@
     },
     "e873a": {
       "importer": "texture",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@e873a",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@e873a",
       "displayName": "",
       "id": "e873a",
       "name": "file2.texture",
@@ -202,7 +179,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "24b24382-da24-41bf-be85-f2a40987096c@adacb"
+        "imageUuidOrDatabaseUri": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@adacb"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -213,7 +190,7 @@
     },
     "a562b": {
       "importer": "texture",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@a562b",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@a562b",
       "displayName": "",
       "id": "a562b",
       "name": "file3.texture",
@@ -225,7 +202,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "24b24382-da24-41bf-be85-f2a40987096c@dfe29"
+        "imageUuidOrDatabaseUri": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@dfe29"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -236,7 +213,7 @@
     },
     "18d45": {
       "importer": "gltf-material",
-      "uuid": "24b24382-da24-41bf-be85-f2a40987096c@18d45",
+      "uuid": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@18d45",
       "displayName": "",
       "id": "18d45",
       "name": "Robot.material",
@@ -255,15 +232,15 @@
     "imageMetas": [
       {
         "name": "file1",
-        "uri": "24b24382-da24-41bf-be85-f2a40987096c@43c71"
+        "uri": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@43c71"
       },
       {
         "name": "file2",
-        "uri": "24b24382-da24-41bf-be85-f2a40987096c@adacb"
+        "uri": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@adacb"
       },
       {
         "name": "file3",
-        "uri": "24b24382-da24-41bf-be85-f2a40987096c@dfe29"
+        "uri": "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@dfe29"
       }
     ],
     "fbx": {
@@ -274,15 +251,7 @@
         "name": "Take 001",
         "duration": 5,
         "fps": 30,
-        "splits": [
-          {
-            "name": "Dance_8",
-            "from": 0,
-            "to": 5,
-            "wrapMode": 2,
-            "previousId": "73b7f"
-          }
-        ]
+        "splits": []
       },
       {
         "name": "mixamo.com",
@@ -290,7 +259,7 @@
         "fps": 30,
         "splits": [
           {
-            "name": "mixamo.com",
+            "name": "Dance_8",
             "from": 0,
             "to": 19.799999237060547,
             "wrapMode": 2,
@@ -319,21 +288,21 @@
     },
     "assetFinder": {
       "meshes": [
-        "24b24382-da24-41bf-be85-f2a40987096c@f74ad"
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@f74ad"
       ],
       "skeletons": [
-        "24b24382-da24-41bf-be85-f2a40987096c@438fe"
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@438fe"
       ],
       "textures": [
-        "24b24382-da24-41bf-be85-f2a40987096c@d20e9",
-        "24b24382-da24-41bf-be85-f2a40987096c@e873a",
-        "24b24382-da24-41bf-be85-f2a40987096c@a562b"
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@d20e9",
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@e873a",
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@a562b"
       ],
       "materials": [
-        "24b24382-da24-41bf-be85-f2a40987096c@18d45"
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@18d45"
       ],
       "scenes": [
-        "24b24382-da24-41bf-be85-f2a40987096c@60616"
+        "af16624f-d3a2-4ba0-8e50-25fcf5a26b0a@60616"
       ]
     }
   }

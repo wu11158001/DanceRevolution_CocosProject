@@ -2,7 +2,7 @@
   "ver": "2.3.13",
   "importer": "fbx",
   "imported": true,
-  "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac",
+  "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90",
   "files": [
     "__original-animation-0.cconb",
     "__original-animation-1.cconb"
@@ -10,7 +10,7 @@
   "subMetas": {
     "f74ad": {
       "importer": "gltf-mesh",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@f74ad",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@f74ad",
       "displayName": "",
       "id": "f74ad",
       "name": "RobotKile.mesh",
@@ -26,35 +26,12 @@
       ],
       "subMetas": {}
     },
-    "73b7f": {
-      "importer": "gltf-animation",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@73b7f",
-      "displayName": "",
-      "id": "73b7f",
-      "name": "Dance_14.animation",
-      "userData": {
-        "gltfIndex": 0,
-        "wrapMode": 2,
-        "sample": 30,
-        "span": {
-          "from": 0,
-          "to": 5
-        },
-        "events": []
-      },
-      "ver": "1.0.17",
-      "imported": true,
-      "files": [
-        ".cconb"
-      ],
-      "subMetas": {}
-    },
     "18d6f": {
       "importer": "gltf-animation",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@18d6f",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@18d6f",
       "displayName": "",
       "id": "18d6f",
-      "name": "mixamo.com.animation",
+      "name": "Dance_14.animation",
       "userData": {
         "gltfIndex": 1,
         "wrapMode": 2,
@@ -74,7 +51,7 @@
     },
     "438fe": {
       "importer": "gltf-skeleton",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@438fe",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@438fe",
       "displayName": "",
       "id": "438fe",
       "name": "UnnamedSkeleton.skeleton",
@@ -91,7 +68,7 @@
     },
     "43c71": {
       "importer": "gltf-embeded-image",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@43c71",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@43c71",
       "displayName": "",
       "id": "43c71",
       "name": "file1.image",
@@ -111,7 +88,7 @@
     },
     "adacb": {
       "importer": "gltf-embeded-image",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@adacb",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@adacb",
       "displayName": "",
       "id": "adacb",
       "name": "file2.image",
@@ -131,7 +108,7 @@
     },
     "dfe29": {
       "importer": "gltf-embeded-image",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@dfe29",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@dfe29",
       "displayName": "",
       "id": "dfe29",
       "name": "file3.image",
@@ -151,7 +128,7 @@
     },
     "d20e9": {
       "importer": "texture",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@d20e9",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@d20e9",
       "displayName": "",
       "id": "d20e9",
       "name": "file1.texture",
@@ -163,7 +140,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "2ee522e8-50ca-4d28-b631-1696032922ac@43c71"
+        "imageUuidOrDatabaseUri": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@43c71"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -174,7 +151,7 @@
     },
     "e873a": {
       "importer": "texture",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@e873a",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@e873a",
       "displayName": "",
       "id": "e873a",
       "name": "file2.texture",
@@ -186,7 +163,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "2ee522e8-50ca-4d28-b631-1696032922ac@adacb"
+        "imageUuidOrDatabaseUri": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@adacb"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -197,7 +174,7 @@
     },
     "a562b": {
       "importer": "texture",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@a562b",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@a562b",
       "displayName": "",
       "id": "a562b",
       "name": "file3.texture",
@@ -209,7 +186,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "2ee522e8-50ca-4d28-b631-1696032922ac@dfe29"
+        "imageUuidOrDatabaseUri": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@dfe29"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -220,7 +197,7 @@
     },
     "18d45": {
       "importer": "gltf-material",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@18d45",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@18d45",
       "displayName": "",
       "id": "18d45",
       "name": "Robot.material",
@@ -236,7 +213,7 @@
     },
     "834e1": {
       "importer": "gltf-scene",
-      "uuid": "2ee522e8-50ca-4d28-b631-1696032922ac@834e1",
+      "uuid": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@834e1",
       "displayName": "",
       "id": "834e1",
       "name": "Dance_14.prefab",
@@ -255,15 +232,15 @@
     "imageMetas": [
       {
         "name": "file1",
-        "uri": "2ee522e8-50ca-4d28-b631-1696032922ac@43c71"
+        "uri": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@43c71"
       },
       {
         "name": "file2",
-        "uri": "2ee522e8-50ca-4d28-b631-1696032922ac@adacb"
+        "uri": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@adacb"
       },
       {
         "name": "file3",
-        "uri": "2ee522e8-50ca-4d28-b631-1696032922ac@dfe29"
+        "uri": "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@dfe29"
       }
     ],
     "fbx": {
@@ -274,15 +251,7 @@
         "name": "Take 001",
         "duration": 5,
         "fps": 30,
-        "splits": [
-          {
-            "name": "Dance_14",
-            "from": 0,
-            "to": 5,
-            "wrapMode": 2,
-            "previousId": "73b7f"
-          }
-        ]
+        "splits": []
       },
       {
         "name": "mixamo.com",
@@ -290,7 +259,7 @@
         "fps": 30,
         "splits": [
           {
-            "name": "mixamo.com",
+            "name": "Dance_14",
             "from": 0,
             "to": 6.699999809265137,
             "wrapMode": 2,
@@ -319,21 +288,21 @@
     },
     "assetFinder": {
       "meshes": [
-        "2ee522e8-50ca-4d28-b631-1696032922ac@f74ad"
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@f74ad"
       ],
       "skeletons": [
-        "2ee522e8-50ca-4d28-b631-1696032922ac@438fe"
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@438fe"
       ],
       "textures": [
-        "2ee522e8-50ca-4d28-b631-1696032922ac@d20e9",
-        "2ee522e8-50ca-4d28-b631-1696032922ac@e873a",
-        "2ee522e8-50ca-4d28-b631-1696032922ac@a562b"
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@d20e9",
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@e873a",
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@a562b"
       ],
       "materials": [
-        "2ee522e8-50ca-4d28-b631-1696032922ac@18d45"
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@18d45"
       ],
       "scenes": [
-        "2ee522e8-50ca-4d28-b631-1696032922ac@834e1"
+        "b6eadb88-d2d9-439f-a46d-c4d8340d5c90@834e1"
       ]
     }
   }

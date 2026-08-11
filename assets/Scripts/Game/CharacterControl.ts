@@ -1,4 +1,4 @@
-import { _decorator, Animation, Component, TiledObjectGroup } from 'cc';
+import { _decorator, Animation, Component, SkeletalAnimation } from 'cc';
 import { CharacterDataManager } from '../Manager/CharacterDataManager';
 const { ccclass, property } = _decorator;
 
@@ -10,8 +10,9 @@ export class CharacterControl extends Component {
     @property({tooltip: "角色編號"})
     private characterIndex: number = 0;
 
-    private anim: Animation | null = null;
+    private anim: SkeletalAnimation | null = null;
 
+    private crossFade: number = 0.2;
     private isInit: boolean = false;
 
     protected start() {
@@ -21,7 +22,8 @@ export class CharacterControl extends Component {
     private init() {
         if(!this.isInit) {
             this.isInit = true;
-            this.anim = this.node.getComponent(Animation);
+
+            if(!this.anim) this.anim = this.node.addComponent(SkeletalAnimation);
             if(this.anim) {
                 this.setClips();
                 this.anim.play('Idle');
@@ -58,7 +60,7 @@ export class CharacterControl extends Component {
 
         const targetDurationSec = barIntervalMs / 1000;
         state.speed = state.duration / targetDurationSec;
-        this.anim.play(clipName);
+        this.anim.crossFade(clipName, this.crossFade);
 
         // 如果是2則從一半進度開始撥放
         const startProgress = animPhase === 2 ? 0.5 : 0;
@@ -90,6 +92,6 @@ export class CharacterControl extends Component {
 
         // 從頭開始播放
         state.time = 0;
-        this.anim.play(key);
+        this.anim.crossFade(key, this.crossFade);
     }
 }

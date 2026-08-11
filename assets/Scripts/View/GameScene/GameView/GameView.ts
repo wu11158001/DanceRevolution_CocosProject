@@ -66,6 +66,7 @@ export class GameView extends BaseView {
     private seatTweenMap: Map<string, any> = new Map();
 
     private isStart: boolean = false;
+    private isGameOver: boolean = false;
 
     public async onOpen(params?: any) {
         super.onOpen(params);
@@ -101,8 +102,10 @@ export class GameView extends BaseView {
             SceneLoader.getInstance().closeLoadBg();
         }
 
-        this.progressBar_song.progress = AudioManager.getInstance().getSongTimeLeftProgress();
-        this.label_songTimeLeft.string = AudioManager.getInstance().getSongTimeLeft();
+        if(!this.isGameOver) {
+            this.progressBar_song.progress = AudioManager.getInstance().getSongTimeLeftProgress();
+            this.label_songTimeLeft.string = AudioManager.getInstance().getSongTimeLeft();
+        }
     }
 
     /**
@@ -318,6 +321,10 @@ export class GameView extends BaseView {
      * 遊戲結束
      */
     public onGameOver() {
+        this.isGameOver = true;
+        this.progressBar_song.progress = 1;
+        this.label_songTimeLeft.string = '00:00';
+
         this.characterMap.forEach((character) => {
             character.playAnimation('Idle');
         });
