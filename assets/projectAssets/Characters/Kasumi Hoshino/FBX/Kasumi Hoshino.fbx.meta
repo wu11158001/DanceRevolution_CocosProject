@@ -5,26 +5,6 @@
   "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe",
   "files": [],
   "subMetas": {
-    "11088": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@11088",
-      "displayName": "",
-      "id": "11088",
-      "name": "DiffuseColor_Texture_4.image",
-      "userData": {
-        "gltfIndex": 4,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
     "28398": {
       "importer": "texture",
       "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@28398",
@@ -38,33 +18,13 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@44724"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_14.png"
       },
       "ver": "1.0.22",
       "imported": true,
       "files": [
         ".json"
-      ],
-      "subMetas": {}
-    },
-    "44724": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@44724",
-      "displayName": "",
-      "id": "44724",
-      "name": "DiffuseColor_Texture_10.image",
-      "userData": {
-        "gltfIndex": 10,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
       ],
       "subMetas": {}
     },
@@ -81,8 +41,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@b0ccd"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_03.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -126,246 +86,6 @@
       ],
       "subMetas": {}
     },
-    "fd73d": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@fd73d",
-      "displayName": "",
-      "id": "fd73d",
-      "name": "DiffuseColor_Texture.image",
-      "userData": {
-        "gltfIndex": 0,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "ca721": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@ca721",
-      "displayName": "",
-      "id": "ca721",
-      "name": "DiffuseColor_Texture_1.image",
-      "userData": {
-        "gltfIndex": 1,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "b0ccd": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@b0ccd",
-      "displayName": "",
-      "id": "b0ccd",
-      "name": "DiffuseColor_Texture_2.image",
-      "userData": {
-        "gltfIndex": 2,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "088c7": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@088c7",
-      "displayName": "",
-      "id": "088c7",
-      "name": "DiffuseColor_Texture_3.image",
-      "userData": {
-        "gltfIndex": 3,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "8738b": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@8738b",
-      "displayName": "",
-      "id": "8738b",
-      "name": "DiffuseColor_Texture_5.image",
-      "userData": {
-        "gltfIndex": 5,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "02fc8": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@02fc8",
-      "displayName": "",
-      "id": "02fc8",
-      "name": "DiffuseColor_Texture_6.image",
-      "userData": {
-        "gltfIndex": 6,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "a868b": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a868b",
-      "displayName": "",
-      "id": "a868b",
-      "name": "DiffuseColor_Texture_7.image",
-      "userData": {
-        "gltfIndex": 7,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "86bac": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@86bac",
-      "displayName": "",
-      "id": "86bac",
-      "name": "DiffuseColor_Texture_8.image",
-      "userData": {
-        "gltfIndex": 8,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "b5cf3": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@b5cf3",
-      "displayName": "",
-      "id": "b5cf3",
-      "name": "DiffuseColor_Texture_9.image",
-      "userData": {
-        "gltfIndex": 9,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "695bd": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@695bd",
-      "displayName": "",
-      "id": "695bd",
-      "name": "DiffuseColor_Texture_11.image",
-      "userData": {
-        "gltfIndex": 11,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "a71d0": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a71d0",
-      "displayName": "",
-      "id": "a71d0",
-      "name": "DiffuseColor_Texture_12.image",
-      "userData": {
-        "gltfIndex": 12,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
-    "a0768": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a0768",
-      "displayName": "",
-      "id": "a0768",
-      "name": "DiffuseColor_Texture_13.image",
-      "userData": {
-        "gltfIndex": 13,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
     "c553d": {
       "importer": "gltf-embeded-image",
       "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@c553d",
@@ -399,8 +119,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@fd73d"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_01.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -422,8 +142,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@ca721"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_02.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -445,8 +165,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@088c7"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_04.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -468,8 +188,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@11088"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_06.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -491,8 +211,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@8738b"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_07.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -514,8 +234,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@02fc8"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_09.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -537,8 +257,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a868b"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_10.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -560,8 +280,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@86bac"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_12.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -583,8 +303,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@b5cf3"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_13.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -606,8 +326,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@695bd"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_15.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -629,8 +349,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a71d0"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_16.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -652,8 +372,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a0768"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_17.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -946,59 +666,59 @@
     "imageMetas": [
       {
         "name": "DiffuseColor_Texture",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@fd73d"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_01.png"
       },
       {
         "name": "DiffuseColor_Texture_1",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@ca721"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_02.png"
       },
       {
         "name": "DiffuseColor_Texture_2",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@b0ccd"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_03.png"
       },
       {
         "name": "DiffuseColor_Texture_3",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@088c7"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_04.png"
       },
       {
         "name": "DiffuseColor_Texture_4",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@11088"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_06.png"
       },
       {
         "name": "DiffuseColor_Texture_5",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@8738b"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_07.png"
       },
       {
         "name": "DiffuseColor_Texture_6",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@02fc8"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_09.png"
       },
       {
         "name": "DiffuseColor_Texture_7",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a868b"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_10.png"
       },
       {
         "name": "DiffuseColor_Texture_8",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@86bac"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_12.png"
       },
       {
         "name": "DiffuseColor_Texture_9",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@b5cf3"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_13.png"
       },
       {
         "name": "DiffuseColor_Texture_10",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@44724"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_14.png"
       },
       {
         "name": "DiffuseColor_Texture_11",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@695bd"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_15.png"
       },
       {
         "name": "DiffuseColor_Texture_12",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a71d0"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_16.png"
       },
       {
         "name": "DiffuseColor_Texture_13",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@a0768"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_17.png"
       },
       {
         "name": "DiffuseColor_Texture_14",

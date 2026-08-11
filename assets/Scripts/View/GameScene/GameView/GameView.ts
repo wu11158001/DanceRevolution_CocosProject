@@ -201,7 +201,7 @@ export class GameView extends BaseView {
         // 角色動畫撥放
         const hitCharacter = this.characterMap.get(data.hitPlayerId);
         if(hitCharacter) {
-            if(data.rating == 'MISS') hitCharacter.playAnimation('Angry', barIntervalMs * 2);
+            if(data.rating == 'MISS') hitCharacter.playAnimation('DanceMiss', barIntervalMs * 2);
             else hitCharacter.playDanceAnimation(data.danceAnim, data.animPhase, barIntervalMs * 4);
         }
 
