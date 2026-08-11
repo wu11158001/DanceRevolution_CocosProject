@@ -1626,7 +1626,8 @@
             "mainTexture": {
               "__uuid__": "534d261a-e93b-4fab-b820-4b7a2c36d6a2@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 5
           },
           {},
           {},

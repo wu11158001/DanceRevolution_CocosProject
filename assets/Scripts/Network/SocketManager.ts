@@ -29,8 +29,10 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      * 初始化完成
      */
     private async onInitComplete() {
-        // 載入角色資料
+        // 載入所有角色3D
         await CharacterDataManager.getInstance().preloadAllCharacters();
+        // 載入所有角色動畫
+        await CharacterDataManager.getInstance().loadAllCharacterClips();
         // 切換場景
         SceneLoader.getInstance().loadScene('LobbyScene');
     }

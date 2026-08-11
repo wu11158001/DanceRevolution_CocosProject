@@ -180,8 +180,7 @@
         "_defines": [
           {
             "DCC_APP_NAME": 2,
-            "USE_ALBEDO_MAP": true,
-            "HAS_EXPORTED_METALLIC": true
+            "USE_ALBEDO_MAP": true
           },
           {},
           {},
@@ -261,8 +260,7 @@
         "_defines": [
           {
             "DCC_APP_NAME": 2,
-            "USE_ALBEDO_MAP": true,
-            "HAS_EXPORTED_METALLIC": true
+            "USE_ALBEDO_MAP": true
           },
           {},
           {},

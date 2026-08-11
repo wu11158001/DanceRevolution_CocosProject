@@ -9,8 +9,8 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('CharacterDataManager')
 export class CharacterDataManager extends SingletonComponent<CharacterDataManager> {
-    // 角色動畫_0
-    private characterClips_0: AnimationClip[] = [];
+    // 角色動畫
+    private characterClips: AnimationClip[][] = [];
 
     // 角色數量
     private _characterCount: number = 0;
@@ -20,36 +20,43 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
 
     // 角色Prefab字典
     private _characterPrefabs: Map<number, Prefab> = new Map();
-    // 舞步動畫字典
-    private clipsMap: Map<string, number> = new Map();
 
     protected start() {
         // 載入所有角色動畫
         this.loadAllCharacterClips();
-        // 預載入所有角色 Prefab
-        this.characterClips_0.forEach((clip) => {
-            this.clipsMap.set(clip.name, clip.duration);
-        });
     }
 
     /**
      * 載入所有角色動畫
      * @returns 
      */
-    private loadAllCharacterClips(): Promise<void> {
-        // 角色_0
-        return new Promise((resolve) => {
-            resources.loadDir('CharacterClips_0', AnimationClip, (err, clips) => {
-                if (err) {
-                    console.error('[CharacterControl] 載入 CharacterClips_0 失敗:', err);
+    public async loadAllCharacterClips(): Promise<void> {
+        const totalGroups = 4;
+        const loadPromises: Promise<void>[] = [];
+
+        for (let i = 0; i < totalGroups; i++) {
+            const folderName = `CharacterClips_${i}`;
+
+            const promise = new Promise<void>((resolve) => {
+                resources.loadDir(folderName, AnimationClip, (err, clips) => {
+                    if (err) {
+                        console.error(`[CharacterControl] 載入 ${folderName} 失敗:`, err);
+                        this.characterClips[i] = [];
+                        resolve();
+                        return;
+                    }
+                    
+                    this.characterClips[i] = clips;
+                    console.log(`[CharacterControl] 成功載入 ${folderName}: ${clips.length} 個動畫檔`);
                     resolve();
-                    return;
-                }
-                this.characterClips_0 = clips;
-                console.log(`[CharacterControl] 成功載入CharacterClips_0: ${clips.length} 個動畫檔`);
-                resolve();
+                });
             });
-        });
+
+            loadPromises.push(promise);
+        }
+
+        await Promise.all(loadPromises);
+        console.log('[CharacterControl] 所有角色動畫載入完畢！');
     }
 
     /**
@@ -57,24 +64,22 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
      * @param index 
      */
     public getAnimationClips(index: number) : AnimationClip[] {
-        switch(index) {
-            case 0:
-                return this.characterClips_0;
-
-            default: 
-                return [];
+        if(index < 0 || index >= this.characterClips.length) {
+            console.error(`獲取角色動畫 錯誤: ${index}`);
         }
+        
+        return this.characterClips[index];
     }
 
     /**
      * 預載入所有角色 Prefab
      */
     public preloadAllCharacters(): Promise<void> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             resources.loadDir('CharacterPrefab', Prefab, (err, prefabs) => {
                 if (err) {
                     console.error('預載入角色 Prefab 失敗：', err);
-                    resolve();
+                    reject(err);
                     return;
                 }
 
@@ -108,13 +113,5 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
             return null;
         }
         return instantiate(prefab);
-    }
-
-    /**
-     * 獲取動畫長度
-     * @param key 
-     */
-    public getAnimationClipDuration(key: string): number {
-        return this.clipsMap.get(key);
     }
 }

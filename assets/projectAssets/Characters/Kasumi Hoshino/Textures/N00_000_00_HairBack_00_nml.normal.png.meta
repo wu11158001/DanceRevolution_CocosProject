@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "407bbd6a-89e8-4509-a8b2-6ca9bc93cdb9",
+  "uuid": "b8d6ac22-e2c9-4eb1-9bea-1746c9307aed",
   "files": [
     ".json",
     ".png"
@@ -10,7 +10,7 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "407bbd6a-89e8-4509-a8b2-6ca9bc93cdb9@6c48a",
+      "uuid": "b8d6ac22-e2c9-4eb1-9bea-1746c9307aed@6c48a",
       "displayName": "N00_000_00_HairBack_00_nml.normal",
       "id": "6c48a",
       "name": "texture",
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "407bbd6a-89e8-4509-a8b2-6ca9bc93cdb9",
+        "imageUuidOrDatabaseUri": "b8d6ac22-e2c9-4eb1-9bea-1746c9307aed",
         "visible": false
       },
       "ver": "1.0.22",
@@ -37,6 +37,6 @@
     "hasAlpha": true,
     "type": "texture",
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "407bbd6a-89e8-4509-a8b2-6ca9bc93cdb9@6c48a"
+    "redirect": "b8d6ac22-e2c9-4eb1-9bea-1746c9307aed@6c48a"
   }
 }
