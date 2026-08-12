@@ -1,4 +1,4 @@
-import { _decorator, Animation, Component, SkeletalAnimation } from 'cc';
+import { _decorator, Animation, Component, SkeletalAnimation, Node } from 'cc';
 import { CharacterDataManager } from '../Manager/CharacterDataManager';
 const { ccclass, property } = _decorator;
 
@@ -9,6 +9,8 @@ const { ccclass, property } = _decorator;
 export class CharacterControl extends Component {
     @property({tooltip: "角色編號"})
     private characterIndex: number = 0;
+    @property(Node)
+    public model3D: Node = null;
 
     private anim: Animation | null = null;
 
@@ -49,7 +51,7 @@ export class CharacterControl extends Component {
     public playDanceAnimation(index: number, animPhase: number, barIntervalMs: number) {
         if (!this.isInit) this.init();
         if (!this.anim) return;
-        
+
         const clipName = `Dance_${index}`;
         const state = this.anim.getState(clipName);
 

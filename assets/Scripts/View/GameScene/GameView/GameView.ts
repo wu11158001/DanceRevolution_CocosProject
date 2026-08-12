@@ -52,12 +52,12 @@ export class GameView extends BaseView {
         new Vec3(-2.8, 0, -1), 
     ];
 
-    private nicknamePosOffset = v3(0, -0.15, 0);
+    private nicknamePosOffset = v3(0, 1.75, 0);
     private selfTargetPosOffest = v3(0, 1.85, 0);
 
     private camera3D: Camera = null;
 
-    private selfCharacterNode: Node = null;
+    private selfCharacter: CharacterControl = null;
     private nicknameMap: Map<CharacterControl, Node> = new Map();
     private characterMap: Map<string, CharacterControl> = new Map();
     private scoreNodeMap: Map<string, ScoreItem> = new Map();
@@ -114,7 +114,7 @@ export class GameView extends BaseView {
     private updateSelfTargetPos() {
         GameTool.getInstance().follow3DNode(
             this.camera3D,
-            this.selfCharacterNode,
+            this.selfCharacter.model3D,
             this.selfTarget,
             this.selfTargetPosOffest
         );
@@ -127,7 +127,7 @@ export class GameView extends BaseView {
         this.nicknameMap.forEach((nicknameNode, character) => {
             GameTool.getInstance().follow3DNode(
                 this.camera3D,
-                character.node,
+                character.model3D,
                 nicknameNode,
                 this.nicknamePosOffset
             );
@@ -166,7 +166,7 @@ export class GameView extends BaseView {
 
                 // 本地玩家角色
                 if(player.playerId == PlayerData.playerId) {
-                    this.selfCharacterNode = character;
+                    this.selfCharacter = characterControl;
                 }
             }
         });

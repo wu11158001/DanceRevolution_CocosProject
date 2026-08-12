@@ -70,6 +70,7 @@ export class GameTool extends SingletonComponent<GameTool> {
 
         // 轉為 UI 本地座標並更新
         camera3D.convertToUINode(this._tempWPos, uiNode.parent, this._tempUIPos);
+        this._tempUIPos.z = 0;
         uiNode.setPosition(this._tempUIPos);
         if (!uiNode.active) uiNode.active = true;
 
