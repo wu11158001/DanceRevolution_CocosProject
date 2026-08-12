@@ -152,6 +152,7 @@ export class GameView extends BaseView {
 
                 let characterControl = character.getComponent(CharacterControl);
                 if(characterControl) {
+                    characterControl.playAnimation('Idle', 0, false);
                     this.characterMap.set(player.playerId, characterControl);
 
                     let nicknameObj = instantiate(this.nicknamePrefab);

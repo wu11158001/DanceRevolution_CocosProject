@@ -8,7 +8,7 @@ import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, ICreateRoomResponse } from 'db://assets/Scripts/Data/RoomData';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { UpdateNicknameView } from 'db://assets/Scripts/View/LobbyScene/UpdateNicknameView';
-import { RoomView } from 'db://assets/Scripts/View/LobbyScene/RoomView';
+import { RoomView } from './RoomView/RoomView';
 
 const { ccclass, property } = _decorator;
 

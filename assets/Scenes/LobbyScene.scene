@@ -179,10 +179,10 @@
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": 0,
+      "x": -0.5372996083468239,
       "y": 0,
       "z": 0,
-      "w": 1
+      "w": 0.8433914458128857
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -194,7 +194,7 @@
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": 0,
+      "x": -65,
       "y": 0,
       "z": 0
     },
@@ -223,8 +223,8 @@
       "__id__": 6
     },
     "_visibility": -325058561,
-    "_illuminanceHDR": 65000,
-    "_illuminance": 65000,
+    "_illuminanceHDR": 50000,
+    "_illuminance": 50000,
     "_illuminanceLDR": 1.6927083333333335,
     "_shadowEnabled": false,
     "_shadowPcf": 2,
@@ -233,23 +233,23 @@
     "_shadowSaturation": 1,
     "_shadowDistance": 50,
     "_shadowInvisibleOcclusionRange": 200,
-    "_csmLevel": 4,
+    "_csmLevel": 1,
     "_csmLayerLambda": 0.75,
     "_csmOptimizationMode": 2,
     "_csmAdvancedOptions": false,
     "_csmLayersTransition": false,
     "_csmTransitionRange": 0.05,
-    "_shadowFixedArea": false,
-    "_shadowNear": 0.1,
-    "_shadowFar": 10,
-    "_shadowOrthoSize": 5,
+    "_shadowFixedArea": true,
+    "_shadowNear": 0,
+    "_shadowFar": 15,
+    "_shadowOrthoSize": 8,
     "_id": "b7hxol0XZCVYOPzgFAzqxq"
   },
   {
     "__type__": "cc.StaticLightSettings",
     "_baked": false,
     "_editorOnly": false,
-    "_castShadow": true
+    "_castShadow": false
   },
   {
     "__type__": "cc.Node",
@@ -365,7 +365,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 529.8360655737705,
+    "_orthoHeight": 522.6954177897574,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -552,8 +552,8 @@
   },
   {
     "__type__": "cc.ShadowsInfo",
-    "_enabled": false,
-    "_type": 0,
+    "_enabled": true,
+    "_type": 1,
     "_normal": {
       "__type__": "cc.Vec3",
       "x": 0,

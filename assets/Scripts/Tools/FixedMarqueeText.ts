@@ -16,10 +16,10 @@ export class FixedMarqueeText extends Component {
     public maskTransform: UITransform = null!;
 
     @property({tooltip: "移動速度 (像素/秒)"})
-    public speed: number = 50;
+    public speed: number = 40;
 
     @property({tooltip: "兩段文字之間的間隔距離"})
-    public spacing: number = 40;
+    public spacing: number = 70;
 
     private _textWidth: number = 0;
     private _isScrolling: boolean = false;

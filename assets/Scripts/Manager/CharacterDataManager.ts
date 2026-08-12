@@ -130,7 +130,7 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
             const ctrl = node.getComponent(CharacterControl);
             if (ctrl) {
                 // 強制觸發 init() 與一次動畫採樣
-                ctrl.playAnimation('Idle'); 
+                ctrl.playAnimation('Idle', 0, true); 
             }
 
             warmupNodes.push(node);
@@ -139,8 +139,9 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
         // 等待 1~2 幀讓 GPU 完成 Shader 編譯與上傳
         await new Promise((resolve) => setTimeout(resolve, 50));
 
-        // 預熱完成後移除（或存入物件池 Pool 重複利用）
+        // 預熱完成後移除
         warmupNodes.forEach((node) => node.destroy());
+        console.log(`角色預熱完成`);
     }
 
     /**

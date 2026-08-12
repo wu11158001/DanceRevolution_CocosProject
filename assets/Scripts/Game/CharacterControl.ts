@@ -7,10 +7,15 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('CharacterControl')
 export class CharacterControl extends Component {
-    @property({tooltip: "角色編號"})
-    private characterIndex: number = 0;
+    @property({tooltip: "角色編號", visible: true})
+    private _characterIndex: number = 0;
     @property(Node)
     public model3D: Node = null;
+
+    // 角色Index
+    public get characterIndex() : number {
+        return this._characterIndex;
+    }
 
     private anim: Animation | null = null;
 
@@ -37,7 +42,7 @@ export class CharacterControl extends Component {
      * 設置所有角色動畫Clips
      */
     private setClips() {
-        CharacterDataManager.getInstance().getAnimationClips(this.characterIndex)?.forEach((clip) => {
+        CharacterDataManager.getInstance().getAnimationClips(this._characterIndex)?.forEach((clip) => {
             this.anim.addClip(clip);
         });
     }
@@ -72,8 +77,9 @@ export class CharacterControl extends Component {
      * 撥放動畫並自動縮放到 1 小節長度
      * @param key 動畫名稱/Clip名稱
      * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
+     * @param isCrossFade 是否使用過度效果
      */
-    public playAnimation(key: string, barIntervalMs: number = 0) {
+    public playAnimation(key: string, barIntervalMs: number = 0, isCrossFade: boolean = true) {
         if(!this.isInit) this.init();
         if (!this.anim) return;
         
@@ -88,8 +94,12 @@ export class CharacterControl extends Component {
         const targetDurationSec = barIntervalMs / 1000;
         state.speed = targetDurationSec > 0 ? state.duration / targetDurationSec : 1;
 
-        // 從頭開始播放
-        state.time = 0;
-        this.anim.crossFade(key, this.crossFade);
+        let crossFade = 0;
+        if(isCrossFade) {
+            crossFade = this.crossFade;
+            state.time = 0;
+        }
+
+        this.anim.crossFade(key, crossFade);
     }
 }

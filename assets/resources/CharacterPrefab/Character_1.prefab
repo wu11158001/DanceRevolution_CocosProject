@@ -4804,7 +4804,7 @@
     "__prefab": {
       "__id__": 163
     },
-    "characterIndex": 1,
+    "_characterIndex": 1,
     "model3D": {
       "__id__": 12
     },

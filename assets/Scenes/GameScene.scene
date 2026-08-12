@@ -346,7 +346,7 @@
     "__type__": "cc.StaticLightSettings",
     "_baked": false,
     "_editorOnly": false,
-    "_castShadow": true
+    "_castShadow": false
   },
   {
     "__type__": "cc.Node",
@@ -805,8 +805,8 @@
     "_maxReceived": 4,
     "_size": {
       "__type__": "cc.Vec2",
-      "x": 2048,
-      "y": 2048
+      "x": 1024,
+      "y": 1024
     }
   },
   {
