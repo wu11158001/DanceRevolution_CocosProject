@@ -646,7 +646,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1920,
-      "height": 910.9999999999999
+      "height": 911
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3681,6 +3681,22 @@
     "nicknamePrefab": {
       "__id__": 17
     },
+    "nicknameColors": [
+      {
+        "__type__": "cc.Color",
+        "r": 90,
+        "g": 241,
+        "b": 108,
+        "a": 255
+      },
+      {
+        "__type__": "cc.Color",
+        "r": 229,
+        "g": 241,
+        "b": 90,
+        "a": 255
+      }
+    ],
     "selfTarget": {
       "__id__": 10
     },
@@ -3705,7 +3721,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1920,
-      "height": 910.9999999999999
+      "height": 911
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

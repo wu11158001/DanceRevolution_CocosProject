@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director, Button} from 'cc';
+import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director, Color} from 'cc';
 
 import { BaseView } from '../../BaseView';
 import { AudioManager } from '../../../Manager/AudioManager';
@@ -40,6 +40,8 @@ export class GameView extends BaseView {
     private nicknameNode: Node = null;
     @property(Node)
     private nicknamePrefab: Node = null;
+    @property([Color])
+    private nicknameColors: Color[] = []; // 0=自己, 1=其他玩家
 
     @property(Node)
     private selfTarget: Node = null;
@@ -52,8 +54,12 @@ export class GameView extends BaseView {
         new Vec3(-2.8, 0, -1), 
     ];
 
-    private nicknamePosOffset = v3(0, 1.75, 0);
-    private selfTargetPosOffest = v3(0, 1.85, 0);
+    private nicknamePosOffset = v3(0, 0.32, 0);
+    private selfTargetPosOffest = v3(0, 0.45, 0);
+
+    // 本地指標移動參數
+    private selfNodeMoveDistance = 20; // 上下移動距離
+    private selfNodeDuration = 1.0;    // 單程時間
 
     private camera3D: Camera = null;
 
@@ -87,10 +93,10 @@ export class GameView extends BaseView {
         this.createAllScoreNode();
     }
 
-    update(dt: number) {
+    protected lateUpdate(dt: number): void {
         this.updateSongProgress();
-        this.updateNicknamePos();
-        this.updateSelfTargetPos();
+        this.updateNicknamePos(dt);
+        this.updateSelfTargetPos(dt);
     }
 
     /**
@@ -111,25 +117,27 @@ export class GameView extends BaseView {
     /**
      * 更新本地玩家指標位置
      */
-    private updateSelfTargetPos() {
+    private updateSelfTargetPos(dt: number) {
         GameTool.getInstance().follow3DNode(
             this.camera3D,
             this.selfCharacter.model3D,
             this.selfTarget,
-            this.selfTargetPosOffest
+            this.selfTargetPosOffest,
+            dt
         );
     }
 
     /**
      * 更新暱稱位置
      */
-    private updateNicknamePos() {
+    private updateNicknamePos(dt: number) {
         this.nicknameMap.forEach((nicknameNode, character) => {
             GameTool.getInstance().follow3DNode(
                 this.camera3D,
                 character.model3D,
                 nicknameNode,
-                this.nicknamePosOffset
+                this.nicknamePosOffset,
+                dt
             );
         });    
     }
@@ -158,9 +166,13 @@ export class GameView extends BaseView {
                     let nicknameObj = instantiate(this.nicknamePrefab);
                     nicknameObj.active = true;
                     nicknameObj.setParent(this.nicknameNode);
+
                     let nicknameLabel = nicknameObj.getComponent(Label);
                     if(nicknameLabel) {
                         nicknameLabel.string = player.nickname;
+
+                        nicknameLabel.color = player.playerId == PlayerData.playerId ? this.nicknameColors[0] : this.nicknameColors[1];
+
                         this.nicknameMap.set(characterControl, nicknameObj);
                     }
                 }

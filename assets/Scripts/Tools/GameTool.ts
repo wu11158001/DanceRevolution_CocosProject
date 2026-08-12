@@ -43,40 +43,41 @@ export class GameTool extends SingletonComponent<GameTool> {
         target3D: Node,
         uiNode: Node,
         offset: Vec3 = Vec3.ZERO,
-        outPos?: Vec3
+        dt: number = 0.016,
+        smoothSpeed: number = 30 // 平滑係數，數值越大越貼緊，一般 20~30 體感最佳
     ): Vec3 | null {
         if (!camera3D || !target3D || !uiNode || !uiNode.parent) return null;
-
-        // 強制更新 3D 物件與相機的世界矩陣
-        target3D.updateWorldTransform();
-        camera3D.node.updateWorldTransform();
-        if (uiNode.parent) {
-            uiNode.parent.updateWorldTransform();
-        }
-
-        // 計算目標 3D 位置
+        // 計算目標 3D 世界座標
         target3D.getWorldPosition(this._tempWPos);
         this._tempWPos.add(offset);
 
-        // 計算方向向量
+        // 視錐體背面判定 (與相機 Forward 做點積)
         const cameraNode = camera3D.node;
         Vec3.subtract(this._tempDir, this._tempWPos, cameraNode.worldPosition);
 
-        // 判斷是否在相機背後 (點積 <= 0 代表在相機背後或平行)
         if (Vec3.dot(cameraNode.forward, this._tempDir) <= 0) {
             uiNode.active = false;
             return null;
         }
 
-        // 轉為 UI 本地座標並更新
+        // 轉為 UI 座標
         camera3D.convertToUINode(this._tempWPos, uiNode.parent, this._tempUIPos);
         this._tempUIPos.z = 0;
-        uiNode.setPosition(this._tempUIPos);
-        if (!uiNode.active) uiNode.active = true;
 
-        if (outPos) {
-            return outPos.set(this._tempUIPos);
+        // 首次顯示時直接歸位，避免從遠處飛過來的視覺瑕疵
+        if (!uiNode.active) {
+            uiNode.setPosition(this._tempUIPos);
+            uiNode.active = true;
+            return this._tempUIPos.clone();
         }
+
+        // 使用獨立於 FPS 的指數平滑插值 (Exponential Smoothing)
+        const currentPos = uiNode.position;
+        const t = 1 - Math.exp(-smoothSpeed * dt);
+        
+        Vec3.lerp(this._tempUIPos, currentPos, this._tempUIPos, t);
+        uiNode.setPosition(this._tempUIPos);
+
         return this._tempUIPos.clone();
     }
 

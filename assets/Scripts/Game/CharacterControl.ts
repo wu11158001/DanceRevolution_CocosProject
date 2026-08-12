@@ -9,7 +9,7 @@ const { ccclass, property } = _decorator;
 export class CharacterControl extends Component {
     @property({tooltip: "角色編號", visible: true})
     private _characterIndex: number = 0;
-    @property(Node)
+    @property({type: Node, visible: true})
     private _model3D: Node = null;
     @property(Animation)
     private anim: Animation = null;

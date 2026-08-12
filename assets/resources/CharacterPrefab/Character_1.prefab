@@ -4808,7 +4808,9 @@
       "__id__": 163
     },
     "_characterIndex": 1,
-    "_model3D": null,
+    "_model3D": {
+      "__id__": 20
+    },
     "anim": {
       "__id__": 164
     },

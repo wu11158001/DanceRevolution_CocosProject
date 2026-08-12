@@ -6934,7 +6934,9 @@
       "__id__": 232
     },
     "_characterIndex": 2,
-    "_model3D": null,
+    "_model3D": {
+      "__id__": 17
+    },
     "anim": {
       "__id__": 233
     },
