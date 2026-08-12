@@ -271,15 +271,15 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 5.444,
-      "z": 1.365
+      "y": 10.812,
+      "z": 0.655
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": -0.6427876096865393,
+      "x": -0.5372996083468239,
       "y": 0,
       "z": 0,
-      "w": 0.766044443118978
+      "w": 0.8433914458128857
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -291,7 +291,7 @@
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": -80,
+      "x": -65,
       "y": 0,
       "z": 0
     },
@@ -320,8 +320,8 @@
       "__id__": 8
     },
     "_visibility": -325058561,
-    "_illuminanceHDR": 65000,
-    "_illuminance": 65000,
+    "_illuminanceHDR": 50000,
+    "_illuminance": 50000,
     "_illuminanceLDR": 1.6927083333333335,
     "_shadowEnabled": true,
     "_shadowPcf": 2,
@@ -337,9 +337,9 @@
     "_csmLayersTransition": false,
     "_csmTransitionRange": 0.05,
     "_shadowFixedArea": true,
-    "_shadowNear": 1,
-    "_shadowFar": 10,
-    "_shadowOrthoSize": 20,
+    "_shadowNear": 0,
+    "_shadowFar": 15,
+    "_shadowOrthoSize": 8,
     "_id": "b0VZ0fBdhCqoIAi7F62HCu"
   },
   {
@@ -415,14 +415,14 @@
     "_staticSettings": {
       "__id__": 11
     },
-    "_visibility": -325058561,
-    "_size": 0.18,
+    "_visibility": 1083179047,
+    "_size": 0.25,
     "_luminanceHDR": 1913.8445799108247,
     "_luminance": 1913.8445799108247,
     "_luminanceLDR": 498.3970260184439,
     "_term": 0,
     "_range": 4.5,
-    "_spotAngle": 43,
+    "_spotAngle": 39,
     "_angleAttenuationStrength": 0,
     "_shadowEnabled": false,
     "_shadowPcf": 2,

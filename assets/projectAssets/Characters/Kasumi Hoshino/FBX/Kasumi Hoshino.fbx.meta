@@ -834,7 +834,8 @@
             "mainTexture": {
               "__uuid__": "169f91d7-1d9a-486c-9640-e37292755ef8@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -903,7 +904,8 @@
             "mainTexture": {
               "__uuid__": "edaf5386-2d6e-4a9c-bf00-0f356eb33071@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -972,7 +974,8 @@
             "mainTexture": {
               "__uuid__": "e482ca05-0014-4fa3-b742-df0d47fd34c0@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.2
           },
           {},
           {},
@@ -1041,7 +1044,8 @@
             "mainTexture": {
               "__uuid__": "f3494b0d-d3e7-42eb-af60-e5782e75bf6f@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1110,7 +1114,8 @@
             "mainTexture": {
               "__uuid__": "2ca1abfc-93f6-4c07-843f-c83c8154122b@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1179,7 +1184,8 @@
             "mainTexture": {
               "__uuid__": "09621d0c-a6c2-4f4c-b4fa-e635fa270035@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1248,7 +1254,8 @@
             "mainTexture": {
               "__uuid__": "a6e2474b-cb77-4029-b16b-bb54edffaa83@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1317,7 +1324,8 @@
             "mainTexture": {
               "__uuid__": "8f63c02f-8d6d-414c-8425-51dc4fc5a24a@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1386,7 +1394,8 @@
             "mainTexture": {
               "__uuid__": "c316dc4e-0425-4840-9799-73fd9f143a81@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1455,7 +1464,8 @@
             "mainTexture": {
               "__uuid__": "1431a013-5121-456b-aae6-6570ed3fb04a@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1524,7 +1534,8 @@
             "mainTexture": {
               "__uuid__": "c9012cc8-dd8a-422c-98bd-4336f7f8a8a3@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1593,7 +1604,8 @@
             "mainTexture": {
               "__uuid__": "04d1f512-a6f3-4f52-8b58-c1efc8aa48b7@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1662,7 +1674,8 @@
             "mainTexture": {
               "__uuid__": "7eb230f1-0afe-42a8-8264-b922d4a68346@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1731,7 +1744,8 @@
             "mainTexture": {
               "__uuid__": "77f87867-932f-41e0-b789-9f89185890f5@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},
@@ -1800,7 +1814,8 @@
             "mainTexture": {
               "__uuid__": "053f21b8-e27e-4a54-9bd7-3eb87e8784ae@6c48a",
               "__expectedType__": "cc.Texture2D"
-            }
+            },
+            "albedoScale": 1.7
           },
           {},
           {},

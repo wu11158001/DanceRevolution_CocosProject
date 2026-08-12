@@ -1,7 +1,6 @@
 import { 
     _decorator, Component, instantiate, Node, Sprite, SpriteFrame, UITransform, Vec3, math,
-    input, Input, EventKeyboard, KeyCode, Color, tween,
-    color, Button
+    input, Input, EventKeyboard, KeyCode, Color, tween, Tween, color, Button
 } from 'cc';
 
 import { BaseView } from '../BaseView';
@@ -284,7 +283,7 @@ export class HitNodeView extends BaseView {
         if (pressedDirection === targetDirection) {
             const currentArrow = this.nodeArrows[this.currentInputIndex];
             if (currentArrow) {
-                tween(currentArrow.node).stop();
+                Tween.stopAllByTarget(currentArrow.node);
 
                 const startColor = currentArrow.color.clone();
                 const black = new Color(0, 0, 0, 255);
@@ -316,6 +315,14 @@ export class HitNodeView extends BaseView {
             }
             this.currentInputIndex++;
         } else {
+            // 停止所有箭頭 Node 上的 running Tween
+            this.nodeArrows.forEach((currentArrow) => {
+                if (currentArrow && currentArrow.node) {
+                    Tween.stopAllByTarget(currentArrow.node);
+                }
+            });
+
+            // 執行重置
             this.resetInputSequence();
         }
     }

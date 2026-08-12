@@ -237,6 +237,7 @@
               "b": 231,
               "a": 255
             },
+            "albedoScale": 7.5,
             "shininessExponent": 35.99999928474426,
             "specularFactor": 0.25,
             "transparencyFactor": 0
@@ -317,6 +318,7 @@
               "b": 231,
               "a": 255
             },
+            "albedoScale": 1.7,
             "shininessExponent": 35.99999928474426,
             "specularFactor": 0.25,
             "transparencyFactor": 0

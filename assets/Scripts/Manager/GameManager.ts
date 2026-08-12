@@ -36,7 +36,7 @@ export interface IPlayHitResult {
     scores: Record<string, number>; // 所有玩家的最新總分對照表{ [playerId]: totalScore }
     totalScore: number;             // 該玩家個人總分
     danceAnim: number;              // 當前小節舞步動畫index
-    animPhase: number;
+    animPhase: number;              // 當前動畫撥放階段
     perfectCombo: number;           // perfect連續次數
     completedCount: number;         // 有正確輸入數量
 }

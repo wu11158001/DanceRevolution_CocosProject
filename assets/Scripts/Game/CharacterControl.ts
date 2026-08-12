@@ -14,7 +14,7 @@ export class CharacterControl extends Component {
 
     private anim: Animation | null = null;
 
-    private crossFade: number = 0.2;
+    private crossFade: number = 0.3;
     private isInit: boolean = false;
 
     protected start() {
@@ -45,13 +45,13 @@ export class CharacterControl extends Component {
     /**
      * 播放舞蹈動畫並自動縮放到 1 小節長度
      * @param index 舞步動畫index
-     * @param animPhase 該舞步的階段(1=重頭開始, 2=重一半位置開始)
+     * @param animPhase 該舞步的階段
      * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
      */
     public playDanceAnimation(index: number, animPhase: number, barIntervalMs: number) {
         if (!this.isInit) this.init();
         if (!this.anim) return;
-
+        
         const clipName = `Dance_${index}`;
         const state = this.anim.getState(clipName);
 
@@ -60,17 +60,12 @@ export class CharacterControl extends Component {
             return;
         }
 
-        // 設定速度與時間進度
-        const targetDurationSec = barIntervalMs / 1000;
-        state.speed = state.duration / targetDurationSec;
-        const startProgress = animPhase === 2 ? 0.5 : 0;
-        state.time = state.duration * startProgress;
-
-        // 進行強制採樣更新骨骼
-        state.sample();
-
-        // 執行過渡
         this.anim.crossFade(clipName, this.crossFade);
+        const targetClipDuration = barIntervalMs / 1000;
+        state.speed = state.duration / targetClipDuration;
+        const startProgress = (animPhase - 1) / 4;
+        state.time = state.duration * startProgress;
+        state.sample();
     }
 
     /**

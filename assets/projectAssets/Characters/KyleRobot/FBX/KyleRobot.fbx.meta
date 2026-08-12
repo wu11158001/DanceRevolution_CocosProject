@@ -315,7 +315,8 @@
             "USE_NORMAL_MAP": true,
             "DCC_APP_NAME": 5,
             "USE_ALBEDO_MAP": true,
-            "USE_OCCLUSION_MAP": true
+            "USE_OCCLUSION_MAP": true,
+            "HAS_EXPORTED_GLOSSINESS": true
           },
           {},
           {},
@@ -365,7 +366,8 @@
               "__uuid__": "f9452524-76b6-478e-81e6-ea31b509b8f5@6c48a",
               "__expectedType__": "cc.Texture2D"
             },
-            "albedoScale": 0.1,
+            "albedoScale": 3.5,
+            "alphaThreshold": 0,
             "shininessExponent": 8.437955856323242,
             "specularColor": {
               "__type__": "cc.Color",
@@ -378,6 +380,7 @@
               "__uuid__": "12b912ce-c99f-4618-ba91-487144278a6e@6c48a",
               "__expectedType__": "cc.Texture2D"
             },
+            "glossiness": 0.2,
             "occlusionMap": {
               "__uuid__": "5e69e1f8-0667-468d-8256-3280975cc203@6c48a",
               "__expectedType__": "cc.Texture2D"

@@ -205,7 +205,7 @@ export class GameView extends BaseView {
         const hitCharacter = this.characterMap.get(data.hitPlayerId);
         if(hitCharacter) {
             if(data.rating == 'MISS') hitCharacter.playAnimation('DanceMiss', barIntervalMs * 2);
-            else hitCharacter.playDanceAnimation(data.danceAnim, data.animPhase, barIntervalMs * 4);
+            else hitCharacter.playDanceAnimation(data.danceAnim, data.animPhase, barIntervalMs * 8);
         }
 
         // 轉為陣列並依分數「由高到低」排序
