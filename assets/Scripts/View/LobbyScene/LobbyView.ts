@@ -100,7 +100,6 @@ export class LobbyView extends BaseView {
         PlayerData.on('characterId', this.onCharacterChange, this);
 
         this.showNickname();
-
         this.onCharacterChange();
     }
 

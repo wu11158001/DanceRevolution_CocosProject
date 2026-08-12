@@ -5,11 +5,12 @@ import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { AudioManager } from 'db://assets/Scripts/Manager/AudioManager';
 import { GameManager } from 'db://assets/Scripts/Manager/GameManager';
 import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
-import { RoomView } from '../View/LobbyScene/RoomView';
+import { CharacterDataManager } from './CharacterDataManager';
+import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
 
 const { ccclass, property } = _decorator;
 
-export type SceneType = 'LobbyScene' | 'GameScene';
+export type SceneType = 'EntryScene' | 'LobbyScene' | 'GameScene';
 
 @ccclass('SceneLoader')
 export class SceneLoader extends SingletonComponent<SceneLoader> {
@@ -23,13 +24,16 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
      */
     public loadScene(sceneType: SceneType, isGameReturn: boolean = false) {
         this.loadBg.active = true;
+        
+        // 跳轉前的舊場景
+        const previousScene = director.getScene()?.name as SceneType;
 
         director.loadScene(sceneType, (err) => {
             if (err) {
                 console.error(`跳轉場景失敗:`, err);
                 this.loadBg.active = false;
             } else {
-                this.onLoadComplete(sceneType, isGameReturn);
+                this.onLoadComplete(sceneType, previousScene, isGameReturn);
             }
         });
     }
@@ -39,11 +43,16 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
      * @param sceneType 
      * @param isGameReturn 
      */
-    private async onLoadComplete(sceneType: SceneType, isGameReturn: boolean = false) {
+    private async onLoadComplete(sceneType: SceneType, previousScene: SceneType, isGameReturn: boolean = false) {
         ViewManager.getInstance().closeAllViews();
 
         switch (sceneType) {
             case 'LobbyScene':
+                if(previousScene === 'EntryScene') {
+                    // 載入所有角色3D
+                    await CharacterDataManager.getInstance().preloadAllCharacters();
+                }    
+
                 if(!isGameReturn) {
                     // 一般進入大廳,開啟大廳介面
                     await ViewManager.getInstance().openView<LobbyView>('LobbyView', "HUD"); 

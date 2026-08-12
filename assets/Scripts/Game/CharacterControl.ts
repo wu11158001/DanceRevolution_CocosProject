@@ -1,4 +1,4 @@
-import { _decorator, Animation, Component, SkeletalAnimation, Node } from 'cc';
+import { _decorator, Animation, Component, Node } from 'cc';
 import { CharacterDataManager } from '../Manager/CharacterDataManager';
 const { ccclass, property } = _decorator;
 
@@ -10,42 +10,21 @@ export class CharacterControl extends Component {
     @property({tooltip: "角色編號", visible: true})
     private _characterIndex: number = 0;
     @property(Node)
-    public model3D: Node = null;
+    private _model3D: Node = null;
+    @property(Animation)
+    private anim: Animation = null;
 
     // 角色Index
     public get characterIndex() : number {
         return this._characterIndex;
     }
 
-    private anim: Animation | null = null;
+    // 角色3D
+    public get model3D(): Node {
+        return this._model3D;
+    }
 
     private crossFade: number = 0.3;
-    private isInit: boolean = false;
-
-    protected start() {
-        this.init();
-    }
-
-    private init() {
-        if(!this.isInit) {
-            this.isInit = true;
-
-            if(!this.anim) this.anim = this.node.addComponent(Animation);
-            if(this.anim) {
-                this.setClips();
-                this.anim.play('Idle');
-            }
-        }
-    }
-
-    /**
-     * 設置所有角色動畫Clips
-     */
-    private setClips() {
-        CharacterDataManager.getInstance().getAnimationClips(this._characterIndex)?.forEach((clip) => {
-            this.anim.addClip(clip);
-        });
-    }
 
     /**
      * 播放舞蹈動畫並自動縮放到 1 小節長度
@@ -54,7 +33,6 @@ export class CharacterControl extends Component {
      * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
      */
     public playDanceAnimation(index: number, animPhase: number, barIntervalMs: number) {
-        if (!this.isInit) this.init();
         if (!this.anim) return;
         
         const clipName = `Dance_${index}`;
@@ -80,7 +58,6 @@ export class CharacterControl extends Component {
      * @param isCrossFade 是否使用過度效果
      */
     public playAnimation(key: string, barIntervalMs: number = 0, isCrossFade: boolean = true) {
-        if(!this.isInit) this.init();
         if (!this.anim) return;
         
         const state = this.anim.getState(key);

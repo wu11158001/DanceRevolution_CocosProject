@@ -1,7 +1,6 @@
-import { _decorator, Component, Node, resources, Prefab, instantiate, AnimationClip, director } from 'cc';
+import { _decorator, Component, Node, resources, Prefab, instantiate, Animation, AnimationClip, NodePool, director, Director } from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
-import { CharacterControl } from '../Game/CharacterControl';
 
 const { ccclass, property } = _decorator;
 
@@ -21,44 +20,8 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
 
     // 角色Prefab字典
     private _characterPrefabs: Map<number, Prefab> = new Map();
-
-    protected start() {
-        // 載入所有角色動畫
-        this.loadAllCharacterClips();
-    }
-
-    /**
-     * 載入所有角色動畫
-     * @returns 
-     */
-    public async loadAllCharacterClips(): Promise<void> {
-        const totalGroups = 4;
-        const loadPromises: Promise<void>[] = [];
-
-        for (let i = 0; i < totalGroups; i++) {
-            const folderName = `CharacterClips_${i}`;
-
-            const promise = new Promise<void>((resolve) => {
-                resources.loadDir(folderName, AnimationClip, (err, clips) => {
-                    if (err) {
-                        console.error(`[CharacterControl] 載入 ${folderName} 失敗:`, err);
-                        this.characterClips[i] = [];
-                        resolve();
-                        return;
-                    }
-                    
-                    this.characterClips[i] = clips;
-                    console.log(`[CharacterControl] 成功載入 ${folderName}: ${clips.length} 個動畫檔`);
-                    resolve();
-                });
-            });
-
-            loadPromises.push(promise);
-        }
-
-        await Promise.all(loadPromises);
-        console.log('[CharacterControl] 所有角色動畫載入完畢！');
-    }
+    // 角色物件池快取
+    private _characterPools: Map<number, NodePool> = new Map();
 
     /**
      * 獲取角色動畫
@@ -77,7 +40,6 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
      */
     public preloadAllCharacters(): Promise<void> {
         return new Promise((resolve, reject) => {
-            // 1. 注意這裡加上 async
             resources.loadDir('CharacterPrefab', Prefab, async (err, prefabs) => {
                 if (err) {
                     console.error('預載入角色 Prefab 失敗：', err);
@@ -87,6 +49,7 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
 
                 this._characterCount = prefabs.length;
                 this._characterPrefabs.clear();
+                this._characterPools.clear();
 
                 prefabs.forEach((prefab) => {
                     const nameParts = prefab.name.split('_');
@@ -94,16 +57,14 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
 
                     if (!isNaN(id)) {
                         this._characterPrefabs.set(id, prefab);
-                    } else {
-                        console.warn(`Prefab 命名格式不符，無視：${prefab.name}`);
+                        this._characterPools.set(id, new NodePool());
                     }
                 });
 
-                console.log(`載入角色完成 共載入:${prefabs.length}個角色`);
-
-                // 角色預熱
+                // 執行預熱
                 try {
                     await this.warmupCharacters();
+                    console.log('預載入與預熱所有角色完成');
                     resolve();
                 } catch (warmupErr) {
                     reject(warmupErr);
@@ -113,46 +74,65 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
     }
 
     /**
-     * 角色預熱
+     * 角色預熱（強制 GPU 提交並填入物件池）
      */
     public async warmupCharacters(): Promise<void> {
-        const parent = director.getScene();
-        if (!parent) return;
+        const scene = director.getScene();
+        if (!scene) return;
 
-        const warmupNodes: Node[] = [];
+        for (const [id, prefab] of this._characterPrefabs) {
+            const node =  this.create(id);
+            node.setScale(0.0001, 0.0001, 0.0001);
+            scene.addChild(node);
 
-        // 生成所有角色並放至場景極遠處
-        this._characterPrefabs.forEach((prefab, id) => {
-            const node = instantiate(prefab);
-            node.setPosition(0, -999, 0);
-            parent.addChild(node);
+            await this.waitForNextFrame();
 
-            const ctrl = node.getComponent(CharacterControl);
-            if (ctrl) {
-                // 強制觸發 init() 與一次動畫採樣
-                ctrl.playAnimation('Idle', 0, true); 
-            }
-
-            warmupNodes.push(node);
-        });
-
-        // 等待 1~2 幀讓 GPU 完成 Shader 編譯與上傳
-        await new Promise((resolve) => setTimeout(resolve, 50));
-
-        // 預熱完成後移除
-        warmupNodes.forEach((node) => node.destroy());
-        console.log(`角色預熱完成`);
+            node.setScale(1, 1, 1);
+            scene.removeChild(node);
+            this.recycle(id, node); 
+        }
     }
 
     /**
-     * 創建角色
+     * 等待引擎完成下一幀繪製
+     */
+    private waitForNextFrame(): Promise<void> {
+        return new Promise((resolve) => {
+            director.once(Director.EVENT_AFTER_DRAW, () => {
+                resolve();
+            });
+        });
+    }
+
+    /**
+     * 創建/取得角色 (優先從物件池拿，沒有才 instantiate)
      */
     public create(index: number): Node | null {
+        const pool = this._characterPools.get(index);
+        
+        // 取出已經預熱好的實例
+        if (pool && pool.size() > 0) {
+            return pool.get()!;
+        }
+
+        // 物件池沒了才進行動態生成
         const prefab = this._characterPrefabs.get(index);
         if (!prefab) {
             console.error(`Prefab 未快取或載入失敗: ${index}`);
             return null;
         }
         return instantiate(prefab);
+    }
+
+    /**
+     * 回收角色回物件池
+     */
+    public recycle(index: number, node: Node) {
+        const pool = this._characterPools.get(index);
+        if (pool) {
+            pool.put(node);
+        } else {
+            node.destroy();
+        }
     }
 }

@@ -1822,6 +1822,8 @@
           {}
         ]
       }
-    }
+    },
+    "dumpMaterials": false,
+    "materialDumpDir": "db://assets/projectAssets/Characters/Kasumi Hoshino/FBX/Materials_Kasumi Hoshino"
   }
 }

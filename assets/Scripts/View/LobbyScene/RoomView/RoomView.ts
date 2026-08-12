@@ -331,6 +331,7 @@ export class RoomView extends BaseView {
             // 玩家訊息
             this.playerInfos[index].node.active = true
             this.playerInfos[index].setData({
+                playerId: player.playerId,
                 isHost: player.isHost,
                 nickname:  player.nickname,
                 isReady: player.isReady,

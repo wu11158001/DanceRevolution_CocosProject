@@ -15,11 +15,14 @@ export class RoomPlayerInfoVIew extends Component {
     private readyNode: Node = null;
     @property(Button)
     private btn_kick: Button = null;
+    @property(Node)
+    private selfNode: Node = null;
 
-    public setData(data:{isHost: boolean, nickname: string, isReady: boolean, kcikAction: () => void}) {
+    public setData(data:{playerId: string, isHost: boolean, nickname: string, isReady: boolean, kcikAction: () => void}) {
         // 本地玩家是否是房主
         const isLocalHost = PlayerData.isHost;
 
+        this.selfNode.active = data.playerId === PlayerData.playerId;
         this.isHostNode.active = data.isHost;
         this.label_nickname.string = data.nickname;
         this.readyNode.active = data.isReady && !data.isHost;
