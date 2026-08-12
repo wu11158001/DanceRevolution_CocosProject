@@ -1,6 +1,7 @@
-import { _decorator, Component, Node, resources, Prefab, instantiate, AnimationClip } from 'cc';
+import { _decorator, Component, Node, resources, Prefab, instantiate, AnimationClip, director } from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
+import { CharacterControl } from '../Game/CharacterControl';
 
 const { ccclass, property } = _decorator;
 
@@ -76,7 +77,8 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
      */
     public preloadAllCharacters(): Promise<void> {
         return new Promise((resolve, reject) => {
-            resources.loadDir('CharacterPrefab', Prefab, (err, prefabs) => {
+            // 1. 注意這裡加上 async
+            resources.loadDir('CharacterPrefab', Prefab, async (err, prefabs) => {
                 if (err) {
                     console.error('預載入角色 Prefab 失敗：', err);
                     reject(err);
@@ -87,7 +89,6 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
                 this._characterPrefabs.clear();
 
                 prefabs.forEach((prefab) => {
-                    // 從檔名提取數字，例如 "Character_0" -> 0
                     const nameParts = prefab.name.split('_');
                     const id = parseInt(nameParts[nameParts.length - 1]);
 
@@ -98,9 +99,48 @@ export class CharacterDataManager extends SingletonComponent<CharacterDataManage
                     }
                 });
 
-                resolve();
+                console.log(`載入角色完成 共載入:${prefabs.length}個角色`);
+
+                // 角色預熱
+                try {
+                    await this.warmupCharacters();
+                    resolve();
+                } catch (warmupErr) {
+                    reject(warmupErr);
+                }
             });
         });
+    }
+
+    /**
+     * 角色預熱
+     */
+    public async warmupCharacters(): Promise<void> {
+        const parent = director.getScene();
+        if (!parent) return;
+
+        const warmupNodes: Node[] = [];
+
+        // 生成所有角色並放至場景極遠處
+        this._characterPrefabs.forEach((prefab, id) => {
+            const node = instantiate(prefab);
+            node.setPosition(0, -999, 0);
+            parent.addChild(node);
+
+            const ctrl = node.getComponent(CharacterControl);
+            if (ctrl) {
+                // 強制觸發 init() 與一次動畫採樣
+                ctrl.playAnimation('Idle'); 
+            }
+
+            warmupNodes.push(node);
+        });
+
+        // 等待 1~2 幀讓 GPU 完成 Shader 編譯與上傳
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        // 預熱完成後移除（或存入物件池 Pool 重複利用）
+        warmupNodes.forEach((node) => node.destroy());
     }
 
     /**

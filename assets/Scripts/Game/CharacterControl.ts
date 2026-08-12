@@ -10,7 +10,7 @@ export class CharacterControl extends Component {
     @property({tooltip: "角色編號"})
     private characterIndex: number = 0;
 
-    private anim: SkeletalAnimation | null = null;
+    private anim: Animation | null = null;
 
     private crossFade: number = 0.2;
     private isInit: boolean = false;
@@ -23,7 +23,7 @@ export class CharacterControl extends Component {
         if(!this.isInit) {
             this.isInit = true;
 
-            if(!this.anim) this.anim = this.node.addComponent(SkeletalAnimation);
+            if(!this.anim) this.anim = this.node.addComponent(Animation);
             if(this.anim) {
                 this.setClips();
                 this.anim.play('Idle');
@@ -47,9 +47,9 @@ export class CharacterControl extends Component {
      * @param barIntervalMs 伺服器傳來的 1 小節毫秒數
      */
     public playDanceAnimation(index: number, animPhase: number, barIntervalMs: number) {
-        if(!this.isInit) this.init();
+        if (!this.isInit) this.init();
         if (!this.anim) return;
-
+        
         const clipName = `Dance_${index}`;
         const state = this.anim.getState(clipName);
 
@@ -58,16 +58,17 @@ export class CharacterControl extends Component {
             return;
         }
 
+        // 設定速度與時間進度
         const targetDurationSec = barIntervalMs / 1000;
         state.speed = state.duration / targetDurationSec;
-        this.anim.crossFade(clipName, this.crossFade);
-
-        // 如果是2則從一半進度開始撥放
         const startProgress = animPhase === 2 ? 0.5 : 0;
         state.time = state.duration * startProgress;
 
-        // 強制採樣，確保當前畫格立刻更新至該時間點，防止出現 1 幀的閃爍
+        // 進行強制採樣更新骨骼
         state.sample();
+
+        // 執行過渡
+        this.anim.crossFade(clipName, this.crossFade);
     }
 
     /**

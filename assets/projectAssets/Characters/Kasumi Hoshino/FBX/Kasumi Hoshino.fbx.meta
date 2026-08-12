@@ -86,26 +86,6 @@
       ],
       "subMetas": {}
     },
-    "c553d": {
-      "importer": "gltf-embeded-image",
-      "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@c553d",
-      "displayName": "",
-      "id": "c553d",
-      "name": "DiffuseColor_Texture_14.image",
-      "userData": {
-        "gltfIndex": 14,
-        "fixAlphaTransparencyArtifacts": true,
-        "hasAlpha": true,
-        "type": "texture"
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".json",
-        ".png"
-      ],
-      "subMetas": {}
-    },
     "4f17a": {
       "importer": "texture",
       "uuid": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@4f17a",
@@ -395,8 +375,8 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@c553d"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_18.png"
       },
       "ver": "1.0.22",
       "imported": true,
@@ -722,7 +702,7 @@
       },
       {
         "name": "DiffuseColor_Texture_14",
-        "uri": "c3a72dd3-6c7f-47bf-bad0-ecfc83bfa2fe@c553d"
+        "uri": "db://assets/projectAssets/Characters/Kasumi Hoshino/Textures/_18.png"
       }
     ],
     "fbx": {

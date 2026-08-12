@@ -1,4 +1,4 @@
-import { _decorator, Camera, Component, Node, Prefab, resources, v3, Vec3} from 'cc';
+import { _decorator, Camera, Component, Node, Prefab, resources, v3, Vec3 ,sys} from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 
@@ -102,5 +102,18 @@ export class GameTool extends SingletonComponent<GameTool> {
      */
     public formatNumber(num: number): string {
         return Math.floor(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    /**
+     * 判斷平台
+     * @returns // true=在手機瀏覽器 
+     */
+    public isMobileBrowser() :boolean {
+        if (sys.isBrowser) {
+            console.log(`判斷是否在手機平台: ${sys.isMobile}`);
+            return sys.isMobile;
+        }
+
+        return false;
     }
 }

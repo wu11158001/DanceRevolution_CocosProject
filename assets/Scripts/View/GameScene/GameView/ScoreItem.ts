@@ -15,9 +15,9 @@ export class ScoreItem extends Component {
     @property(Node)
     private selfNode: Node = null;
     @property(Color)
-    private localScoreColor: Color = Color.WHITE;
+    private localScoreColor: Color = null;
     @property(Color)
-    private otherScoreColor: Color = Color.WHITE;
+    private otherScoreColor: Color = null;
 
     public currentScore: number = 0;
 

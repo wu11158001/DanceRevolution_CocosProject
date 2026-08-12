@@ -130,8 +130,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 306.0599365234375,
-      "height": 67
+      "width": 269.76171875,
+      "height": 104.8
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -172,17 +172,17 @@
     "_actualFontSize": 110,
     "_fontSize": 110,
     "_fontFamily": "Arial",
-    "_lineHeight": 50,
+    "_lineHeight": 80,
     "_overflow": 0,
     "_enableWrapText": false,
     "_font": {
-      "__uuid__": "72c9c16f-82f3-4973-9935-797804c0cecb",
+      "__uuid__": "0138c2fe-4e8a-4236-b080-20c6a739d584",
       "__expectedType__": "cc.TTFFont"
     },
     "_isSystemFontUsed": false,
     "_spacingX": 0,
     "_isItalic": false,
-    "_isBold": true,
+    "_isBold": false,
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
@@ -302,9 +302,9 @@
       },
       {
         "__type__": "cc.Color",
-        "r": 120,
-        "g": 126,
-        "b": 129,
+        "r": 180,
+        "g": 180,
+        "b": 180,
         "a": 255
       }
     ],

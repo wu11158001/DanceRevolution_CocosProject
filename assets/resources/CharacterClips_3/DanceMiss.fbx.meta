@@ -38,7 +38,7 @@
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 1.7333333492279053
+          "to": 6.833333492279053
         },
         "events": []
       },
@@ -255,13 +255,13 @@
       },
       {
         "name": "mixamo.com",
-        "duration": 1.7333333492279053,
+        "duration": 6.833333492279053,
         "fps": 30,
         "splits": [
           {
             "name": "DanceMiss",
             "from": 0,
-            "to": 1.7333333492279053,
+            "to": 6.833333492279053,
             "wrapMode": 2,
             "previousId": "18d6f"
           }

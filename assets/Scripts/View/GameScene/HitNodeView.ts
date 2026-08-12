@@ -1,12 +1,13 @@
 import { 
     _decorator, Component, instantiate, Node, Sprite, SpriteFrame, UITransform, Vec3, math,
     input, Input, EventKeyboard, KeyCode, Color, tween,
-    color
+    color, Button
 } from 'cc';
 
 import { BaseView } from '../BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { GameManager, INoteSequenceData} from 'db://assets/Scripts/Manager/GameManager';
+import { GameTool } from '../../Tools/GameTool';
 
 const { ccclass, property } = _decorator;
 
@@ -30,6 +31,9 @@ export class HitNodeView extends BaseView {
     private nodeArrowPrefab: Node = null;
     @property([SpriteFrame])
     private nodeArrowSprites: SpriteFrame[] = []; // [0]: 預設/未按 , [1]: 正確按壓
+
+    @property([Button])
+    private phoneBtns: Button[] = [];   // 手機專用按鈕(0=上,1=下,2=左,3=右,4=打擊)
 
     private barWidth: number = 0;
     private barStartTime: number = 0;
@@ -56,6 +60,9 @@ export class HitNodeView extends BaseView {
     public async onOpen(params?: any) {
         super.onOpen(params);
 
+        // 初始化手機專用按鈕
+        this.initPhoneButtons();
+
         this.sprite_nodeBar.node.active = false;
         this.nodeArrowPrefab.active = false;
 
@@ -65,6 +72,36 @@ export class HitNodeView extends BaseView {
         this.sprite_hitZone.node.setPosition(new Vec3(hitZoneX, 0, 0));
         this.cursor.setPosition(new Vec3(0, 0, 0));
         this.sprite_beatBar.node.active = false;
+    }
+
+    /**
+     * 初始化手機 UI 按鈕綁定
+     */
+    private initPhoneButtons() {
+        const isMobile = GameTool.getInstance().isMobileBrowser();
+        const directions = ['UP', 'DOWN', 'LEFT', 'RIGHT'];
+
+        this.phoneBtns.forEach((btn, index) => {
+            if (!btn) return;
+
+            // 僅在手機網頁顯示按鈕
+            btn.node.active = isMobile;
+
+            btn.node.off(Node.EventType.TOUCH_START);
+
+            if (index < 4) {
+                // 0:UP, 1:DOWN, 2:LEFT, 3:RIGHT
+                const dir = directions[index];
+                btn.node.on(Node.EventType.TOUCH_START, () => {
+                    this.handleDirectionInput(dir);
+                }, this);
+            } else if (index === 4) {
+                // 4:打擊 (Space)
+                btn.node.on(Node.EventType.TOUCH_START, () => {
+                    this.onSpaceHit();
+                }, this);
+            }
+        });
     }
 
     protected update(deltaTime: number) {
@@ -93,7 +130,6 @@ export class HitNodeView extends BaseView {
     private updateHitZoneAlpha(currentServerTime: number) {
         if (!this.sprite_hitZone || this.beatIntervalMs <= 0) return;
 
-        // 計算在當前單拍內的相對時間進度 (0.0 ~ 1.0)
         const elapsedTime = currentServerTime - this.barStartTime;
         const beatProgress = (elapsedTime % this.beatIntervalMs) / this.beatIntervalMs;
 
@@ -104,7 +140,6 @@ export class HitNodeView extends BaseView {
 
         const calculatedAlpha = centerAlpha + alphaRange * Math.cos(beatProgress * Math.PI * 2);
 
-        // 更新 Sprite 顏色 Alpha
         const color = this.sprite_hitZone.color;
         this.sprite_hitZone.color = new Color(color.r, color.g, color.b, math.clamp(calculatedAlpha, minAlpha, maxAlpha));
     }
@@ -159,7 +194,7 @@ export class HitNodeView extends BaseView {
      */
     public showCurrentNode(sequence: string[]) {
         this.currentSequence = sequence;
-        this.currentInputIndex = 0; // 重置輸入索引
+        this.currentInputIndex = 0;
 
         // 移除舊譜面
         this.nodeArrows.forEach((nodeArrow) => {
@@ -229,9 +264,18 @@ export class HitNodeView extends BaseView {
                 break;
         }
 
-        if (!pressedDirection) return;
+        if (pressedDirection) {
+            this.handleDirectionInput(pressedDirection);
+        }
+    }
 
-        // 如果箭頭已經全部輸入完成，忽視多餘的方向鍵輸入
+    /**
+     * 處理方向鍵輸入 (鍵盤與手機按鈕共用)
+     */
+    private handleDirectionInput(pressedDirection: string) {
+        if (!this.isRunning) return;
+
+        // 如果箭頭已經全部輸入完成，忽視多餘的方向輸入
         if (this.currentInputIndex >= this.currentSequence.length) return;
 
         // 比對當前位置的箭頭方向
@@ -242,34 +286,30 @@ export class HitNodeView extends BaseView {
             if (currentArrow) {
                 tween(currentArrow.node).stop();
 
-                // 箭頭漸變效果
                 const startColor = currentArrow.color.clone();
                 const black = new Color(0, 0, 0, 255);
                 const white = new Color(255, 255, 255, 255);
 
                 tween(currentArrow.node)
-                    // 先變黑
                     .to(0.1, {}, {
                         onUpdate: (target, ratio) => {
                             let r = math.lerp(startColor.r, black.r, ratio);
                             let g = math.lerp(startColor.g, black.g, ratio);
                             let b = math.lerp(startColor.b, black.b, ratio);
-                            currentArrow.color = new Color(r, g, b, 255); // 觸發 Sprite setter 刷新畫面
+                            currentArrow.color = new Color(r, g, b, 255);
                         }
                     })
-                    // 換圖
                     .call(() => {
                         if (this.nodeArrowSprites[1]) {
                             currentArrow.spriteFrame = this.nodeArrowSprites[1];
                         }
                     })
-                    // 再變白
                     .to(0.1, {}, {
                         onUpdate: (target, ratio) => {
                             let r = math.lerp(black.r, white.r, ratio);
                             let g = math.lerp(black.g, white.g, ratio);
                             let b = math.lerp(black.b, white.b, ratio);
-                            currentArrow.color = new Color(r, g, b, 255); // 觸發 Sprite setter 刷新畫面
+                            currentArrow.color = new Color(r, g, b, 255);
                         }
                     })
                     .start();
@@ -278,7 +318,6 @@ export class HitNodeView extends BaseView {
         } else {
             this.resetInputSequence();
         }
-        
     }
 
     /**
@@ -289,14 +328,14 @@ export class HitNodeView extends BaseView {
         this.nodeArrows.forEach((sp) => {
             if (sp && this.nodeArrowSprites[0]) {
                 tween(sp.node).stop();
-                sp.color = new Color(255, 255, 255, 255)
+                sp.color = new Color(255, 255, 255, 255);
                 sp.spriteFrame = this.nodeArrowSprites[0];
             }
         });
     }
 
     /**
-     * 按下 Space 打擊觸發
+     * 按下 Space / 打擊鈕觸發
      */
     private onSpaceHit() {
         // 進度小於 50% || 沒有任何正確
@@ -306,7 +345,7 @@ export class HitNodeView extends BaseView {
 
         // 發送給 Server 判定
         SocketManager.getInstance().sendPlayerHit({
-            hitTime: currentServerTime,                 // 按下 Space 的校正時間
+            hitTime: currentServerTime,                 // 校正時間
             completedCount: this.currentInputIndex,     // 正確輸入的箭頭數量
             sequenceLength: this.currentSequence.length // 總箭頭數
         });

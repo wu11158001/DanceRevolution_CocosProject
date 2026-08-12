@@ -11,8 +11,10 @@ const { ccclass, property } = _decorator;
 export class GameResultItem extends Component {
     @property(Sprite)
     private mainBg: Sprite = null;
-    @property([SpriteFrame])
-    private bgSpriteFrames: SpriteFrame[] = [];
+    @property(Color)
+    private firstPlaceColor: Color = new Color(0,0,0,255);
+    @property(Color)
+    private otherColor: Color = new Color(0,0,0,255);
 
     @property(Node)
     private selfNode: Node = null;
@@ -39,7 +41,7 @@ export class GameResultItem extends Component {
 
         this.selfNode.active = isSelf;
         this.firstPlaceNode.active = index == 0;
-        this.mainBg.spriteFrame = isSelf ? this.bgSpriteFrames[0] : this.bgSpriteFrames[1];
+        this.mainBg.color = isSelf ? this.firstPlaceColor : this.otherColor;
 
         this.label_nickname.string = data.nickname;
         this.label_score.string = GameTool.getInstance().formatNumber(data.totalScore);

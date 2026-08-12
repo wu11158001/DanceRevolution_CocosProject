@@ -200,7 +200,6 @@ export class GameManager extends Component {
      * 接收:所有玩家打擊判定資料
      */
     private async onBarHitResults(data: IPlayHitResult) {
-                console.log(`打擊時間資訊: ${data.animPhase}`);
         this.gameVIew.UpdateScore(data, this.barIntervalMs);               
     }
 

@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director} from 'cc';
+import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director, Button} from 'cc';
 
 import { BaseView } from '../../BaseView';
 import { AudioManager } from '../../../Manager/AudioManager';
@@ -78,7 +78,7 @@ export class GameView extends BaseView {
         this.nicknamePrefab.active = false;
 
         this.label_selfScore.string = '0';
-        this.songNameMarquee.setTitle(RoomData.currentSong.name);
+        this.songNameMarquee.setTitle(`${RoomData.currentSong.name} (BPM:${RoomData.currentSong.bpm})`);
 
         this.progressBar_song.progress = 0;
         this.label_songTimeLeft.string = "00:00";
