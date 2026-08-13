@@ -21,6 +21,9 @@ export class GameTextTipView extends BaseView {
     @property(Color)
     private finishColor: Color = new Color(255,255,255,255);
 
+    // 是否已開始譜面倒數
+    private isStart: boolean = false;
+
     protected start(): void {
         this.uiOpacity_tip.opacity = 0;
     }
@@ -56,9 +59,11 @@ export class GameTextTipView extends BaseView {
     }
 
     /**
-     * 遊戲開始
+     * 遊戲準備
      */
-    public onGameStart() {
+    public onReady() {
+        if(this.isStart) return;
+
         this.showTip('READY', this.readyColor, false)
     }
 
@@ -68,6 +73,8 @@ export class GameTextTipView extends BaseView {
      * @param sequence 倒數文字
      */
     public async onStartCount(data: {countdownSec: number, sequence: string[]}) {
+        this.isStart = true;
+
         for(let i = 0; i < data.countdownSec; i++) {
             let color = i === 0 ? this.startColor : this.countDownColor;
             this.showTip(data.sequence[i], color);

@@ -141,8 +141,7 @@ export class GameManager extends Component {
 
             SceneLoader.getInstance().closeLoadBg();
             
-            this.gameTextTipView.onGameStart();
-            this.gameCameraController.onGameOpening();
+            this.gameCameraController.onGameOpening(this.gameTextTipView);
             this.playMusicSynchronized(Math.abs(remainingTime));
         }
     }

@@ -1,4 +1,5 @@
-import { _decorator, Component, Node, Vec3, Tween, tween } from 'cc';
+import { _decorator, Component, Node, Vec3, Tween, tween, Camera, Layers } from 'cc';
+import { GameTextTipView } from '../View/GameScene/GameView/GameTextTipView';
 const { ccclass, property } = _decorator;
 
 /**
@@ -15,15 +16,28 @@ interface CameraCamPoint {
  */
 @ccclass('GameCameraController')
 export class GameCameraController extends Component {
+    @property(Camera)
+    private camera3D: Camera = null!;
     @property(Node)
     private cameraNode: Node = null!;
+    @property(Node)
+    private camera3DBgNode: Node = null;
 
+    private gameTextTipView: GameTextTipView = null;
     private currentTween: Tween<Node> | null = null;
+
+    private bgLayerBit: number = 0;
 
     /**
      * 遊戲開場運鏡
      */
-    public onGameOpening() {
+    public onGameOpening(gameTextTipView: GameTextTipView) {
+        this.gameTextTipView = gameTextTipView;
+
+        this.camera3DBgNode.active = false;
+        this.bgLayerBit = Layers.Enum['3DBg'];
+        this.camera3D.visibility |= this.bgLayerBit;
+
         this.cameraNode.position = new Vec3(0, 6, 6);
         this.cameraNode.eulerAngles = new Vec3(-50, 0, 0);
 
@@ -66,6 +80,10 @@ export class GameCameraController extends Component {
         this.currentTween = camTween
             .call(() => {
                 console.log('攝影機運鏡結束!');
+                this.camera3DBgNode.active = true;
+                this.camera3DBgNode.position = this.cameraNode.position;
+                this.camera3D.visibility &= ~this.bgLayerBit;
+                this.gameTextTipView.onReady();
             })
             .start();
     }
