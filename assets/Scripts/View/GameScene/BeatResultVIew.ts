@@ -15,7 +15,7 @@ export class BeatResultVIew extends BaseView {
     @property({type: CCFloat})
     private closeTime = 2.5;
     @property({type: CCFloat})
-    private selfSize = 80;
+    private selfSize = 130;
     @property({type: CCFloat})
     private otherSize = 40;
 

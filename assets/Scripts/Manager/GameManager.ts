@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, find } from 'cc';
 
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
@@ -10,6 +10,8 @@ import { GameView } from '../View/GameScene/GameView/GameView';
 import { PlayerData } from '../Data/PlayerData';
 import { BeatResultVIew } from '../View/GameScene/BeatResultVIew';
 import { GameResultView } from '../View/GameScene/GameResultView/GameResultView';
+import { GameTextTipView } from '../View/GameScene/GameView/GameTextTipView';
+import { GameCameraController } from '../Game/GameCameraController';
 
 const { ccclass, property } = _decorator;
 
@@ -78,11 +80,14 @@ export class GameManager extends Component {
 
     private hitNodeView: HitNodeView = null;
     private gameVIew: GameView = null;
+    private gameTextTipView: GameTextTipView = null;
+    private gameCameraController: GameCameraController = null;
 
     protected onDestroy(): void {
         document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
 
         SocketManager.getInstance().socket?.off('game_started');
+        SocketManager.getInstance().socket?.off('start_countdown');
         SocketManager.getInstance().socket?.off('new_note_sequence');
         SocketManager.getInstance().socket?.off('player_hit_result');
         SocketManager.getInstance().socket?.off('game_ended');
@@ -94,6 +99,8 @@ export class GameManager extends Component {
 
         // 監聽:"game_started" [正式遊戲開始]
         SocketManager.getInstance().socket?.on('game_started', this.onGameStarted.bind(this));
+        // 監聽:"start_countdown" [譜面首次發送前的倒數]
+        SocketManager.getInstance().socket?.on('start_countdown', this.onStartCount.bind(this));
         // 監聽:"new_note_sequence" [譜面與打擊時間]
         SocketManager.getInstance().socket?.on('new_note_sequence', this.onNewNodeSequence.bind(this));
         // 監聽:"player_hit_result" [所有玩家打擊判定]
@@ -103,9 +110,21 @@ export class GameManager extends Component {
     }
 
     async start() {
+        const gamera3D = find('Camera_3D')
+        if(gamera3D) {
+            this.gameCameraController = gamera3D.getComponent(GameCameraController);
+        }
+
         await SocketManager.getInstance().syncServerTime();
-        this.hitNodeView = await ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup');
-        this.gameVIew = await ViewManager.getInstance().openView<GameView>('GameView', 'HUD');
+
+        const [hitNodeView, gameVIew, gameTextTipView] = await Promise.all([
+            ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup'),
+            ViewManager.getInstance().openView<GameView>('GameView', 'HUD'),
+            ViewManager.getInstance().openView<GameTextTipView>('GameTextTipView', 'Popup'),
+        ]);
+        this.hitNodeView = hitNodeView;
+        this.gameVIew = gameVIew;
+        this.gameTextTipView = gameTextTipView;        
 
         SocketManager.getInstance().sendPrepareGame();
     }
@@ -119,6 +138,11 @@ export class GameManager extends Component {
 
         if (remainingTime <= 0) {
             this.isWaitingStart = false; // 防止重複觸發
+
+            SceneLoader.getInstance().closeLoadBg();
+            
+            this.gameTextTipView.onGameStart();
+            this.gameCameraController.onGameOpening();
             this.playMusicSynchronized(Math.abs(remainingTime));
         }
     }
@@ -178,14 +202,28 @@ export class GameManager extends Component {
         this.playMusicSynchronized(expectedCurrentTimeSec);
     }
 
-    // 接收:遊戲正式開始
-    private onGameStarted(data: { song: any; startTime: number }) {
+    /**
+     * 接收:遊戲正式開始
+     * @param data 
+     * countdownSec=歌曲開始播放的時間點
+     */
+    private onGameStarted(data: { song: any; startTime: number}) {
         RoomData.updateSongs(data.song);
         this.targetStartTime = data.startTime;
         this.isGamePlaying = true;
         this.isWaitingStart = true;
 
         console.log(`[GameManager] 收到開始指令，目標伺服器時間: ${this.targetStartTime}`);
+    }
+
+    /**
+     * 首個譜面發送前的倒數
+     * @param data 
+     * @param countdownSec 倒數總秒數, 
+     * @param countdownSequence 倒數文字序列'START', '3', '2', '1'
+     */
+    private onStartCount(data: { countdownSec: number, sequence: string[] }) {
+         this.gameTextTipView.onStartCount(data);
     }
 
     /**
@@ -215,6 +253,8 @@ export class GameManager extends Component {
         ViewManager.getInstance().openView<GameResultView>('GameResultView', 'Popup').then((view) => {
             view.setData(data);
         });
+
+        this.gameTextTipView.onGameFinish();
     }
 
     /**

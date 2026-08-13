@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director, Color} from 'cc';
+import { _decorator, Component, instantiate, Label, Node, ProgressBar, tween, Vec3, v3, Camera, find, director, Color, UIOpacity, Tween} from 'cc';
 
 import { BaseView } from '../../BaseView';
 import { AudioManager } from '../../../Manager/AudioManager';
@@ -57,10 +57,6 @@ export class GameView extends BaseView {
     private nicknamePosOffset = v3(0, 0.32, 0);
     private selfTargetPosOffest = v3(0, 0.45, 0);
 
-    // 本地指標移動參數
-    private selfNodeMoveDistance = 20; // 上下移動距離
-    private selfNodeDuration = 1.0;    // 單程時間
-
     private camera3D: Camera = null;
 
     private selfCharacter: CharacterControl = null;
@@ -71,7 +67,6 @@ export class GameView extends BaseView {
     private playerSeatMap: Map<string, number> = new Map();
     private seatTweenMap: Map<string, any> = new Map();
 
-    private isStart: boolean = false;
     private isGameOver: boolean = false;
 
     public async onOpen(params?: any) {
@@ -97,17 +92,12 @@ export class GameView extends BaseView {
         this.updateSongProgress();
         this.updateNicknamePos(dt);
         this.updateSelfTargetPos(dt);
-    }
+    } 
 
     /**
      * 更新音樂進度
      */
     private updateSongProgress() {
-        if(AudioManager.getInstance().getSongTimeLeftProgress() > 0 && !this.isStart) {
-            this.isStart = true;
-            SceneLoader.getInstance().closeLoadBg();
-        }
-
         if(!this.isGameOver) {
             this.progressBar_song.progress = AudioManager.getInstance().getSongTimeLeftProgress();
             this.label_songTimeLeft.string = AudioManager.getInstance().getSongTimeLeft();
@@ -123,7 +113,9 @@ export class GameView extends BaseView {
             this.selfCharacter.model3D,
             this.selfTarget,
             this.selfTargetPosOffest,
-            dt
+            dt,
+            30,
+            false
         );
     }
 
@@ -137,7 +129,9 @@ export class GameView extends BaseView {
                 character.model3D,
                 nicknameNode,
                 this.nicknamePosOffset,
-                dt
+                dt,
+                30,
+                false
             );
         });    
     }

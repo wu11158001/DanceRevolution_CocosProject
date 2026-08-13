@@ -32,11 +32,6 @@ export class GameTool extends SingletonComponent<GameTool> {
     private _tempDir = v3();
     /**
      * 將 3D 物件的世界座標同步至 UI 節點
-     * @param camera3D 畫面的 3D 相機
-     * @param target3D 追蹤的 3D 物件
-     * @param uiNode 要移動的 UI 節點
-     * @param offset 3D 空間中的頭頂偏移量 (預設為 0, 0, 0)
-     * @returns 是否在相機前方（true: 在前方並已更新 UI 位置；false: 在相機後方，UI 應隱藏）
      */
     public follow3DNode(
         camera3D: Camera,
@@ -44,14 +39,16 @@ export class GameTool extends SingletonComponent<GameTool> {
         uiNode: Node,
         offset: Vec3 = Vec3.ZERO,
         dt: number = 0.016,
-        smoothSpeed: number = 30 // 平滑係數，數值越大越貼緊，一般 20~30 體感最佳
+        smoothSpeed: number = 30,
+        immediate: boolean = true // 強制立即歸位
     ): Vec3 | null {
         if (!camera3D || !target3D || !uiNode || !uiNode.parent) return null;
+
         // 計算目標 3D 世界座標
         target3D.getWorldPosition(this._tempWPos);
         this._tempWPos.add(offset);
 
-        // 視錐體背面判定 (與相機 Forward 做點積)
+        // 視錐體背面判定
         const cameraNode = camera3D.node;
         Vec3.subtract(this._tempDir, this._tempWPos, cameraNode.worldPosition);
 
@@ -64,14 +61,14 @@ export class GameTool extends SingletonComponent<GameTool> {
         camera3D.convertToUINode(this._tempWPos, uiNode.parent, this._tempUIPos);
         this._tempUIPos.z = 0;
 
-        // 首次顯示時直接歸位，避免從遠處飛過來的視覺瑕疵
-        if (!uiNode.active) {
+        // 首次顯示、強制立即定位、或平滑係數為 0 時直接歸位
+        if (!uiNode.active || immediate || smoothSpeed <= 0) {
             uiNode.setPosition(this._tempUIPos);
             uiNode.active = true;
             return this._tempUIPos.clone();
         }
 
-        // 使用獨立於 FPS 的指數平滑插值 (Exponential Smoothing)
+        // 指數平滑插值
         const currentPos = uiNode.position;
         const t = 1 - Math.exp(-smoothSpeed * dt);
         

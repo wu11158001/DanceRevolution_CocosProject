@@ -298,7 +298,7 @@ export class RoomView extends BaseView {
                         this.camera3D,
                         character,
                         this.playerInfos[index].node,
-                        this.playerInfoPosOffset
+                        this.playerInfoPosOffset,
                     );
 
                     // 選擇歌曲按鈕
@@ -318,7 +318,7 @@ export class RoomView extends BaseView {
                                 this.camera3D,
                                 character,
                                 this.switchBtnNode,
-                                this.switchBtnPosOffset
+                                this.switchBtnPosOffset,
                             )
                         } else {
                             this.btn_switchCharacterLeft.node.active = !player.isReady;
