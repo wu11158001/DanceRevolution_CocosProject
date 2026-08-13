@@ -2,6 +2,7 @@ import { _decorator, Component, Node, AudioSource, AudioClip, tween, Tween, dire
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { GameTool } from '../Tools/GameTool';
+import { ISongData } from '../Data/RoomData';
 
 const { ccclass, property } = _decorator;
 
@@ -43,10 +44,20 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     // 音效與音樂快取容器
     private clipCache: Map<string, AudioClip> = new Map();
 
+    // 試聽控制
+    private isPreviewing: boolean = false;
+    private previewStartTime: number = 0;
+    private previewEndTime: number = 0;
+    private bgmTween: Tween<AudioSource> = null;
+
     protected onLoad(): void {
         super.onLoad();
 
         this.init();
+    }
+
+    protected update(dt: number): void {
+        this.previewing();
     }
 
     /**
@@ -70,7 +81,7 @@ export class AudioManager extends SingletonComponent<AudioManager> {
      */
     public playBGM (
         type: BGM_TYPE, 
-        volume: number = 1.0, 
+        volume: number = 0.85, 
         isLoop: boolean = true, 
         currentTime: number = 0, 
     ) {
@@ -184,6 +195,112 @@ export class AudioManager extends SingletonComponent<AudioManager> {
         } else {
             return this.createSfxSource();
         }
+    }
+
+    /**
+     * 試聽音樂監控
+     */
+    private previewing() {
+        if (this.isPreviewing && this.bgmSource && this.bgmSource.playing) {
+            // 超過試聽區間，跳回 preview_start 重新循環
+            if (this.bgmSource.currentTime >= this.previewEndTime) {
+                this.bgmSource.currentTime = this.previewStartTime;
+            }
+        }
+    }
+
+    /**
+     * 播放試聽歌曲
+     */
+    public playSongPreview(songData: ISongData) {
+        if (!songData) return;
+
+        const bgmName = songData.id;
+        this.previewStartTime = songData.preview_start || 10;
+        const duration = songData.preview_duration || 15;
+        this.previewEndTime = this.previewStartTime + duration;
+
+        if (this.bgmTween) {
+            this.bgmTween.stop();
+        }
+
+        const startPreviewLoop = (clip: AudioClip) => {
+            this.isPreviewing = true;
+            this.bgmSource.stop();
+            this.bgmSource.clip = clip;
+            this.bgmSource.loop = true;
+            this.bgmSource.currentTime = this.previewStartTime;
+            this.bgmSource.volume = 0;
+            this.bgmSource.play();
+
+            // 音樂淡入
+            this.bgmTween = tween(this.bgmSource)
+                .to(0.3, { volume: 1.0 })
+                .start();
+        };
+
+        // 先淡出當前音樂，再播放新試聽
+        this.fadeBGM(0.2, 0, () => {
+            if (this.clipCache.has(bgmName)) {
+                startPreviewLoop(this.clipCache.get(bgmName)!);
+            } else {
+                resources.load(`audio/bgm/${bgmName}`, AudioClip, (err, clip) => {
+                    if (err || !clip) {
+                        console.error(`[AudioManager] 載入試聽音樂失敗: audio/bgm/${bgmName}`, err);
+                        return;
+                    }
+                    this.clipCache.set(bgmName, clip);
+                    startPreviewLoop(clip);
+                });
+            }
+        });
+    }
+
+    /**
+     * 停止試聽
+     * @param restoreLobbyBGM 是否恢復大廳背景音樂
+     */
+    public stopSongPreview(restoreLobbyBGM: boolean = true) {
+        if (!this.isPreviewing) return;
+
+        this.isPreviewing = false;
+
+        if (this.bgmTween) {
+            this.bgmTween.stop();
+        }
+
+        // 淡出當前試聽
+        this.bgmTween = tween(this.bgmSource)
+            .to(0.3, { volume: 0 })
+            .call(() => {
+                this.bgmSource.stop();
+                if (restoreLobbyBGM) {
+                    // 播放大廳 BGM
+                    this.playBGM(BGM_TYPE.LobbyBGM, 1.0, true);
+                }
+            })
+            .start();
+    }
+
+    /**
+     * 通用 BGM 音量淡入淡出工具
+     */
+    private fadeBGM(duration: number, targetVolume: number, onComplete?: Function) {
+        if (this.bgmTween) {
+            this.bgmTween.stop();
+        }
+
+        if (!this.bgmSource.playing) {
+            if (onComplete) onComplete();
+            return;
+        }
+
+        this.bgmTween = tween(this.bgmSource)
+            .to(duration, { volume: targetVolume })
+            .call(() => {
+                if (onComplete) onComplete();
+            })
+            .start();
     }
 
     /**

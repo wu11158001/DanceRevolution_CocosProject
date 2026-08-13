@@ -9,10 +9,18 @@ export class SongBtnItem extends Component {
     @property(Button)
     private mainBtn: Button = null;
     @property(Label)
-    private label_songInfo: Label = null;
+    private label_author: Label = null;
+    @property(Label)
+    private label_sonName: Label = null;
+    @property(Label)
+    private label_bpm: Label = null;
 
-    public setData(songInfo: string, callback?: () => void) {
-        this.label_songInfo.string = songInfo;
+    public setData(songInfo: string, bpm: number, callback?: () => void) {
+        const songParts = songInfo.split('-');
+
+        this.label_author.string = songParts[0];
+        this.label_sonName.string = songParts[1];
+        this.label_bpm.string = `BPM: ${bpm}`;
 
         this.mainBtn.node.targetOff(this);
         this.mainBtn.node.on(Button.EventType.CLICK, () => { callback?.() }, this);

@@ -2,7 +2,7 @@ import { _decorator, Component, Node, director, UIOpacity, instantiate} from 'cc
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
-import { AudioManager } from 'db://assets/Scripts/Manager/AudioManager';
+import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { GameManager } from 'db://assets/Scripts/Manager/GameManager';
 import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
 import { CharacterDataManager } from './CharacterDataManager';
@@ -53,6 +53,8 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                     await CharacterDataManager.getInstance().preloadAllCharacters();
                 }    
 
+                await AudioManager.getInstance().playBGM(BGM_TYPE.LobbyBGM)
+
                 if(!isGameReturn) {
                     // 一般進入大廳,開啟大廳介面
                     await ViewManager.getInstance().openView<LobbyView>('LobbyView', "HUD"); 
@@ -65,6 +67,8 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                 break;
 
             case 'GameScene':
+                AudioManager.getInstance().stopBGM();
+
                 // 創建GameManager
                 const obj = new Node('Gamemanager');
                 const gameMgr = obj.addComponent(GameManager);

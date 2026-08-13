@@ -202,7 +202,6 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      * @param callback 
      */
     public sendSelectSong(songId: string,  callback?: (res: any) => void) {
-        console.log(`切換歌曲: ${songId}`);
         this.socket.emit('select_song', { songId: songId }, callback);
     }
 

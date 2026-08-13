@@ -14,10 +14,12 @@ export interface IRoomPlayer {
 // 歌曲資料結構
 export interface ISongData {
     id: keyof typeof BGM_TYPE;
-    name: string,
-    bpm: number,
-    duration: number;
-    offset: number;
+    name: string,               // 歌曲明成
+    bpm: number,                // BMP
+    duration: number;           // 歌曲長度
+    offset: number;             // 譜面開始時間
+    preview_start: number;      // 試聽起點
+    preview_duration: number;   // 試聽長度
 }
 
 // 房間資料更新資料結構
