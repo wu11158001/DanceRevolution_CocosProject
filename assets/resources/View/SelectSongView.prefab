@@ -3713,8 +3713,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 180.9639434814453,
-      "height": 50.4
+      "width": 650,
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3750,13 +3750,13 @@
       "a": 255
     },
     "_string": "作者名稱 author",
-    "_horizontalAlign": 1,
+    "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 28,
     "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 0,
+    "_overflow": 2,
     "_enableWrapText": false,
     "_font": {
       "__uuid__": "72c9c16f-82f3-4973-9935-797804c0cecb",
@@ -3825,7 +3825,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 220.9639434814453,
+      "width": 700,
       "height": 40
     },
     "_anchorPoint": {
@@ -3851,7 +3851,7 @@
     "__prefab": {
       "__id__": 157
     },
-    "_resizeMode": 1,
+    "_resizeMode": 0,
     "_layoutType": 1,
     "_cellSize": {
       "__type__": "cc.Size",
@@ -4047,8 +4047,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 170.79995727539062,
-      "height": 50.4
+      "width": 690,
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4084,13 +4084,13 @@
       "a": 255
     },
     "_string": "音樂名稱 Music",
-    "_horizontalAlign": 1,
+    "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 28,
     "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 0,
+    "_overflow": 2,
     "_enableWrapText": false,
     "_font": {
       "__uuid__": "72c9c16f-82f3-4973-9935-797804c0cecb",
@@ -4159,7 +4159,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 170.79995727539062,
+      "width": 690,
       "height": 40
     },
     "_anchorPoint": {
@@ -4340,7 +4340,7 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -90.04792785644531,
+      "x": -100,
       "y": 0,
       "z": 0
     },
@@ -4381,8 +4381,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 90.04792785644531,
-      "height": 50.4
+      "width": 100,
+      "height": 50
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -4424,7 +4424,7 @@
     "_fontSize": 32,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
-    "_overflow": 0,
+    "_overflow": 2,
     "_enableWrapText": false,
     "_font": {
       "__uuid__": "72c9c16f-82f3-4973-9935-797804c0cecb",
@@ -4493,7 +4493,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 90.04792785644531,
+      "width": 100,
       "height": 40
     },
     "_anchorPoint": {
@@ -4641,9 +4641,9 @@
     "_transition": 1,
     "_normalColor": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 100,
+      "g": 100,
+      "b": 100,
       "a": 255
     },
     "_hoverColor": {
@@ -4739,9 +4739,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 100,
+      "g": 100,
+      "b": 100,
       "a": 255
     },
     "_spriteFrame": {

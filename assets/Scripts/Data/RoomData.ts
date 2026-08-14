@@ -1,7 +1,7 @@
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { BGM_TYPE } from '../Manager/AudioManager';
 
-// 房間內單一玩家的資料結構
+// 房間內單一玩家資料
 export interface IRoomPlayer {
     playerId: string;
     nickname: string;
@@ -11,7 +11,7 @@ export interface IRoomPlayer {
     isReady: boolean;
 }
 
-// 歌曲資料結構
+// 歌曲資料
 export interface ISongData {
     id: keyof typeof BGM_TYPE;
     name: string,               // 歌曲明成
@@ -22,8 +22,8 @@ export interface ISongData {
     preview_duration: number;   // 試聽長度
 }
 
-// 房間資料更新資料結構
-export interface IRoomUpdatedData {
+// 房間資料
+export interface IRoomData {
     roomId: string;
     roomName: string;
     hostId: string;
@@ -31,13 +31,30 @@ export interface IRoomUpdatedData {
     players: IRoomPlayer[];
 }
 
-// 創建房間回傳資料結構
+// 創建房間回傳資料
 export interface ICreateRoomResponse {
     success: boolean;
     roomId?: string;
     roomName?: string;
     slotId?: number;
     message?: string;
+}
+
+// 房間列表歌曲資料
+export interface IRoomListSongData {
+    id: string;
+    name: string;
+}
+
+// 房間列表資料
+export interface IRoomListData {
+    roomId: string;
+    roomName: string;
+    hostName: string;
+    currentSong: IRoomListSongData;
+    currentPlayers: number;
+    maxPlayers: number;
+    isStarting: boolean;
 }
 
 /**
@@ -52,7 +69,7 @@ export class RoomData {
     public static songs: ISongData[] = [];
 
     // 儲存更新監聽事件
-    public static onRoomUpdated: ((data: IRoomUpdatedData) => void) | null = null;
+    public static onRoomUpdated: ((data: IRoomData) => void) | null = null;
 
     /**
      * 更新歌單
@@ -70,7 +87,7 @@ export class RoomData {
     /**
      * 更新房間資料並觸發監聽
      */
-    public static update(data: IRoomUpdatedData) {
+    public static update(data: IRoomData) {
         this.roomId = data.roomId;
         this.roomName = data.roomName;
         this.hostId = data.hostId;

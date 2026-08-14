@@ -9,6 +9,7 @@ const { ccclass, property } = _decorator;
  * Cancas類型
  */
 export type CanvasType = 
+'Canvas_Background' |
 'HUD' |
 'Popup' |
 'Highest';
@@ -36,6 +37,8 @@ export type ViewType =
 @ccclass('ViewManager')
 export class ViewManager extends SingletonComponent<ViewManager> {
     @property(Node)
+    private canvas_Background: Node;
+    @property(Node)
     private canvas_HUD: Node;
     @property(Node)
     private canvas_Popup: Node;
@@ -47,6 +50,10 @@ export class ViewManager extends SingletonComponent<ViewManager> {
 
     // 保存當前已開啟的介面實例 (ViewName -> BaseView)
     private openViews: Map<ViewType, BaseView> = new Map();
+
+    public get BackgroundCanvas(): Node {
+        return this.canvas_Background;
+    }
 
     /**
      * 開啟介面

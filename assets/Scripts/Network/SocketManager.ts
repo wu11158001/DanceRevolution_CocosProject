@@ -8,7 +8,7 @@ import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
-import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
+import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';
 
 const { ccclass, property } = _decorator;
 
@@ -73,7 +73,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         });
 
         // 監聽:"room_updated" [房間資訊更新]
-        this.socket.on('room_updated', (data: IRoomUpdatedData) => {
+        this.socket.on('room_updated', (data: IRoomData) => {
             console.log(`[Socket 事件] 收到房間更新廣播:`, data);
             // 更新全域房間資料
             RoomData.update(data);

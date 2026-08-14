@@ -8,7 +8,7 @@ import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, ICreateRoomResponse } from 'db://assets/Scripts/Data/RoomData';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { UpdateNicknameView } from 'db://assets/Scripts/View/LobbyScene/UpdateNicknameView';
-import { RoomView } from './RoomView/RoomView';
+import { RoomView } from '../RoomView/RoomView';
 
 const { ccclass, property } = _decorator;
 
@@ -17,6 +17,9 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('LobbyView')
 export class LobbyView extends BaseView {
+    @property(Node)
+    private bgNode: Node = null;
+
     @property(Label)
     private label_nickname: Label = null;
     @property(Button)
@@ -32,7 +35,7 @@ export class LobbyView extends BaseView {
 
     private characterObj: Node = null;
 
-    onDestroy() {
+    onClose() {
         PlayerData.off('nickname', this.showNickname);
         PlayerData.off('characterId', this.onCharacterChange, this);
         
@@ -40,6 +43,8 @@ export class LobbyView extends BaseView {
             this.characterObj.destroy();
         }
         this.characterObj = null;
+
+        this.bgNode.destroy();
     }
 
     start() {
@@ -99,6 +104,8 @@ export class LobbyView extends BaseView {
         // 訂閱:玩家資料變更(角色)
         PlayerData.on('characterId', this.onCharacterChange, this);
 
+        this.bgNode.setParent(ViewManager.getInstance().BackgroundCanvas);
+
         this.showNickname();
         this.onCharacterChange();
     }
@@ -107,7 +114,7 @@ export class LobbyView extends BaseView {
      * 顯示當前暱稱
      */
     private showNickname() {
-        this.label_nickname.string = `暱稱: ${PlayerData.nickname}`;
+        this.label_nickname.string = `${PlayerData.nickname}`;
     }
 
     /**

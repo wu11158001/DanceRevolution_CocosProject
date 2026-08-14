@@ -2,7 +2,7 @@ import { _decorator, Component, Node, find } from 'cc';
 
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
-import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
+import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';
 import { SceneLoader } from './SceneLoader';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
 import { ViewManager } from './ViewManager';

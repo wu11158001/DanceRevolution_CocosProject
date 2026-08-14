@@ -6,14 +6,14 @@ import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { GameTool } from 'db://assets/Scripts/Tools/GameTool';
 import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
-import { RoomData, IRoomUpdatedData } from 'db://assets/Scripts/Data/RoomData';
-import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
+import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';
 import { UpdateRoomNameView } from 'db://assets/Scripts/View/LobbyScene/UpdateRoomNameView';
 import { SelectSongView } from '../SelectSongView/SelectSongView';
 import { MessagePopupView } from '../../Common/MessagePopupView';
 import { CharacterControl } from '../../../Game/CharacterControl';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 import { RoomPlayerInfoVIew } from './RoomPlayerInfoVIew';
+import { LobbyView } from '../LobbyView/LobbyView';
 
 const { ccclass, property } = _decorator;
 
@@ -31,6 +31,9 @@ interface IRoomCharacterData {
  */
 @ccclass('RoomView')
 export class RoomView extends BaseView {
+    @property(Node)
+    private bgNode: Node = null;
+
     @property(Label)
     private label_roomName: Label = null;
     @property(Button)
@@ -90,6 +93,8 @@ export class RoomView extends BaseView {
             }
         });
         this.characters = [];
+
+        this.bgNode.destroy();
     }
 
     protected onLoad() {
@@ -151,7 +156,7 @@ export class RoomView extends BaseView {
         this.camera3D = cameraNode ? cameraNode.getComponent(Camera) : null;
 
         // 監聽:房間資料變更
-        RoomData.onRoomUpdated = (data: IRoomUpdatedData) => {
+        RoomData.onRoomUpdated = (data: IRoomData) => {
             this.refreshRoom(data);
         }
 
@@ -167,6 +172,8 @@ export class RoomView extends BaseView {
                 players: RoomData.players
             });
         }
+
+        this.bgNode.setParent(ViewManager.getInstance().BackgroundCanvas);
     }
 
     /**
@@ -225,7 +232,7 @@ export class RoomView extends BaseView {
      * 刷新房間
      * @param data 
      */
-    private refreshRoom(data: IRoomUpdatedData) {
+    private refreshRoom(data: IRoomData) {
         this.label_roomName.string = `房間: ${data.roomName}`;
         if(this.currentSongName != data.currentSong.name) {
             this.fixedMarqueeText.setTitle(`${data.currentSong.name} (BPM:${data.currentSong.bpm})`)

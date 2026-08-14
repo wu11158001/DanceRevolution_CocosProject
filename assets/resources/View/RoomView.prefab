@@ -83,7 +83,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bg",
+    "_name": "bgNode",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -6093,6 +6093,9 @@
     "isPopupEffect": false,
     "popupObj": null,
     "popupType": "DownToUp",
+    "bgNode": {
+      "__id__": 2
+    },
     "label_roomName": {
       "__id__": 18
     },
