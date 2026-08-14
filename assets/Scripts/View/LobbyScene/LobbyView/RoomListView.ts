@@ -67,8 +67,16 @@ export class RoomListView extends Component {
             }
         });
 
+        // 等待中的排前面
+        const sortData = [...datas].sort((a, b) => {
+            if (a.isStarting === b.isStarting) {
+                return 0;
+            }
+            return a.isStarting ? 1 : -1;
+        });
+
         // 刷新列表
-        datas.forEach((data, index) => {
+        sortData.forEach((data, index) => {
             let item: RoomListItem | null = null;
 
             if (index >= this.roomListItems.length) {

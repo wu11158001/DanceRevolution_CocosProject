@@ -1,5 +1,6 @@
 import { _decorator, Button, Color, Component, Label, Node } from 'cc';
 import { IRoomListData } from '../../../Data/RoomData';
+import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 const { ccclass, property } = _decorator;
 
 /**
@@ -11,8 +12,8 @@ export class RoomListItem extends Component {
     private mainBtn: Button = null;
     @property(Label)
     private label_roomName: Label = null;
-    @property(Label)
-    private label_SongName: Label = null;
+    @property(FixedMarqueeText)
+    private fixedMarqueeText: FixedMarqueeText = null;
     @property(Label)
     private label_playerCount: Label = null;
     @property(Label)
@@ -25,7 +26,6 @@ export class RoomListItem extends Component {
 
     public setData(data: IRoomListData, callback?: () => void) {
         this.label_roomName.string = data.roomName;
-        this.label_SongName.string = data.currentSong.name;
         this.label_playerCount.string = `${data.currentPlayers} / ${data.maxPlayers}`;
 
         this.label_playState.string = data.isStarting ? "進行中" : "等待";
@@ -34,6 +34,8 @@ export class RoomListItem extends Component {
         this.mainBtn.interactable = !data.isStarting;
         this.mainBtn.node.targetOff(this);
         this.mainBtn.node.on(Button.EventType.CLICK, () => callback?.(), this);
+
+        this.fixedMarqueeText.setTitle(data.currentSong.name);
     }
 }
 

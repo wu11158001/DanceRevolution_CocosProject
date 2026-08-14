@@ -14,6 +14,7 @@ import { CharacterControl } from '../../../Game/CharacterControl';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 import { RoomPlayerInfoVIew } from './RoomPlayerInfoVIew';
 import { LobbyView } from '../LobbyView/LobbyView';
+import { CHAT_PLACE, ChatView } from '../../Common/ChatView/ChatView';
 
 const { ccclass, property } = _decorator;
 
@@ -82,6 +83,7 @@ export class RoomView extends BaseView {
     private playerInfoPosOffset = v3(0, -0.2, 0);
 
     private currentSongName: string = "";
+    private chatView: ChatView = null;
 
     protected onDestroy(): void {
         SocketManager.getInstance().socket?.off('kicked_from_room');
@@ -95,6 +97,9 @@ export class RoomView extends BaseView {
         this.characters = [];
 
         this.bgNode.destroy();
+
+        RoomData.onRoomUpdated = null;
+        this.chatView.onClose();
     }
 
     protected onLoad() {
@@ -141,12 +146,9 @@ export class RoomView extends BaseView {
         this.btn_switchCharacterRight.node.on(Button.EventType.CLICK, () => { PlayerData.switchCharacterId(1) }, this);
     }
 
-    public onClose(): void {
-        RoomData.onRoomUpdated = null;
-    }
-
     public async onOpen(params?: any) {
-        super.onOpen(params);
+        // 開啟聊天介面
+        this.chatView = await ViewManager.getInstance().openView<ChatView>('ChatView', 'Popup', false, {chatPlace: CHAT_PLACE.RoomView});
 
         // 獲取歌單列表
         SocketManager.getInstance().sendGetSongs((data) => {RoomData.updateSongs(data)});
@@ -174,6 +176,8 @@ export class RoomView extends BaseView {
         }
 
         this.bgNode.setParent(ViewManager.getInstance().BackgroundCanvas);
+
+        super.onOpen(params);
     }
 
     /**

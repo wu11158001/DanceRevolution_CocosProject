@@ -4,9 +4,10 @@ import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComp
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { GameManager } from 'db://assets/Scripts/Manager/GameManager';
-import { LobbyView } from 'db://assets/Scripts/View/LobbyScene/LobbyView';
 import { CharacterDataManager } from './CharacterDataManager';
 import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
+import { SpriteFrameManager } from './SpriteFrameManager';
+import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
 
 const { ccclass, property } = _decorator;
 
@@ -51,6 +52,8 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                 if(previousScene === 'EntryScene') {
                     // 載入所有角色3D
                     await CharacterDataManager.getInstance().preloadAllCharacters();
+                    // 載入圖片資源
+                    await SpriteFrameManager.getInstance().loadSpriteFrameAssets();
                 }    
 
                 await AudioManager.getInstance().playBGM(BGM_TYPE.LobbyBGM)

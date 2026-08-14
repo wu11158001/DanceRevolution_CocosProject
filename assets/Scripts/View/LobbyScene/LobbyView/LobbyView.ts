@@ -9,6 +9,7 @@ import { RoomData, ICreateRoomResponse } from 'db://assets/Scripts/Data/RoomData
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { UpdateNicknameView } from 'db://assets/Scripts/View/LobbyScene/UpdateNicknameView';
 import { RoomView } from '../RoomView/RoomView';
+import { CHAT_PLACE, ChatView } from '../../Common/ChatView/ChatView';
 
 const { ccclass, property } = _decorator;
 
@@ -34,8 +35,9 @@ export class LobbyView extends BaseView {
     private btn_switchCharacterRight: Button = null;
 
     private characterObj: Node = null;
+    private chatView: ChatView = null;
 
-    onClose() {
+    onDestroy() {
         PlayerData.off('nickname', this.showNickname);
         PlayerData.off('characterId', this.onCharacterChange, this);
         
@@ -45,6 +47,7 @@ export class LobbyView extends BaseView {
         this.characterObj = null;
 
         this.bgNode.destroy();
+        this.chatView?.onClose();
     }
 
     start() {
@@ -97,7 +100,8 @@ export class LobbyView extends BaseView {
     }
 
     public async onOpen(params?: any) {
-        super.onOpen(params);
+        // 開啟聊天介面
+        this.chatView = await ViewManager.getInstance().openView<ChatView>('ChatView', 'Popup', false, {chatPlace: CHAT_PLACE.LobbyVIew});
 
         // 訂閱:玩家資料變更(暱稱)
         PlayerData.on('nickname', this.showNickname, this);
@@ -108,6 +112,8 @@ export class LobbyView extends BaseView {
 
         this.showNickname();
         this.onCharacterChange();
+
+        super.onOpen(params);
     }
 
     /**

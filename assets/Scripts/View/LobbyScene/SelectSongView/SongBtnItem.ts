@@ -1,4 +1,5 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
+import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 const { ccclass, property } = _decorator;
 
 /**
@@ -10,8 +11,8 @@ export class SongBtnItem extends Component {
     private mainBtn: Button = null;
     @property(Label)
     private label_author: Label = null;
-    @property(Label)
-    private label_sonName: Label = null;
+    @property(FixedMarqueeText)
+    private fixedMarqueeText: FixedMarqueeText = null;
     @property(Label)
     private label_bpm: Label = null;
 
@@ -19,9 +20,9 @@ export class SongBtnItem extends Component {
         const songParts = songInfo.split('-');
 
         this.label_author.string = songParts[0];
-        this.label_sonName.string = songParts[1];
         this.label_bpm.string = `BPM: ${bpm}`;
-
+        this.fixedMarqueeText.setTitle(songParts[1]);
+        
         this.mainBtn.node.targetOff(this);
         this.mainBtn.node.on(Button.EventType.CLICK, () => { callback?.() }, this);
     }

@@ -5,7 +5,6 @@ import type { Socket } from 'socket.io-client';
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { SceneLoader } from 'db://assets/Scripts/Manager/SceneLoader';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
-import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';

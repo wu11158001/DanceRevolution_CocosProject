@@ -2,13 +2,11 @@ import { _decorator, Component, Node, find } from 'cc';
 
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
-import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';
+import { RoomData } from 'db://assets/Scripts/Data/RoomData';
 import { SceneLoader } from './SceneLoader';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
 import { ViewManager } from './ViewManager';
 import { GameView } from '../View/GameScene/GameView/GameView';
-import { PlayerData } from '../Data/PlayerData';
-import { BeatResultVIew } from '../View/GameScene/BeatResultVIew';
 import { GameResultView } from '../View/GameScene/GameResultView/GameResultView';
 import { GameTextTipView } from '../View/GameScene/GameView/GameTextTipView';
 import { GameCameraController } from '../Game/GameCameraController';
