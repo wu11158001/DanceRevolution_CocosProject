@@ -1,8 +1,13 @@
-import { _decorator, Component, Label, Node, UITransform, v3, Vec2, Vec3, HorizontalTextAlignment, Sprite, PlaceMethod, math } from 'cc';
+import { _decorator, Component, Label, Node, UITransform, v3, Vec2, Vec3, HorizontalTextAlignment, Sprite, Button } from 'cc';
 import { SpriteFrameManager } from '../../../Manager/SpriteFrameManager';
 import { IChatMessageData } from '../../../Manager/ChatManager';
 import { PlayerData } from '../../../Data/PlayerData';
 import { GameTool } from '../../../Tools/GameTool';
+import { SocketManager } from '../../../Network/SocketManager';
+import { ViewManager } from '../../../Manager/ViewManager';
+import { RoomView } from '../../LobbyScene/RoomView/RoomView';
+import { LobbyView } from '../../LobbyScene/LobbyView/LobbyView';
+import { MessagePopupView } from '../MessagePopupView';
 const { ccclass, property } = _decorator;
 
 /**
@@ -23,7 +28,7 @@ export class ChatItemView extends Component {
     @property(Label)
     private label_message: Label = null;
     @property(UITransform)
-    private labelTransform: UITransform = null;
+    private messageTransform: UITransform = null;
 
     @property(UITransform)
     private stickTransform: UITransform = null;
@@ -34,6 +39,15 @@ export class ChatItemView extends Component {
     private label_time: Label = null;
     @property(UITransform)
     private timeTransform: UITransform = null;
+
+    @property(Button)
+    private btn_recruit: Button = null;
+    @property(UITransform)
+    private recruitTransform: UITransform = null;
+    @property(Label)
+    private label_recruitRoomName: Label = null;
+    @property(Label)
+    private label_recruitPlayerCount: Label = null;
 
     @property({ tooltip: "文字訊息最大寬度" })
     maxWidth: number = 530;
@@ -46,6 +60,11 @@ export class ChatItemView extends Component {
 
     private isSelf: boolean = false;
 
+    /**
+     * 設置資料
+     * @param data 
+     * @returns 
+     */
     public setData(data: IChatMessageData) {
         if(!data) {
             this.node.active = false;
@@ -67,6 +86,10 @@ export class ChatItemView extends Component {
             case 'sticker':
                 this.showStick(data.content);
                 break;
+
+            case 'recruit':
+                this.showRecrit(data);
+                break;
         }
     }
 
@@ -78,9 +101,10 @@ export class ChatItemView extends Component {
         this.mainTransform.anchorPoint = anchorPoint;
         this.nicknameTransform.anchorPoint = anchorPoint;
         this.messageNodeTransform.anchorPoint = anchorPoint;
-        this.labelTransform.anchorPoint = anchorPoint;
+        this.messageTransform.anchorPoint = anchorPoint;
         this.stickTransform.anchorPoint = anchorPoint;
         this.timeTransform.anchorPoint = anchorPoint;
+        this.recruitTransform.anchorPoint = anchorPoint;
 
         const horizontalAlign = this.isSelf ? HorizontalTextAlignment.RIGHT : HorizontalTextAlignment.LEFT;
         this.label_nickname.horizontalAlign = horizontalAlign;
@@ -91,11 +115,51 @@ export class ChatItemView extends Component {
     }
 
     /**
+     * 顯示招募訊息
+     */
+    private showRecrit(data: IChatMessageData) {
+        if(!data || !data.recruitmentData) {
+            this.node.active = false;
+            return;
+        }
+
+        this.messageNodeTransform.node.active = false;
+        this.stickTransform.node.active = false;
+        this.btn_recruit.node.active = true;
+
+        this.label_recruitRoomName.string = data.recruitmentData.roomName;
+        this.label_recruitPlayerCount.string = `人數: ${data.recruitmentData.currentPlayers} / ${data.recruitmentData.maxPlayers}`;
+
+        this.btn_recruit.node.targetOff(this);
+        this.btn_recruit.node.on(Button.EventType.CLICK, () => {
+            SocketManager.getInstance().sendJoinRoom(
+                { roomId: data.recruitmentData.roomId, characterId: PlayerData.characterId }, 
+                (res: { success: boolean; message?: string }) => {
+                    if (res && res.success) {
+                        ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD').then((roomView) => {
+                        const lobbyView = ViewManager.getInstance().getView<LobbyView>('LobbyView');
+                            if(lobbyView) {
+                                lobbyView.closeSelf();
+                            }
+                        });
+                    } else {
+                        console.warn(`[快速加入失敗]: ${res?.message}`);
+                        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+                            popup?.setData(res?.message || "加入房間失敗!");
+                        });
+                    }
+                }
+            );
+        }, this);
+    }
+
+    /**
      * 顯示貼圖
      */
     private showStick(stick: string) {
         this.messageNodeTransform.node.active = false;
         this.stickTransform.node.active = true;
+        this.btn_recruit.node.active = false;
 
         const spriteFrame = SpriteFrameManager.getInstance().getStick(stick);
         if(spriteFrame) {
@@ -109,6 +173,7 @@ export class ChatItemView extends Component {
     private showMessage(message: string) {
         this.messageNodeTransform.node.active = true;
         this.stickTransform.node.active = false;
+        this.btn_recruit.node.active = false;
 
         // 設為 NONE，計算單行自然寬度
         this.label_message.overflow = Label.Overflow.NONE;
@@ -116,8 +181,8 @@ export class ChatItemView extends Component {
         this.label_message.updateRenderData(true);
         
         // 判斷是否超過最大寬度限制
-        if (this.labelTransform.width > this.maxWidth) {
-            this.labelTransform.width = this.maxWidth;
+        if (this.messageTransform.width > this.maxWidth) {
+            this.messageTransform.width = this.maxWidth;
             this.label_message.overflow = Label.Overflow.RESIZE_HEIGHT;
             
             // 強制更新，取得換行後的正確高度
@@ -129,8 +194,8 @@ export class ChatItemView extends Component {
 
         // 設置背景大小+Padding
         this.messageNodeTransform.setContentSize(
-            this.labelTransform.width + (this.bgWidthPadding * 2),
-            this.labelTransform.height + (this.bgHeightPadding * 2)
+            this.messageTransform.width + (this.bgWidthPadding * 2),
+            this.messageTransform.height + (this.bgHeightPadding * 2)
         )
     }
 }

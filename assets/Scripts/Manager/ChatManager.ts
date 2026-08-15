@@ -1,6 +1,7 @@
 import { _decorator } from 'cc';
 import { SocketManager } from '../Network/SocketManager';
 import { SingletonComponent } from '../Extensions/SingletonComponent';
+import { IRoomData, IRoomListData } from '../Data/RoomData';
 
 const { ccclass } = _decorator;
 
@@ -20,7 +21,17 @@ export type ChatChannel = 'global' | 'room' | 'recruit';
 /**
  * 聊天內容類型
  */
-export type ChatType = 'text' | 'sticker';
+export type ChatType = 'text' | 'sticker' | 'recruit';
+
+/**
+ * 招募資料
+ */
+export interface IRecruitmentData {
+    roomId: string;
+    roomName: string;
+    currentPlayers: number;
+    maxPlayers: number;
+}
 
 /**
  * 聊天訊息資料
@@ -31,6 +42,7 @@ export interface IChatMessageData {
     channel: ChatChannel;
     type: ChatType;
     content: string;
+    recruitmentData: IRecruitmentData;
     timestamp: number;
 }
 
@@ -40,6 +52,8 @@ export interface IChatMessageData {
 export type ChatEventMap = {
     /** 新訊息接收事件 */
     ON_MESSAGE_RECEIVED: IChatMessageData;
+    /** 招募列表接收事件 */
+    ON_RECRUIT_LIST_RECEIVED: IChatMessageData[];
 };
 
 export type ChatEventKey = keyof ChatEventMap;
@@ -57,6 +71,9 @@ export class ChatManager{
     private static globalMessages: IChatMessageData[] = [];
     // 紀錄房間訊息
     private static roomMessages: IChatMessageData[] = [];
+    // 紀錄招募訊息
+    private static recruitMessage: IChatMessageData[] = [];
+
 
     // 最大紀錄訊息數量
     private static MAX_HISTORY = 100;
@@ -90,6 +107,39 @@ export class ChatManager{
 
             this.emit('ON_MESSAGE_RECEIVED', data);
         });
+
+        // 監聽:招募清單更新
+        SocketManager.getInstance().socket.on('recruitment_list_updated', this.updateRecruitListData.bind(this));
+    }
+
+    /**
+     * 發送:招募訊息
+     * @param callback 
+     */
+    public static sendRoomRecruit(callback?: (res: any) => void) {
+        SocketManager.getInstance().socket.emit('send_recruitment', callback);
+    }
+
+    /**
+     * 發送:獲取招募列表
+     * @param callback 
+     */
+    public static sendGetRecruitList() {
+        SocketManager.getInstance().socket.emit('get_recruitment_list', this.updateRecruitListData.bind(this));
+    }
+
+    /**
+     * 更新招募列表資料
+     * @param datas 
+     */
+    private static updateRecruitListData(datas: IChatMessageData[]) {
+        if (!datas || !Array.isArray(datas) || datas.length === 0) {
+            this.recruitMessage.length = 0;
+        } else {
+            this.recruitMessage = datas;
+        }
+        
+        this.emit('ON_RECRUIT_LIST_RECEIVED', datas)
     }
 
     /**
@@ -113,11 +163,18 @@ export class ChatManager{
     }
 
     /**
-     * 獲取房間圖訊息資料
+     * 獲取房間訊息資料
      * @returns 
      */
     public static getRoomMessageData(): IChatMessageData[] {
         return this.roomMessages;
+    }
+
+    /**
+     * 獲取招募資料
+     */
+    public static getRecuitData(): IChatMessageData[] {
+        return this.recruitMessage;
     }
 
     /**

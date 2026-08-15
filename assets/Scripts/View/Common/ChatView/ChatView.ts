@@ -27,6 +27,8 @@ export class ChatView extends BaseView {
                 break;
         }
 
+        this.chatFullView.setData(params.chatPlace);
+
         super.onOpen(params);
     }
 }

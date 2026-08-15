@@ -66,6 +66,9 @@ export class RoomView extends BaseView {
     @property(Node)
     private playerInfoPrefab: Node = null;
 
+    @property(Button)
+    private btn_recruit: Button = null;
+
     // 角色位置
     private readonly characterSeatPos: Vec3[] = [
         new Vec3(-0.8, 0.1, 0), 
@@ -109,6 +112,11 @@ export class RoomView extends BaseView {
     }
 
     start() {
+        // 招募按鈕
+        this.btn_recruit.node.on(Button.EventType.CLICK, () =>{
+            ChatManager.sendRoomRecruit();
+        }, this);
+
         // 更新房間名稱按鈕
         this.btn_updateRoomName.node.on(Button.EventType.CLICK, 
             () =>{
@@ -254,7 +262,7 @@ export class RoomView extends BaseView {
         }
         this.currentSongName = data.currentSong.name;
 
-        let isLocalHost = PlayerData.isHost;
+        let isLocalAndHost = PlayerData.isHost;
         let isCanStart = true;
 
         // 清除房間資訊
@@ -324,14 +332,14 @@ export class RoomView extends BaseView {
                     );
 
                     // 選擇歌曲按鈕
-                    this.btn_selectSong.node.active = isLocalHost;
+                    this.btn_selectSong.node.active = isLocalAndHost;
 
                     // 本地玩家
                     if(isSelf) {
                         // 更換歌曲按鈕
-                        this.btn_selectSong.node.active = isLocalHost;
+                        this.btn_selectSong.node.active = isLocalAndHost;
 
-                        if(!player.isReady || isLocalHost) {
+                        if(!player.isReady || isLocalAndHost) {
                             // 切換角色按鈕
                             this.btn_switchCharacterLeft.node.active = true;
                             this.btn_switchCharacterRight.node.active = true;
@@ -365,7 +373,7 @@ export class RoomView extends BaseView {
             index++;
         });
 
-        // 4. 清理已經離開房間的玩家 3D 節點
+        // 清理已經離開房間的玩家 3D 節點
         this.characterMap.forEach((cache, playerId) => {
             if (!currentPlayerIds.has(playerId)) {
                 if (isValid(cache.characterControl.node)) {
@@ -376,14 +384,16 @@ export class RoomView extends BaseView {
         });
 
         // UI設置
-        if(isLocalHost) {
+        if(isLocalAndHost) {
             this.label_readyOrStart.string = "START";
             this.btn_readyOrStart.interactable = isCanStart;
             this.btn_updateRoomName.node.active = true;
+            this.btn_recruit.node.active = data.players.length < 4;
         } else {
             this.label_readyOrStart.string = PlayerData.isReady ? "CANCEL" : "READY";
             this.btn_readyOrStart.interactable = true;
             this.btn_updateRoomName.node.active = false;
+            this.btn_recruit.node.active = false;
         }
     }
 }
