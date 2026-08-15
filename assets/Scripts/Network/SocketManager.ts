@@ -8,6 +8,7 @@ import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';
+import { ChatManager } from '../Manager/ChatManager';
 
 const { ccclass, property } = _decorator;
 
@@ -28,6 +29,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      * 初始化完成
      */
     private async onInitComplete() {
+        ChatManager.init();
         // 切換場景
         SceneLoader.getInstance().loadScene('LobbyScene');
     }

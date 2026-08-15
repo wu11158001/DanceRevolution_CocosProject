@@ -27,6 +27,12 @@ export class UpdateNicknameView extends BaseView {
         this.btn_confirm.interactable = false;
     }
 
+    public async onOpen(params?: any): Promise<void> {
+        super.onOpen(params);
+
+        this.editBox_nickname.focus();
+    }
+
     /**
      * 輸入框文字變更
      * @param editBox 

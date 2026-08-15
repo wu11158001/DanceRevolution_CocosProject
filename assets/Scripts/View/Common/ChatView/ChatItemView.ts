@@ -1,5 +1,8 @@
-import { _decorator, Component, Label, Node, UITransform, v3, Vec2, Vec3, HorizontalTextAlignment, Sprite } from 'cc';
+import { _decorator, Component, Label, Node, UITransform, v3, Vec2, Vec3, HorizontalTextAlignment, Sprite, PlaceMethod, math } from 'cc';
 import { SpriteFrameManager } from '../../../Manager/SpriteFrameManager';
+import { IChatMessageData } from '../../../Manager/ChatManager';
+import { PlayerData } from '../../../Data/PlayerData';
+import { GameTool } from '../../../Tools/GameTool';
 const { ccclass, property } = _decorator;
 
 /**
@@ -27,19 +30,44 @@ export class ChatItemView extends Component {
     @property(Sprite)
     private sprite_stick: Sprite = null;
 
+    @property(Label)
+    private label_time: Label = null;
+    @property(UITransform)
+    private timeTransform: UITransform = null;
+
     @property({ tooltip: "文字訊息最大寬度" })
     maxWidth: number = 530;
-    @property({ tooltip: "背景Padding" })
-    bgPadding: number = 10;
+    @property({ tooltip: "文字訊息最小寬度" })
+    minWidth: number = 100;
+    @property({ tooltip: "背景寬度Padding" })
+    bgWidthPadding: number = 15;
+    @property({ tooltip: "背景高度Padding" })
+    bgHeightPadding: number = 5;
 
     private isSelf: boolean = false;
 
-    protected start(): void {
-        this.isSelf = false;
+    public setData(data: IChatMessageData) {
+        if(!data) {
+            this.node.active = false;
+            return;
+        }
+
+        this.isSelf = data.senderId === PlayerData.playerId;
+
+        this.label_nickname.string = data.senderName;
+        this.label_time.string = GameTool.getInstance().formatChatTimestamp(data.timestamp);
+
         this.setDirection();
-        
-        //this.showMessage('問自訊息問自訊息問自');
-        this.showStick(0);
+
+        switch(data.type) {
+            case 'text':
+                this.showMessage(data.content);
+                break;
+
+            case 'sticker':
+                this.showStick(data.content);
+                break;
+        }
     }
 
     /**
@@ -52,10 +80,12 @@ export class ChatItemView extends Component {
         this.messageNodeTransform.anchorPoint = anchorPoint;
         this.labelTransform.anchorPoint = anchorPoint;
         this.stickTransform.anchorPoint = anchorPoint;
+        this.timeTransform.anchorPoint = anchorPoint;
 
         const horizontalAlign = this.isSelf ? HorizontalTextAlignment.RIGHT : HorizontalTextAlignment.LEFT;
         this.label_nickname.horizontalAlign = horizontalAlign;
         this.label_message.horizontalAlign = horizontalAlign;
+        this.label_time.horizontalAlign = horizontalAlign;
 
         this.label_nickname.node.position = new Vec3(0, this.label_nickname.node.position.y, 0);
     }
@@ -63,11 +93,11 @@ export class ChatItemView extends Component {
     /**
      * 顯示貼圖
      */
-    private showStick(index: number) {
+    private showStick(stick: string) {
         this.messageNodeTransform.node.active = false;
         this.stickTransform.node.active = true;
 
-        const spriteFrame = SpriteFrameManager.getInstance().getStick(index);
+        const spriteFrame = SpriteFrameManager.getInstance().getStick(stick);
         if(spriteFrame) {
             this.sprite_stick.spriteFrame = spriteFrame;
         }
@@ -94,14 +124,13 @@ export class ChatItemView extends Component {
             this.label_message.updateRenderData(true);
         }
         
-        const offsetX = this.isSelf ? -this.bgPadding : this.bgPadding;
+        const offsetX = this.isSelf ? -this.bgWidthPadding : this.bgWidthPadding;
         this.label_message.node.position = new Vec3(offsetX, 0, 0);
 
         // 設置背景大小+Padding
-        const pad = this.bgPadding * 2;
         this.messageNodeTransform.setContentSize(
-            this.labelTransform.width + pad,
-            this.labelTransform.height + pad
+            this.labelTransform.width + (this.bgWidthPadding * 2),
+            this.labelTransform.height + (this.bgHeightPadding * 2)
         )
     }
 }

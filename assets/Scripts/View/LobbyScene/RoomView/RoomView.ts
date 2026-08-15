@@ -14,7 +14,8 @@ import { CharacterControl } from '../../../Game/CharacterControl';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 import { RoomPlayerInfoVIew } from './RoomPlayerInfoVIew';
 import { LobbyView } from '../LobbyView/LobbyView';
-import { CHAT_PLACE, ChatView } from '../../Common/ChatView/ChatView';
+import { CHAT_PLACE, ChatManager } from '../../../Manager/ChatManager';
+import { ChatView } from '../../Common/ChatView/ChatView';
 
 const { ccclass, property } = _decorator;
 
@@ -125,6 +126,8 @@ export class RoomView extends BaseView {
             () =>{
                 SocketManager.getInstance().sendLeaveRoom();
                 ViewManager.getInstance().openView<LobbyView>('LobbyView', 'HUD').then(lobbyView => {
+                    // 清除房間聊天訊息
+                    ChatManager.clearRoomMessageData();
                     this.closeSelf();
                 });                
             }, this);
@@ -148,7 +151,12 @@ export class RoomView extends BaseView {
 
     public async onOpen(params?: any) {
         // 開啟聊天介面
-        this.chatView = await ViewManager.getInstance().openView<ChatView>('ChatView', 'Popup', false, {chatPlace: CHAT_PLACE.RoomView});
+        this.chatView = await ViewManager.getInstance().openView<ChatView>(
+            'ChatView', 
+            'Popup',
+            false, 
+            { chatPlace: CHAT_PLACE.RoomView }
+        );
 
         // 獲取歌單列表
         SocketManager.getInstance().sendGetSongs((data) => {RoomData.updateSongs(data)});
@@ -205,6 +213,9 @@ export class RoomView extends BaseView {
     private onKicked(data) {
         // 清除房間資料
         RoomData.reset();
+
+        // 清除房間聊天訊息
+        ChatManager.clearRoomMessageData();
 
         // 彈出提示並切換回大廳 View
         ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {

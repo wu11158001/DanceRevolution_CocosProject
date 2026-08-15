@@ -37,8 +37,8 @@ export class SpriteFrameManager extends SingletonComponent<SpriteFrameManager> {
     /**
      * 獲取貼圖
      */
-    public getStick(index: number): SpriteFrame {
-        return this.stickMap.get(`stick_${index}`);
+    public getStick(stick: string): SpriteFrame {
+        return this.stickMap.get(`${stick}`);
     }
 }
 

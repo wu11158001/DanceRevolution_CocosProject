@@ -1,15 +1,9 @@
 import { _decorator, Component, Enum, Node } from 'cc';
 import { ChatFullView } from './ChatFullView';
 import { BaseView } from '../../BaseView';
+import { CHAT_PLACE } from '../../../Manager/ChatManager';
 const { ccclass, property } = _decorator;
 
-/**
- * 聊天區域
- */
-export enum CHAT_PLACE {
-    LobbyVIew,
-    RoomView
-}
 
 /**
  * 聊天介面

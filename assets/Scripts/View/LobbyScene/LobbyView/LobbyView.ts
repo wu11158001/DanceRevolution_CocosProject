@@ -9,7 +9,8 @@ import { RoomData, ICreateRoomResponse } from 'db://assets/Scripts/Data/RoomData
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { UpdateNicknameView } from 'db://assets/Scripts/View/LobbyScene/UpdateNicknameView';
 import { RoomView } from '../RoomView/RoomView';
-import { CHAT_PLACE, ChatView } from '../../Common/ChatView/ChatView';
+import { ChatView } from '../../Common/ChatView/ChatView';
+import { CHAT_PLACE } from '../../../Manager/ChatManager';
 
 const { ccclass, property } = _decorator;
 
@@ -101,7 +102,12 @@ export class LobbyView extends BaseView {
 
     public async onOpen(params?: any) {
         // 開啟聊天介面
-        this.chatView = await ViewManager.getInstance().openView<ChatView>('ChatView', 'Popup', false, {chatPlace: CHAT_PLACE.LobbyVIew});
+        this.chatView = await ViewManager.getInstance().openView<ChatView>(
+            'ChatView', 
+            'Popup', 
+            false, 
+            { chatPlace: CHAT_PLACE.LobbyVIew}
+        );
 
         // 訂閱:玩家資料變更(暱稱)
         PlayerData.on('nickname', this.showNickname, this);
