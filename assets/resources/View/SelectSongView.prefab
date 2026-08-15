@@ -760,9 +760,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -2820,9 +2820,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 29,
-      "g": 125,
-      "b": 230,
+      "r": 143,
+      "g": 196,
+      "b": 255,
       "a": 255
     },
     "_spriteFrame": {
@@ -5897,8 +5897,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 163.83995056152344,
-      "height": 50.4
+      "width": 164.13995056152345,
+      "height": 50.699999999999996
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5953,15 +5953,15 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_enableOutline": false,
+    "_enableOutline": true,
     "_outlineColor": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 223,
+      "g": 223,
+      "b": 223,
       "a": 255
     },
-    "_outlineWidth": 2,
+    "_outlineWidth": 0.15,
     "_enableShadow": false,
     "_shadowColor": {
       "__type__": "cc.Color",
@@ -6059,8 +6059,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 163.83995056152344,
-      "height": 50.4
+      "width": 164.13995056152345,
+      "height": 50.699999999999996
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6115,15 +6115,15 @@
     "_isUnderline": false,
     "_underlineHeight": 2,
     "_cacheMode": 0,
-    "_enableOutline": false,
+    "_enableOutline": true,
     "_outlineColor": {
       "__type__": "cc.Color",
-      "r": 0,
-      "g": 0,
-      "b": 0,
+      "r": 223,
+      "g": 223,
+      "b": 223,
       "a": 255
     },
-    "_outlineWidth": 2,
+    "_outlineWidth": 0.15,
     "_enableShadow": false,
     "_shadowColor": {
       "__type__": "cc.Color",
@@ -6806,9 +6806,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -6844,7 +6844,7 @@
     "_duration": 0.1,
     "_zoomScale": 1.2,
     "_target": {
-      "__id__": 276
+      "__id__": 277
     },
     "_id": ""
   },

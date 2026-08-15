@@ -1,5 +1,5 @@
 import { _decorator, Button, Component, EditBox, instantiate, Node, ScrollView, SpriteFrame, Toggle, ToggleContainer } from 'cc';
-import { CHAT_PLACE, ChatChannel, ChatManager, IChatMessageData } from '../../../Manager/ChatManager';
+import { CHAT_PLACE, ChatChannel, ChatManager, IChatMessageData, IChatPanelType } from '../../../Manager/ChatManager';
 import { ChatItemView } from './ChatItemView';
 import { GameTool } from '../../../Tools/GameTool';
 import { SpriteFrameManager } from '../../../Manager/SpriteFrameManager';
@@ -7,7 +7,7 @@ import { StickItemView } from './StickItemView';
 const { ccclass, property } = _decorator;
 
 /**
- * 聊天介面完整顯示面板
+ * 聊天介面-完整顯示面板
  */
 @ccclass('ChatFullView')
 export class ChatFullView extends Component {
@@ -17,6 +17,9 @@ export class ChatFullView extends Component {
     private editBox: EditBox = null;
     @property(Button)
     private btn_send: Button = null;
+
+    @property(Button)
+    private btn_close: Button = null;
 
     @property(ScrollView)
     private scrollView: ScrollView = null;     
@@ -49,6 +52,8 @@ export class ChatFullView extends Component {
 
     // 聊天項目物件池
     private chatItemPool: ChatItemView[] = [];
+    // 關閉Action
+    private closeAction: (targetPanel: IChatPanelType, currentChannel: ChatChannel) => void = null;
 
     protected onDestroy(): void {
         this.offListener();
@@ -71,24 +76,35 @@ export class ChatFullView extends Component {
         // 綁定:招募列表訊息接收
         ChatManager.on('ON_RECRUIT_LIST_RECEIVED', (datas: IChatMessageData[]) => {
             if(this.getActiveToggleTag() === 'recruit') {
-                this.showChatMessage(datas);
+                this.showMessage(datas);
             }  
         }, this);
     }
 
     protected start(): void {
+        // 輸入框Enter
         this.editBox.node.on(EditBox.EventType.EDITING_RETURN, this.sendTextMessage, this);
+        // 發送按鈕
         this.btn_send.node.on(Button.EventType.CLICK, this.sendTextMessage, this);     
         
+        // 頻道標籤Toggle
         this.tag_global.node.on(Toggle.EventType.TOGGLE, (tog) => { this.onChannelChange('global') }, this);
         this.tag_room.node.on(Toggle.EventType.TOGGLE, (tog) => { this.onChannelChange('room') }, this);
         this.tag_recruit.node.on(Toggle.EventType.TOGGLE, (tog) => { this.onChannelChange('recruit') }, this);
 
+        // 新訊息按鈕
         this.btn_newMessage.node.on(Button.EventType.CLICK, this.toBottom, this);
 
+        // 滑條滑動偵測
         this.scrollView.node.on('scrolling', this.onScrollViewScroll, this);
 
+        // 貼圖開關按鈕
         this.btn_sticker.node.on(Button.EventType.CLICK, this.switchStickPanel, this);
+
+        // 關閉按鈕
+        this.btn_close.node.on(Button.EventType.CLICK, () => { 
+            this.closeAction?.(IChatPanelType.Short, this.getActiveToggleTag());
+        }, this);
 
         this.chatItemPrefab.active = false;
         this.btn_newMessage.node.active = false;
@@ -99,7 +115,11 @@ export class ChatFullView extends Component {
         this.createStickItem();
     }
 
-    public setData(chatPlace: CHAT_PLACE) {
+    public setData(chatPlace: CHAT_PLACE, 
+        closeAction: (targetPanel: IChatPanelType, currentChannel: ChatChannel) => void
+    ) {
+        this.closeAction = closeAction;
+
         // 判斷聊天所在介面
         this.tag_global.node.active = true;
         switch(chatPlace) {
@@ -120,6 +140,29 @@ export class ChatFullView extends Component {
 
         // 獲取招募資料
         ChatManager.sendGetRecruitList();
+    }
+
+    /**
+     * 面板開啟設定
+     * @param targetChannel 
+     */
+    public openSet(targetChannel: ChatChannel) {
+        switch(targetChannel) {
+            case 'global':
+                this.tag_global.isChecked = true;
+                break;
+
+            case 'room':
+                this.tag_room.isChecked = true;
+                break;
+
+            case 'recruit':
+                this.tag_recruit.isChecked = true;
+                break;
+        }
+
+        // 獲取招募資料
+        //ChatManager.sendGetRecruitList();
     }
 
     /**
@@ -169,21 +212,21 @@ export class ChatFullView extends Component {
 
             case 'recruit':
                 this.inputNode.active = false;
-                datas = ChatManager.getRecuitData();
+                datas = ChatManager.getRecruitData();
                 break;
         }
 
         if(datas) {
-            this.showChatMessage(datas);
+            this.showMessage(datas);
             this.toBottom();
         }
     }
 
     /**
-     * 顯示聊天訊息
+     * 顯示訊息
      * @param datas 
      */
-    private showChatMessage(datas: IChatMessageData[]) {
+    private showMessage(datas: IChatMessageData[]) {
         if (!datas || !Array.isArray(datas)) {
             datas = [];
         }
@@ -191,7 +234,6 @@ export class ChatFullView extends Component {
         let poolIndex = 0;
         for (const data of datas) {
             // 頻道不符時直接跳過
-            console.log(`${data.channel} | ${this.getActiveToggleTag()}`);
             if (data.channel !== this.getActiveToggleTag()) {
                 continue;
             }

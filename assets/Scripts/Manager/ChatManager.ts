@@ -1,7 +1,5 @@
 import { _decorator } from 'cc';
 import { SocketManager } from '../Network/SocketManager';
-import { SingletonComponent } from '../Extensions/SingletonComponent';
-import { IRoomData, IRoomListData } from '../Data/RoomData';
 
 const { ccclass } = _decorator;
 
@@ -12,6 +10,11 @@ export enum CHAT_PLACE {
     LobbyVIew,
     RoomView
 }
+
+/**
+ * 聊天面板類型
+ */
+export enum IChatPanelType { Full, Short }
 
 /**
  * 聊天頻道
@@ -138,7 +141,7 @@ export class ChatManager{
         } else {
             this.recruitMessage = datas;
         }
-        
+        console.log(`更新招募列表資料:${JSON.stringify(datas)}`);
         this.emit('ON_RECRUIT_LIST_RECEIVED', datas)
     }
 
@@ -173,7 +176,7 @@ export class ChatManager{
     /**
      * 獲取招募資料
      */
-    public static getRecuitData(): IChatMessageData[] {
+    public static getRecruitData(): IChatMessageData[] {
         return this.recruitMessage;
     }
 

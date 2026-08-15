@@ -982,9 +982,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -1020,7 +1020,7 @@
     "_duration": 0.1,
     "_zoomScale": 1.2,
     "_target": {
-      "__id__": 28
+      "__id__": 22
     },
     "_id": ""
   },
@@ -2419,9 +2419,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -2457,7 +2457,7 @@
     "_duration": 0.1,
     "_zoomScale": 1.2,
     "_target": {
-      "__id__": 88
+      "__id__": 82
     },
     "_id": ""
   },
@@ -2986,9 +2986,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -3439,9 +3439,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -3941,9 +3941,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -4281,9 +4281,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -5473,7 +5473,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40.959991455078125,
+      "width": 28.6719970703125,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -5512,8 +5512,8 @@
     "_string": "踢",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 40,
-    "_fontSize": 40,
+    "_actualFontSize": 28,
+    "_fontSize": 28,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -5668,9 +5668,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -6110,7 +6110,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 450,
-      "y": 360,
+      "y": 335,
       "z": 0
     },
     "_lrot": {
@@ -6203,7 +6203,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 57.343994140625,
+      "width": 49.1519775390625,
       "height": 50.400000000000006
     },
     "_anchorPoint": {
@@ -6242,8 +6242,8 @@
     "_string": "招募",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 28,
-    "_fontSize": 28,
+    "_actualFontSize": 24,
+    "_fontSize": 24,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 0,
@@ -6302,10 +6302,10 @@
     },
     "_alignFlags": 45,
     "_target": null,
-    "_left": 21.3280029296875,
-    "_right": 21.3280029296875,
-    "_top": 24.799999999999997,
-    "_bottom": 24.799999999999997,
+    "_left": 15.42401123046875,
+    "_right": 15.42401123046875,
+    "_top": 14.799999999999997,
+    "_bottom": 14.799999999999997,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -6351,8 +6351,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 80,
+      "height": 80
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -6434,9 +6434,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -6459,7 +6459,9 @@
     "_disabledSprite": null,
     "_duration": 0.1,
     "_zoomScale": 1.2,
-    "_target": null,
+    "_target": {
+      "__id__": 253
+    },
     "_id": ""
   },
   {

@@ -1648,9 +1648,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -2150,9 +2150,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -2541,9 +2541,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -3068,9 +3068,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -3459,9 +3459,9 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_pressedColor": {
@@ -3653,7 +3653,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1920,
-      "height": 910.9999999999999
+      "height": 911
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3796,7 +3796,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1920,
-      "height": 910.9999999999999
+      "height": 911
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
