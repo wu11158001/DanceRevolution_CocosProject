@@ -70,7 +70,9 @@ export class ChatFullView extends Component {
         ChatManager.on('ON_MESSAGE_RECEIVED', this.reciveMessage, this);
         // 綁定:招募列表訊息接收
         ChatManager.on('ON_RECRUIT_LIST_RECEIVED', (datas: IChatMessageData[]) => {
-            this.showChatMessage(datas);
+            if(this.getActiveToggleTag() === 'recruit') {
+                this.showChatMessage(datas);
+            }  
         }, this);
     }
 
@@ -187,11 +189,11 @@ export class ChatFullView extends Component {
         }
 
         let poolIndex = 0;
-
         for (const data of datas) {
             // 頻道不符時直接跳過
+            console.log(`${data.channel} | ${this.getActiveToggleTag()}`);
             if (data.channel !== this.getActiveToggleTag()) {
-                continue; 
+                continue;
             }
 
             // 依據過濾後的實際數量來使用 Pool
@@ -301,7 +303,7 @@ export class ChatFullView extends Component {
         const channel = this.getActiveToggleTag();
         const content = this.editBox.string.trim();
 
-        if(channel && content.length > 0) {
+        if(channel && channel != 'recruit' && content.length > 0) {
             ChatManager.sendChatMessage({
                 channel: channel, 
                 type: 'text', 

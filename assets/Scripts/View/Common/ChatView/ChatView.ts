@@ -24,6 +24,7 @@ export class ChatView extends BaseView {
                 break;
 
             case CHAT_PLACE.RoomView:
+                this.chatFullView.node.active = true;
                 break;
         }
 

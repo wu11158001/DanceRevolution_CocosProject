@@ -178,7 +178,7 @@ export class ChatManager{
     }
 
     /**
-     * 清除房間資料
+     * 清除房間聊天資料
      */
     public static clearRoomMessageData() {
         this.roomMessages.length = 0;
