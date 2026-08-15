@@ -35,10 +35,18 @@ export class SpriteFrameManager extends SingletonComponent<SpriteFrameManager> {
     }
 
     /**
-     * 獲取貼圖
+     * 獲取貼圖SpriteFrame
      */
     public getStick(stick: string): SpriteFrame {
         return this.stickMap.get(`${stick}`);
+    }
+
+    /**
+     * 獲取所有貼圖
+     * @returns 
+     */
+    public getAllStick(): Map<string, SpriteFrame> {
+        return this.stickMap;
     }
 }
 

@@ -1,4 +1,4 @@
-import { _decorator, Camera, Component, Node, Prefab, resources, v3, Vec3 ,sys} from 'cc';
+import { _decorator, Camera, Component, Node, Prefab, resources, v3, Vec3 ,sys, ScrollView} from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 
@@ -95,6 +95,31 @@ export class GameTool extends SingletonComponent<GameTool> {
     }
 
     /**
+     * 將毫秒時間戳轉換為 yyyy/MM/dd HH:mm:ss 或 yyyy/MM/dd HH:mm
+     * @param timestamp 
+     * @param includeSeconds 
+     * @returns 
+     */
+    public formatChatTimestamp(timestamp: number, includeSeconds: boolean = true): string {
+        if (!timestamp || isNaN(timestamp)) return '';
+
+        const date = new Date(timestamp);
+
+        const year: number = date.getFullYear();
+        const month: string = String(date.getMonth() + 1).padStart(2, '0');
+        const day: string = String(date.getDate()).padStart(2, '0');
+        const hours: string = String(date.getHours()).padStart(2, '0');
+        const minutes: string = String(date.getMinutes()).padStart(2, '0');
+
+        if (includeSeconds) {
+            const seconds: string = String(date.getSeconds()).padStart(2, '0');
+            return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        return `${year}/${month}/${day} ${hours}:${minutes}`;
+    }
+
+    /**
      * 格式化數字千分位
      * @param num 
      * @returns 
@@ -109,10 +134,28 @@ export class GameTool extends SingletonComponent<GameTool> {
      */
     public isMobileBrowser() :boolean {
         if (sys.isBrowser) {
-            console.log(`判斷是否在手機平台: ${sys.isMobile}`);
             return sys.isMobile;
         }
 
         return false;
+    }
+
+    /**
+     * 判斷 ScrollView 是否處於最底部
+     * @param threshold 誤差容許範圍 (像素)，預設 5px
+     */
+    public isAtBottom(scrollView: ScrollView, threshold: number = 50): boolean {
+        // 當前滾動偏移量
+        const currentOffset = scrollView.getScrollOffset();
+        // 最大可滾動偏移量
+        const maxOffset = scrollView.getMaxScrollOffset();
+
+        // 當 maxOffset.y 為 0 時代表內容長度未超過視窗，無須滾動（視為已在底部）
+        if (maxOffset.y <= 0) return true;
+
+        // Y 軸距離底部的剩餘像素值
+        const distanceToBottom = maxOffset.y - currentOffset.y;
+
+        return distanceToBottom <= threshold;
     }
 }

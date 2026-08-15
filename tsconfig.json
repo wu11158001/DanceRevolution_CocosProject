@@ -4,6 +4,8 @@
 
   /* Add your custom configuration here. */
   "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["ES2017", "DOM"],
     "strict": false,
     "moduleResolution": "bundler"
   }

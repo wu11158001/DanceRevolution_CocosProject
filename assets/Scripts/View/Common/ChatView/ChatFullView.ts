@@ -1,7 +1,10 @@
-import { _decorator, Button, Component, EditBox, instantiate, Node, ScrollView, Toggle, ToggleContainer } from 'cc';
+import { _decorator, Button, Component, EditBox, instantiate, Node, ScrollView, SpriteFrame, Toggle, ToggleContainer } from 'cc';
 import { CHAT_PLACE, ChatChannel, ChatManager, IChatMessageData } from '../../../Manager/ChatManager';
 import { ChatItemView } from './ChatItemView';
 import { GameTool } from '../../../Tools/GameTool';
+import { SpriteFrameManager } from '../../../Manager/SpriteFrameManager';
+import { StickItemView } from './StickItemView';
+import { noop } from 'rxjs';
 const { ccclass, property } = _decorator;
 
 /**
@@ -33,6 +36,15 @@ export class ChatFullView extends Component {
 
     @property(Button)
     private btn_newMessage: Button = null;
+
+    @property(Button)
+    private btn_sticker: Button = null;
+    @property(Node)
+    private stickGroupNode: Node = null;
+    @property(Node)
+    private stickItemParent: Node = null;
+    @property(Node)
+    private stickItemPrefab: Node = null;
 
     // 聊天項目物件池
     private chatItemPool: ChatItemView[] = [];
@@ -69,8 +81,14 @@ export class ChatFullView extends Component {
 
         this.scrollView.node.on('scrolling', this.onScrollViewScroll, this);
 
+        this.btn_sticker.node.on(Button.EventType.CLICK, this.switchStickPanel, this);
+
         this.chatItemPrefab.active = false;
         this.btn_newMessage.node.active = false;
+        this.stickItemPrefab.active = false;
+        this.stickGroupNode.active = false;
+
+        this.createStickItem();
     }
 
     public setData(chatPlace: CHAT_PLACE) {
@@ -91,6 +109,33 @@ export class ChatFullView extends Component {
                 this.tag_room.isChecked = true;
                 break;
         }
+    }
+
+    /**
+     * 創建貼圖項目
+     */
+    private createStickItem() {
+        const stickMap = SpriteFrameManager.getInstance().getAllStick();
+
+        for (const stickName of stickMap.keys()) {
+            const obj = instantiate(this.stickItemPrefab);
+            obj.active = true;
+            obj.setParent(this.stickItemParent);
+
+            const stickItemView = obj.getComponent(StickItemView);
+            if(stickItemView) {
+                stickItemView.setData(stickName, (stickName) => {
+                    this.sendStickMessage(stickName);
+                });
+            }
+        }
+    }
+
+    /**
+     * 貼圖面板開關
+     */
+    private switchStickPanel() {
+        this.stickGroupNode.active = !this.stickGroupNode.active;
     }
 
     /**
@@ -251,6 +296,32 @@ export class ChatFullView extends Component {
                 }
             }, 1);
         }
+    }
+
+    /**
+     * 發送貼圖訊息
+     */
+    private sendStickMessage(stickName: string) {
+        const channel = this.getActiveToggleTag();
+
+        if(stickName) {
+            ChatManager.sendChatMessage({
+                channel: channel, 
+                type: 'sticker', 
+                content: stickName
+            });
+        }
+
+        // 電腦上重設焦點
+        if(!GameTool.getInstance().isMobileBrowser()) {
+            setTimeout(() => {
+                if (this.node && this.node.isValid && this.editBox) {
+                    this.editBox.focus();
+                }
+            }, 1);
+        }
+
+        this.stickGroupNode.active = false;
     }
 }
 
