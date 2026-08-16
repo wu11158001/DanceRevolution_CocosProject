@@ -23,7 +23,14 @@ Enum(BGM_TYPE);
  */
 export enum SFX_TYPE {
     ButtonClick,
-    CancalClick
+    CancelClick,
+
+    BeatPerfect,
+    BeatNromal,
+    BeatMiss,
+
+    Cheer,
+    Ready
 }
 Enum(SFX_TYPE);
 
@@ -130,7 +137,7 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     /**
      * 播放音效 (動態從 resources/audio/sfx/ 載入並進行物件池派發)
      */
-    public playSFX(type: SFX_TYPE, volume: number = 1.0) {
+    public playSFX(type: SFX_TYPE, volume: number = 0.65) {
         // 數字 Enum 會自動反向查表取出檔名 (例如: 0 -> "ButtonClick")
         const sfxName = typeof type === 'number' ? SFX_TYPE[type] : String(type);
 

@@ -1,4 +1,4 @@
-import { _decorator, Color, Component, Label, Node } from 'cc';
+import { _decorator, Color, Component, Label, Node, tween, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -20,6 +20,19 @@ export class ScoreItem extends Component {
     private otherScoreColor: Color = null;
 
     public currentScore: number = 0;
+
+    // 本地指標移動參數
+    private selfNodeMoveDistance = 10; // 上下移動距離
+    private selfNodeDuration = 1.0;    // 單程時間
+
+    protected start(): void {
+        tween(this.selfNode)
+            .by(this.selfNodeDuration, { position: new Vec3(0, this.selfNodeMoveDistance, 0) }, { easing: 'sineInOut' })
+            .by(this.selfNodeDuration, { position: new Vec3(0, -this.selfNodeMoveDistance, 0) }, { easing: 'sineInOut' })
+            .union()          // 將上面的動作打包為一個整體單元
+            .repeatForever()  // 無限循環
+            .start();
+    }
 
     /**
      * 設置初始資料

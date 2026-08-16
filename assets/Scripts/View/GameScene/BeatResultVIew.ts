@@ -1,6 +1,7 @@
 import { _decorator, bezier, Camera, Color, Component, Label, Node, find, v3, CCFloat } from 'cc';
 import { BaseView } from '../BaseView';
 import { GameTool } from '../../Tools/GameTool';
+import { AudioManager, SFX_TYPE } from '../../Manager/AudioManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -70,21 +71,25 @@ export class BeatResultVIew extends BaseView {
                 if(perfectCombo > 1) resultStr = `PERFECT x${perfectCombo}`;
                 else resultStr = 'PERFECT';
                 colorIndex = 0;
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatPerfect);
                 break;
 
             case 'GREAT':
                 resultStr = 'GREAT';
                 colorIndex = 1;
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.4);
                 break;
 
             case 'GOOD':
                 resultStr = 'GOOD';
                 colorIndex = 2
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.45);
                 break;
 
             case 'MISS':
                 resultStr = 'MISS';
                 colorIndex = 3;
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatMiss, 0.75);
                 break;
         }
 

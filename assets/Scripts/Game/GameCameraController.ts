@@ -43,8 +43,8 @@ export class GameCameraController extends Component {
 
         const cameraPoints: CameraCamPoint[] = [
             { position: new Vec3(-3, 8.1, 6), rotation: new Vec3(-55, -9.2, 7.8), duration: 1 },
-            { position: new Vec3(0, 13, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1.5 },
-            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 1.5 },
+            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 2 },
+            { position: new Vec3(0, 8, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1.5 },
             { position: new Vec3(0, 2.7, 10),    rotation: new Vec3(-12, 0, 0), duration: 2 },
         ];
 
@@ -79,7 +79,6 @@ export class GameCameraController extends Component {
         // 鏈結完成後開始執行
         this.currentTween = camTween
             .call(() => {
-                console.log('攝影機運鏡結束!');
                 this.camera3DBgNode.active = true;
                 this.camera3DBgNode.position = this.cameraNode.position;
                 this.camera3D.visibility &= ~this.bgLayerBit;

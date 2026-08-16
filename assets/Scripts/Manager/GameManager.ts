@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, find } from 'cc';
 
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
-import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
+import { AudioManager, BGM_TYPE, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { RoomData } from 'db://assets/Scripts/Data/RoomData';
 import { SceneLoader } from './SceneLoader';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
@@ -247,6 +247,7 @@ export class GameManager extends Component {
 
         await new Promise(resolve => setTimeout(resolve, 2500));
 
+        AudioManager.getInstance().playSFX(SFX_TYPE.Cheer);
         ViewManager.getInstance().openView<GameResultView>('GameResultView', 'Popup').then((view) => {
             view.setData(data);
         });
@@ -272,7 +273,7 @@ export class GameManager extends Component {
         if (bgmType !== undefined) {
             AudioManager.getInstance().playBGM(
                 bgmType,
-                1,
+                0.85,
                 false,
                 overshootSeconds,            
             );

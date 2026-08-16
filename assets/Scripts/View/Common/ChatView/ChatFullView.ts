@@ -103,6 +103,7 @@ export class ChatFullView extends Component {
 
         // 關閉按鈕
         this.btn_close.node.on(Button.EventType.CLICK, () => { 
+            this.stickGroupNode.active = false;
             this.closeAction?.(IChatPanelType.Short, this.getActiveToggleTag());
         }, this);
 
@@ -196,6 +197,8 @@ export class ChatFullView extends Component {
      * @param channel 
      */
     private onChannelChange(channel: ChatChannel) {
+        this.stickGroupNode.active = false;
+
         let datas = [];
 
         switch(channel) {

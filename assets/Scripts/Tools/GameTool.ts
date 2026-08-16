@@ -1,4 +1,4 @@
-import { _decorator, Camera, Component, Node, Prefab, resources, v3, Vec3 ,sys, ScrollView} from 'cc';
+import { _decorator, Camera, Component, Node, Prefab, resources, v3, Vec3 ,sys, ScrollView, director, Director} from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 
@@ -157,5 +157,25 @@ export class GameTool extends SingletonComponent<GameTool> {
         const distanceToBottom = maxOffset.y - currentOffset.y;
 
         return distanceToBottom <= threshold;
+    }
+
+    /**
+     * 等待指定的幀數
+     * @param frameCount 要等待的幀數
+     */
+    public waitFrames(frameCount: number = 2): Promise<void> {
+        return new Promise((resolve) => {
+        let count = 0;
+        const check = () => {
+            count++;
+            if (count >= frameCount) {
+                resolve();
+            } else {
+                // 利用 Component 的 scheduleOnce 或 Director 監聽 LateUpdate
+                director.once(Director.EVENT_AFTER_UPDATE, check);
+            }
+        };
+        director.once(Director.EVENT_AFTER_UPDATE, check);
+    });
     }
 }

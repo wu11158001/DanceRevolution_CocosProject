@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Label, UIOpacity, Color, Tween, tween, Vec3} from 'cc';
 import { BaseView } from '../../BaseView';
+import { AudioManager, SFX_TYPE } from '../../../Manager/AudioManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -64,6 +65,7 @@ export class GameTextTipView extends BaseView {
     public onReady() {
         if(this.isStart) return;
 
+        AudioManager.getInstance().playSFX(SFX_TYPE.Ready, 0.85),
         this.showTip('READY', this.readyColor, false)
     }
 

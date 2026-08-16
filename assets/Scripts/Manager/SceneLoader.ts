@@ -8,6 +8,7 @@ import { CharacterDataManager } from './CharacterDataManager';
 import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
 import { SpriteFrameManager } from './SpriteFrameManager';
 import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
+import { GameTool } from '../Tools/GameTool';
 
 const { ccclass, property } = _decorator;
 
@@ -18,6 +19,8 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
     @property(Node)
     private loadBg: Node = null;
 
+    private isLoadCharacter: boolean = false;
+
     /**
      * 載入場景
      * @param sceneType 
@@ -25,16 +28,13 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
      */
     public loadScene(sceneType: SceneType, isGameReturn: boolean = false) {
         this.loadBg.active = true;
-        
-        // 跳轉前的舊場景
-        const previousScene = director.getScene()?.name as SceneType;
 
         director.loadScene(sceneType, (err) => {
             if (err) {
                 console.error(`跳轉場景失敗:`, err);
                 this.loadBg.active = false;
             } else {
-                this.onLoadComplete(sceneType, previousScene, isGameReturn);
+                this.onLoadComplete(sceneType, isGameReturn);
             }
         });
     }
@@ -44,25 +44,28 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
      * @param sceneType 
      * @param isGameReturn 
      */
-    private async onLoadComplete(sceneType: SceneType, previousScene: SceneType, isGameReturn: boolean = false) {
+    private async onLoadComplete(sceneType: SceneType, isGameReturn: boolean = false) {
         ViewManager.getInstance().closeAllViews();
 
         switch (sceneType) {
             case 'LobbyScene':
-                if(previousScene === 'EntryScene') {
+                if(!this.isLoadCharacter) {
+                    this.isLoadCharacter = true;
+
                     // 載入所有角色3D
                     await CharacterDataManager.getInstance().preloadAllCharacters();
                     // 載入圖片資源
                     await SpriteFrameManager.getInstance().loadSpriteFrameAssets();
                 }    
 
-                await AudioManager.getInstance().playBGM(BGM_TYPE.LobbyBGM)
+                AudioManager.getInstance().playBGM(BGM_TYPE.LobbyBGM)
 
                 if(!isGameReturn) {
                     // 一般進入大廳,開啟大廳介面
                     await ViewManager.getInstance().openView<LobbyView>('LobbyView', "HUD"); 
                 } else {
                     // 遊戲進入大廳,開啟房間介面
+                    await GameTool.getInstance().waitFrames(1);
                     await ViewManager.getInstance().openView<RoomView>('RoomView', "HUD");
                 }
 

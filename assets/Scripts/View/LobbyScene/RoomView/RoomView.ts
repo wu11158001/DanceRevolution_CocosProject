@@ -158,6 +158,8 @@ export class RoomView extends BaseView {
     }
 
     public async onOpen(params?: any) {
+        super.onOpen(params);
+
         // 開啟聊天介面
         this.chatView = await ViewManager.getInstance().openView<ChatView>(
             'ChatView', 
@@ -180,8 +182,10 @@ export class RoomView extends BaseView {
 
         this.init();
 
+        this.bgNode.setParent(ViewManager.getInstance().BackgroundCanvas);
+
         // 初始化畫面
-        if (RoomData.roomId) {
+        if (RoomData.roomId) {            
             this.refreshRoom({
                 roomId: RoomData.roomId,
                 roomName: RoomData.roomName,
@@ -190,10 +194,6 @@ export class RoomView extends BaseView {
                 players: RoomData.players
             });
         }
-
-        this.bgNode.setParent(ViewManager.getInstance().BackgroundCanvas);
-
-        super.onOpen(params);
     }
 
     /**
@@ -313,6 +313,8 @@ export class RoomView extends BaseView {
                     if (currentScene) {
                         currentScene.addChild(this.characters[index]);
                         this.characters[index].setPosition(this.characterSeatPos[index]);
+
+                        this.characters[index].updateWorldTransform();
                     }
 
                     // 準備/未準備動畫
@@ -324,6 +326,7 @@ export class RoomView extends BaseView {
                         }
                     }
 
+                    // 角色訊息物件
                     GameTool.getInstance().follow3DNode(
                         this.camera3D,
                         character,
@@ -341,15 +344,15 @@ export class RoomView extends BaseView {
 
                         if(!player.isReady || isLocalAndHost) {
                             // 切換角色按鈕
-                            this.btn_switchCharacterLeft.node.active = true;
-                            this.btn_switchCharacterRight.node.active = true;
-
                             GameTool.getInstance().follow3DNode(
                                 this.camera3D,
                                 character,
                                 this.switchBtnNode,
                                 this.switchBtnPosOffset,
                             )
+                            
+                            this.btn_switchCharacterLeft.node.active = true;
+                            this.btn_switchCharacterRight.node.active = true;
                         } else {
                             this.btn_switchCharacterLeft.node.active = !player.isReady;
                             this.btn_switchCharacterRight.node.active = !player.isReady;

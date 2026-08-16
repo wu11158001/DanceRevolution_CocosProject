@@ -2,6 +2,7 @@ import { _decorator, Component, Node, EditBox, Button} from 'cc';
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
+import { AudioManager, SFX_TYPE } from '../../Manager/AudioManager';
 
 const { ccclass, property } = _decorator;
 
@@ -51,6 +52,7 @@ export class UpdateRoomNameView extends BaseView {
 
         if(roomName.length == 0) return;
 
+        AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
         SocketManager.getInstance().sendUpdateRoomName(roomName);
         this.closeSelf();
     }
