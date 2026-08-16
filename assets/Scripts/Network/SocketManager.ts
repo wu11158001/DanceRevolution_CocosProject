@@ -54,6 +54,15 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         // 監聽:"disconnect"[斷線]
         this.socket.on('disconnect', (reason: string) => {
             console.warn(`與伺服器斷開連線，原因: ${reason}`);
+            ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+                popup?.setData(
+                    "與伺服器斷開連線!", 
+                    () => this.connectToServer(), 
+                    null, 
+                    false, 
+                    "重新連接"
+                );
+            });
         });
 
         // 監聽:"connect_error"[連線錯誤]

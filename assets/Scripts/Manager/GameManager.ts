@@ -130,17 +130,24 @@ export class GameManager extends Component {
     update(deltaTime: number) {
         if (!this.isWaitingStart) return;
 
-        // 當前校正後的伺服器時間
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
-        const remainingTime = (this.targetStartTime - currentServerTime) / 1000; // 轉秒
+        
+        // 如果已經到達或超過 Server 設定的播放時間
+        if (currentServerTime >= this.targetStartTime) {
+            this.isWaitingStart = false; // 關閉等待
 
-        if (remainingTime <= 0) {
-            this.isWaitingStart = false; // 防止重複觸發
+            // 計算因為 Update 幀率 (例如 60FPS) 產生的超時毫秒，進行音訊補償
+            const overshootMs = currentServerTime - this.targetStartTime;
+            const overshootSeconds = overshootMs / 1000;
 
             SceneLoader.getInstance().closeLoadBg();
             
-            this.gameCameraController.onGameOpening(this.gameTextTipView);
-            this.playMusicSynchronized(Math.abs(remainingTime));
+            if (this.gameCameraController) {
+                this.gameCameraController.onGameOpening(this.gameTextTipView);
+            }
+            
+            // 傳入誤差秒數，精確起播
+            this.playMusicSynchronized(overshootSeconds);
         }
     }
 
@@ -177,25 +184,24 @@ export class GameManager extends Component {
         const song = RoomData.currentSong;
         if (!song) return;
 
-        // 計算音樂理論上應該播放到的位置（秒）
-        const songStartTime = this.targetStartTime + (song.offset * 1000);
-        const expectedCurrentTimeSec = (currentServerTime - songStartTime) / 1000;
+        // targetStartTime 即為 Server 設定的音樂播放時間 (musicStartTime)
+        // 歌曲理論應播放時間（秒）
+        const expectedCurrentTimeSec = (currentServerTime - this.targetStartTime) / 1000;
 
-        // 歌曲還沒開始
+        // 歌曲尚未開始
         if (expectedCurrentTimeSec < 0) {
             return; 
         }
 
-        // 歌曲已經播完了
+        // 歌曲已播放完畢
         if (expectedCurrentTimeSec >= song.duration) {
             AudioManager.getInstance().stopBGM();
             return;
         }
 
-        // 情遊戲進行中，強制將 AudioManager 播放位置跳轉 (Seek) 到 expectedCurrentTimeSec
-        console.log(`[切回視窗強校正] 音樂重置並跳轉至: ${expectedCurrentTimeSec.toFixed(3)}s`);
+        console.log(`[切回視窗/強校正] 音樂重置並跳轉至: ${expectedCurrentTimeSec.toFixed(3)}s`);
         
-        // 重新播放 BGM，並從 expectedCurrentTimeSec 開始播放
+        // 跳轉音樂至精確秒數
         this.playMusicSynchronized(expectedCurrentTimeSec);
     }
 

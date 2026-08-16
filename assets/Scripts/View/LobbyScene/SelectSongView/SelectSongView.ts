@@ -78,6 +78,7 @@ export class SelectSongView extends BaseView {
 
         this.downNode.active = false;
         this.currentSongData = null;
+        this.songBtnPrefab.active = false;
 
         this.refreshSongList();
     }
@@ -104,15 +105,12 @@ export class SelectSongView extends BaseView {
             sortedSongs.sort((a, b) => b.bpm - a.bpm);
         }
 
-        // 清空舊的列表節點
-        this.songBtnParent.removeAllChildren();
-        this.songBtnPrefab.active = false;
-
         // 重新生成按鈕
         sortedSongs.forEach((song) => {
             const songNode = instantiate(this.songBtnPrefab);
             songNode.active = true;
             songNode.setParent(this.songBtnParent);
+            songNode.name = 'SongItem';
 
             const songBtnItem = songNode.getComponent(SongBtnItem);
             if (songBtnItem) {

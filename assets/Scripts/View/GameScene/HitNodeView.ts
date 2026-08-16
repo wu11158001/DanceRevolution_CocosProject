@@ -22,7 +22,7 @@ export class HitNodeView extends BaseView {
     @property(Sprite)
     private sprite_hitZone: Sprite = null;
     @property({ tooltip: "打擊點位於背景條的比例 (0.8 代表 80% 位置)" })
-    private hitRatio: number = 0.8;
+    private hitRatio: number = 0.75;
 
     @property(Sprite)
     private sprite_nodeBar: Sprite = null;

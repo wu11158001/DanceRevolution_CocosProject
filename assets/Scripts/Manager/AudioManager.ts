@@ -242,7 +242,7 @@ export class AudioManager extends SingletonComponent<AudioManager> {
 
             // 音樂淡入
             this.bgmTween = tween(this.bgmSource)
-                .to(0.3, { volume: 1.0 })
+                .to(0.3, { volume: 0.85 })
                 .start();
         };
 
