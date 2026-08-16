@@ -160,7 +160,7 @@ export class ChatShortView extends Component {
      */
     private setTruncatedRichText(prefix: string, content: string, suffix: string) {
         // 最大允許寬度
-        const maxAllowedWidth = 500; 
+        const maxAllowedWidth = 450; 
         // 將 RichText 的 maxWidth 設為 0，確保文字呈單行展開以利精確計算寬度
         this.richText_message.maxWidth = 0;
         // 完整文字

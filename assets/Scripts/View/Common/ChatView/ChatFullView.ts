@@ -161,8 +161,7 @@ export class ChatFullView extends Component {
                 break;
         }
 
-        // 獲取招募資料
-        //ChatManager.sendGetRecruitList();
+        this.onChannelChange(targetChannel);
     }
 
     /**

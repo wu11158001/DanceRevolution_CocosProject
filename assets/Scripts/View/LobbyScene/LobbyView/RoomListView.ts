@@ -25,6 +25,9 @@ export class RoomListView extends Component {
     @property(LobbyView)
     private lobbyView: LobbyView = null;
 
+    @property(Node)
+    private emptyNode: Node = null;
+
     private roomListItems: RoomListItem[] = [];
 
     onDestroy() {        
@@ -99,6 +102,8 @@ export class RoomListView extends Component {
                 item.setData(data, () => this.joinRoom(data.roomId));
             }
         });
+
+        this.emptyNode.active = !sortData || sortData.length == 0;
     }
 
     /**

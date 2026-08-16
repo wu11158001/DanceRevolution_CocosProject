@@ -1,7 +1,7 @@
 import { _decorator, Component, Enum, Node, UIOpacity, tween } from 'cc';
 import { ChatFullView } from './ChatFullView';
 import { BaseView } from '../../BaseView';
-import { CHAT_PLACE, ChatChannel, IChatPanelType } from '../../../Manager/ChatManager';
+import { CHAT_PLACE, ChatChannel, ChatManager, IChatPanelType } from '../../../Manager/ChatManager';
 import { ChatShortView } from './ChatShortView';
 const { ccclass, property } = _decorator;
 

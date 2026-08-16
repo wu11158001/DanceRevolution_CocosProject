@@ -71,10 +71,10 @@ export class RoomView extends BaseView {
 
     // 角色位置
     private readonly characterSeatPos: Vec3[] = [
-        new Vec3(-0.8, 0.1, 0), 
-        new Vec3(0.7, 0.1, 0), 
-        new Vec3(2.2, 0.1, 0), 
-        new Vec3(-2.3, 0.1, 0), 
+        new Vec3(-0.8, 0.25, 0), 
+        new Vec3(0.7, 0.25, 0), 
+        new Vec3(2.2, 0.25, 0), 
+        new Vec3(-2.3, 0.25, 0), 
     ];
 
     private camera3D: Camera = null;
