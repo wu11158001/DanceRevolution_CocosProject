@@ -108,21 +108,23 @@ export class HitNodeView extends BaseView {
 
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
         
-        // 計算當前進度並記錄到全域變數
+        // 計算當前進度 (0.0 代表小節開頭第 1 拍，0.75 代表 Hit Zone 第 4 拍，1.0 代表小節結束)
         this.currentProgress = (currentServerTime - this.barStartTime) / this.barIntervalMs;
         
-        const currentX = math.clamp01(this.currentProgress) * this.barWidth;
+        // clamp01 確保游標不會超出範圍
+        const clampedProgress = math.clamp01(this.currentProgress);
+        const currentX = clampedProgress * this.barWidth;
         this.cursor.setPosition(new Vec3(currentX, 0, 0));
 
         // 依據節拍更新 hitZone 的 Alpha
         this.updateHitZoneAlpha(currentServerTime);
 
-        // 未打擊 (超過當前小節時間)
+        // 當前小節結束 (到達 100% 尾端)
         if (this.currentProgress >= 1.0) {
             this.resetState();
         }
     }
-
+    
     /**
      * 計算並更新 HitZone 依照節拍的 Alpha 變化
      */
@@ -182,6 +184,9 @@ export class HitNodeView extends BaseView {
         this.beatIntervalMs = data.beatIntervalMs || (this.barIntervalMs / 4);
 
         this.sprite_beatBar.node.active = true;
+
+        // 當 targetHitTime 為第 4 拍 (75% 位置) 時：
+        // barStartTime 會剛好等於 currentBarStartTime (第 1 拍)
         this.barStartTime = this.targetHitTime - (this.barIntervalMs * this.hitRatio);
         this.isRunning = true;
 

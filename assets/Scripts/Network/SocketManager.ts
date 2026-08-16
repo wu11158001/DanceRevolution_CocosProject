@@ -57,7 +57,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
             ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
                 popup?.setData(
                     "與伺服器斷開連線!", 
-                    () => this.connectToServer(), 
+                    () => SceneLoader.getInstance().loadScene('EntryScene'), 
                     null, 
                     false, 
                     "重新連接"
@@ -104,7 +104,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
             popup?.setData(
                 "連線伺服器失敗!", 
-                () => this.connectToServer(), 
+                () => SceneLoader.getInstance().loadScene('EntryScene'), 
                 null, 
                 false, 
                 "重新連接"

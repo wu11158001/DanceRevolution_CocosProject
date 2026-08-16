@@ -9,6 +9,7 @@ import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
 import { SpriteFrameManager } from './SpriteFrameManager';
 import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
 import { GameTool } from '../Tools/GameTool';
+import { SocketManager } from '../Network/SocketManager';
 
 const { ccclass, property } = _decorator;
 
@@ -48,6 +49,10 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
         ViewManager.getInstance().closeAllViews();
 
         switch (sceneType) {
+            case 'EntryScene':
+                SocketManager.getInstance().connectToServer();
+                break;
+
             case 'LobbyScene':
                 if(!this.isLoadCharacter) {
                     this.isLoadCharacter = true;

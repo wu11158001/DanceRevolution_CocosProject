@@ -39,7 +39,7 @@ export class LobbyView extends BaseView {
     private chatView: ChatView = null;
 
     onDestroy() {
-        PlayerData.off('nickname', this.showNickname);
+        PlayerData.off('nickname', this.showNickname, this);
         PlayerData.off('characterId', this.onCharacterChange, this);
         
         if(this.characterObj) {

@@ -14,7 +14,8 @@ export enum BGM_TYPE {
 
     Song_0 = 'Song_0',
     Song_1 = 'Song_1',
-    Song_2 = 'Song_2'
+    Song_2 = 'Song_2',
+    Song_3 = 'Song_3'
 }
 Enum(BGM_TYPE);
 
@@ -122,6 +123,8 @@ export class AudioManager extends SingletonComponent<AudioManager> {
         isLoop: boolean, 
         currentTime: number, 
     ) {
+        this.isPreviewing = false
+
         this.bgmSource.stop();
         this.bgmSource.clip = clip;
         this.bgmSource.loop = isLoop;
@@ -208,13 +211,17 @@ export class AudioManager extends SingletonComponent<AudioManager> {
      * 試聽音樂監控
      */
     private previewing() {
-        if (this.isPreviewing && this.bgmSource && this.bgmSource.playing) {
-            // 超過試聽區間，跳回 preview_start 重新循環
-            if (this.bgmSource.currentTime >= this.previewEndTime) {
-                this.bgmSource.currentTime = this.previewStartTime;
-            }
+    if (this.isPreviewing && this.bgmSource && this.bgmSource.playing) {
+        // 確保不會超出音訊總長度
+        const duration = this.bgmSource.duration;
+        const targetEndTime = Math.min(this.previewEndTime, duration);
+
+        // 超過試聽區間，跳回 preview_start 重新循環
+        if (this.bgmSource.currentTime >= targetEndTime) {
+            this.bgmSource.currentTime = Math.min(this.previewStartTime, duration);
         }
     }
+}
 
     /**
      * 播放試聽歌曲

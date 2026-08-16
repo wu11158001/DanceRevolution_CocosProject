@@ -77,13 +77,13 @@ export class BeatResultVIew extends BaseView {
             case 'GREAT':
                 resultStr = 'GREAT';
                 colorIndex = 1;
-                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.4);
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.55);
                 break;
 
             case 'GOOD':
                 resultStr = 'GOOD';
                 colorIndex = 2
-                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.45);
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.65);
                 break;
 
             case 'MISS':
