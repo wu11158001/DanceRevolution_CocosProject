@@ -281,7 +281,7 @@
     "_priority": 0,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8562329390355,
+    "_orthoHeight": 651.0236220472441,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -814,7 +814,7 @@
     "_priority": 100,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8562329390355,
+    "_orthoHeight": 651.0236220472441,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1028,7 +1028,7 @@
     "_priority": 200,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8562329390355,
+    "_orthoHeight": 651.0236220472441,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1242,7 +1242,7 @@
     "_priority": 400,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8562329390355,
+    "_orthoHeight": 651.0236220472441,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1456,7 +1456,7 @@
     "_priority": 1000,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8562329390355,
+    "_orthoHeight": 651.0236220472441,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1873,7 +1873,7 @@
     "_priority": 800,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8562329390355,
+    "_orthoHeight": 651.0236220472441,
     "_near": 1,
     "_far": 2000,
     "_color": {

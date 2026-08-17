@@ -1,6 +1,16 @@
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { BGM_TYPE } from '../Manager/AudioManager';
 
+/**
+ * 困難度類型
+ */
+export enum DIFFICULTY_TYPE {
+    EASY,
+    NORMAL,
+    HARD,
+    CRAZY
+}
+
 // 房間內單一玩家資料
 export interface IRoomPlayer {
     playerId: string;
@@ -27,6 +37,8 @@ export interface IRoomData {
     roomId: string;
     roomName: string;
     hostId: string;
+    difficulty: DIFFICULTY_TYPE;
+    difficultyName: string;
     currentSong: ISongData;
     players: IRoomPlayer[];
 }
@@ -64,6 +76,8 @@ export class RoomData {
     public static roomId: string = '';
     public static roomName: string = '';
     public static hostId: string = '';
+    public static difficulty: DIFFICULTY_TYPE = DIFFICULTY_TYPE.EASY;
+    public static difficultyName: string;
     public static currentSong: ISongData = null;
     public static players: IRoomPlayer[] = [];
     public static songs: ISongData[] = [];
@@ -91,8 +105,17 @@ export class RoomData {
         this.roomId = data.roomId;
         this.roomName = data.roomName;
         this.hostId = data.hostId;
+        this.difficultyName = data.difficultyName;
         this.currentSong = data.currentSong;
         this.players = data.players;
+
+        if (typeof data.difficulty === 'string') {
+            // 若後端給字串 'EASY'，轉成 Enum 數字 0 存入 static 變數
+            this.difficulty = DIFFICULTY_TYPE[data.difficulty as keyof typeof DIFFICULTY_TYPE] ?? DIFFICULTY_TYPE.EASY;
+        } else {
+            this.difficulty = data.difficulty ?? DIFFICULTY_TYPE.EASY;
+        }
+
 
         // 更新當前玩家在房間內的屬性 (同步至 PlayerData)
         const mySelf = data.players.find(p => p.playerId === PlayerData.playerId);
@@ -104,7 +127,7 @@ export class RoomData {
 
         // 觸發刷新事件
         if (this.onRoomUpdated) {
-            this.onRoomUpdated(data);
+            this.onRoomUpdated(this);
         }
     }
 

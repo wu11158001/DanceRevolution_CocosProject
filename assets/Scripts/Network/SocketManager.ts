@@ -7,7 +7,7 @@ import { SceneLoader } from 'db://assets/Scripts/Manager/SceneLoader';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
-import { RoomData, IRoomData } from 'db://assets/Scripts/Data/RoomData';
+import { RoomData, IRoomData, DIFFICULTY_TYPE } from 'db://assets/Scripts/Data/RoomData';
 import { ChatManager } from '../Manager/ChatManager';
 
 const { ccclass, property } = _decorator;
@@ -231,6 +231,16 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      */
     public sendUpdateRoomName(newRoomName: string, callback?: (res: { success: boolean; roomName?: string; message?: string }) => void) {
         this.socket?.emit('update_room_name', { newRoomName }, callback);
+    }
+
+    /**
+     * 發送:更換困難度
+     * @param difficulty 
+     * @param callback 
+     */
+    public sendSelectDifficulty(difficulty: DIFFICULTY_TYPE, callback?: (res: { success: boolean; message?: string }) => void) {
+        const difficultyKey = DIFFICULTY_TYPE[difficulty];        
+        this.socket?.emit('select_difficulty', { difficulty: difficultyKey }, callback);
     }
 
     /**

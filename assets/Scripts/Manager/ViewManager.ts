@@ -30,7 +30,8 @@ export type ViewType =
 'BeatResultVIew' |
 'GameResultView'|
 'GameTextTipView' |
-'ChatView';
+'ChatView' |
+'DifficultyIllustrateView'
 
 /**
  * 介面管理中心
