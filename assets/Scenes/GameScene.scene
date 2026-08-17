@@ -368,7 +368,7 @@
     "_illuminance": 50000,
     "_illuminanceLDR": 1.6927083333333335,
     "_shadowEnabled": true,
-    "_shadowPcf": 2,
+    "_shadowPcf": 3,
     "_shadowBias": 0.00001,
     "_shadowNormalBias": 0,
     "_shadowSaturation": 1,

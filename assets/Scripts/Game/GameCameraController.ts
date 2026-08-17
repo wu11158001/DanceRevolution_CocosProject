@@ -42,9 +42,9 @@ export class GameCameraController extends Component {
         this.cameraNode.eulerAngles = new Vec3(-50, 0, 0);
 
         const cameraPoints: CameraCamPoint[] = [
-            { position: new Vec3(-3, 8.1, 6), rotation: new Vec3(-55, -9.2, 7.8), duration: 1 },
-            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 2 },
-            { position: new Vec3(0, 8, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1.5 },
+            { position: new Vec3(-3, 8.1, 6), rotation: new Vec3(-55, -9.2, 7.8), duration: 0.75 },
+            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 1.7 },
+            { position: new Vec3(0, 8, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1 },
             { position: new Vec3(0, 2.7, 10),    rotation: new Vec3(-12, 0, 0), duration: 2 },
         ];
 

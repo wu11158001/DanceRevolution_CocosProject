@@ -29,7 +29,7 @@ export class HitNodeView extends BaseView {
     @property(Node)
     private nodeArrowPrefab: Node = null;
     @property([SpriteFrame])
-    private nodeArrowSprites: SpriteFrame[] = []; // [0]: 預設/未按 , [1]: 正確按壓
+    private nodeArrowSprites: SpriteFrame[] = []; // [0]: 一般/未按, [1]:反向/未按, [2]:按壓的效果, [3]: 正確按壓
 
     @property([Button])
     private phoneBtns: Button[] = [];   // 手機專用按鈕(0=上,1=下,2=左,3=右,4=打擊)
@@ -285,36 +285,18 @@ export class HitNodeView extends BaseView {
         // 比對當前位置的箭頭方向
         const targetDirection = this.currentSequence[this.currentInputIndex];
 
+        // 正確輸入
         if (pressedDirection === targetDirection) {
             const currentArrow = this.nodeArrows[this.currentInputIndex];
             if (currentArrow) {
                 Tween.stopAllByTarget(currentArrow.node);
 
-                const startColor = currentArrow.color.clone();
-                const black = new Color(0, 0, 0, 255);
-                const white = new Color(255, 255, 255, 255);
-
+                currentArrow.spriteFrame = this.nodeArrowSprites[2];
                 tween(currentArrow.node)
-                    .to(0.1, {}, {
-                        onUpdate: (target, ratio) => {
-                            let r = math.lerp(startColor.r, black.r, ratio);
-                            let g = math.lerp(startColor.g, black.g, ratio);
-                            let b = math.lerp(startColor.b, black.b, ratio);
-                            currentArrow.color = new Color(r, g, b, 255);
-                        }
+                    .to(0.05, {}, {
                     })
                     .call(() => {
-                        if (this.nodeArrowSprites[1]) {
-                            currentArrow.spriteFrame = this.nodeArrowSprites[1];
-                        }
-                    })
-                    .to(0.1, {}, {
-                        onUpdate: (target, ratio) => {
-                            let r = math.lerp(black.r, white.r, ratio);
-                            let g = math.lerp(black.g, white.g, ratio);
-                            let b = math.lerp(black.b, white.b, ratio);
-                            currentArrow.color = new Color(r, g, b, 255);
-                        }
+                         currentArrow.spriteFrame = this.nodeArrowSprites[3];
                     })
                     .start();
             }
