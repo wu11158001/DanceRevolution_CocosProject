@@ -6,12 +6,14 @@ import { ISongData, RoomData } from 'db://assets/Scripts/Data/RoomData';
 import { SongBtnItem } from './SongBtnItem';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 import { AudioManager } from 'db://assets/Scripts/Manager/AudioManager'; // 引用 AudioManager
+import { GameTool } from '../../../Tools/GameTool';
 
 const { ccclass, property } = _decorator;
 
 export enum SortType {
     AUTHOR,
-    BPM
+    BPM,
+    TIME
 }
 
 /**
@@ -26,6 +28,8 @@ export class SelectSongView extends BaseView {
     private tog_aothorFilter: Toggle = null;
     @property(Toggle)
     private tog_bpmFilter: Toggle = null;
+    @property(Toggle)
+    private tog_timeFilter: Toggle = null;
 
     @property(Node)
     private songBtnPrefab: Node = null;
@@ -34,6 +38,10 @@ export class SelectSongView extends BaseView {
 
     @property(Node)
     private downNode: Node = null;
+    @property(Label)
+    private label_selectBPM: Label = null;
+    @property(Label)
+    private label_selectTime: Label = null;
     @property(FixedMarqueeText)
     private fixedMarqueeText: FixedMarqueeText = null;
     @property(Button)
@@ -41,6 +49,9 @@ export class SelectSongView extends BaseView {
 
     private currentSongData: ISongData = null;
     private currentSortType: SortType = SortType.AUTHOR; // 預設排序
+    private isFilterReverse: boolean = false;   // 排序(false=升幕, true=降幕)
+
+    private songBtnItems: SongBtnItem[] = [];
 
     protected start(): void {
         // 關閉按鈕
@@ -71,6 +82,14 @@ export class SelectSongView extends BaseView {
                 this.refreshSongList();
             }
         }, this);
+
+        // 時間篩選按鈕
+        this.tog_timeFilter.node.on('toggle', (toggle: Toggle) => {
+            if (toggle.isChecked) {
+                this.currentSortType = SortType.TIME;
+                this.refreshSongList();
+            }
+        }, this);
     }
 
     public async onOpen(params?: any) {
@@ -98,36 +117,80 @@ export class SelectSongView extends BaseView {
         // 排序資料
         const sortedSongs = [...RoomData.songs];
 
-        if (this.currentSortType === SortType.AUTHOR) {
-            // 依作者/歌名 (Alphabetical) 排序
-            sortedSongs.sort((a, b) => a.name.localeCompare(b.name));
-        } else if (this.currentSortType === SortType.BPM) {
-            sortedSongs.sort((a, b) => b.bpm - a.bpm);
-        }
+        this.isFilterReverse = !this.isFilterReverse;
 
-        // 重新生成按鈕
+        switch(this.currentSortType) {
+            case SortType.AUTHOR:
+                // 依作者/歌名 排序
+                if(this.isFilterReverse) {
+                    sortedSongs.sort((a, b) => b.name.localeCompare(a.name));
+                } else {
+                    sortedSongs.sort((a, b) => a.name.localeCompare(b.name));
+                }
+                break;
+
+            case SortType.BPM:
+                // 依BPM排序
+                if(this.isFilterReverse) {
+                    sortedSongs.sort((a, b) => b.bpm - a.bpm);
+                } else {
+                    sortedSongs.sort((a, b) => a.bpm - b.bpm);
+                }                
+                break;
+
+            case SortType.TIME:
+                // 依歌曲時間排序
+                if(this.isFilterReverse) {
+                    sortedSongs.sort((a, b) => b.duration - a.duration);
+                } else {
+                    sortedSongs.sort((a, b) => a.duration - b.duration);
+                }
+                
+                break;
+        } 
+
+        // 關閉當前所有項目
+        this.songBtnItems.forEach((item) => {
+            item.node.active = false;
+        });
+
+        // 重新生成項目按鈕
+        let index: number = 0;
         sortedSongs.forEach((song) => {
-            const songNode = instantiate(this.songBtnPrefab);
-            songNode.active = true;
-            songNode.setParent(this.songBtnParent);
-            songNode.name = 'SongItem';
 
-            const songBtnItem = songNode.getComponent(SongBtnItem);
+            let songBtnItem: SongBtnItem = null;
+            if(index < this.songBtnItems.length) {
+                songBtnItem = this.songBtnItems[index];
+            } else {
+                const songNode = instantiate(this.songBtnPrefab);
+                songNode.active = true;
+                songNode.setParent(this.songBtnParent);
+
+                songBtnItem = songNode.getComponent(SongBtnItem);
+                if(songBtnItem) {
+                    this.songBtnItems.push(songBtnItem);
+                }
+            }
+
             if (songBtnItem) {
+                songBtnItem.node.active = true;
                 songBtnItem.setData(
-                    song.name,
-                    song.bpm,
+                    song,
                     () => {
                         // 點擊歌曲卡片
                         this.currentSongData = song;
                         this.downNode.active = true;
-                        this.fixedMarqueeText.setTitle(`${song.name} (BPM:${song.bpm})`);
+                        this.fixedMarqueeText.setTitle(`${song.name}`);
+                        this.label_selectBPM.string = `BPM: ${song.bpm}`;
+                        this.label_selectTime.string = `TIME: ${GameTool.getInstance().formatTime(song.duration)}`;
 
                         // 開始試聽
                         AudioManager.getInstance().playSongPreview(song);
                     }
                 );
             }
+
+            index++;
         });
     }
 }
