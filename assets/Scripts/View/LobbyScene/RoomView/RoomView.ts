@@ -293,7 +293,6 @@ export class RoomView extends BaseView {
         this.label_roomName.string = `房間: ${data.roomName}`;
 
         // 困難度文字
-        console.log(`${data.difficulty}`);
         const diffcultyTitle = `<color=#FFFFFF>困難度: </color>`;
         let diffcultyColor = '#FFFFFF';
 

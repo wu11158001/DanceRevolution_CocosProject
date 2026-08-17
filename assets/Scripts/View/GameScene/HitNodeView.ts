@@ -5,8 +5,9 @@ import {
 
 import { BaseView } from '../BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
-import { GameManager, INoteSequenceData} from 'db://assets/Scripts/Manager/GameManager';
+import { GameManager, INoteSequenceData, ISequenceData} from 'db://assets/Scripts/Manager/GameManager';
 import { GameTool } from '../../Tools/GameTool';
+import { DIFFICULTY_TYPE, RoomData } from '../../Data/RoomData';
 
 const { ccclass, property } = _decorator;
 
@@ -33,6 +34,8 @@ export class HitNodeView extends BaseView {
 
     @property([Button])
     private phoneBtns: Button[] = [];   // 手機專用按鈕(0=上,1=下,2=左,3=右,4=打擊)
+    @property(Node)
+    private reversPhoneBtnsNode: Node = null
 
     private barWidth: number = 0;
     private barStartTime: number = 0;
@@ -42,18 +45,25 @@ export class HitNodeView extends BaseView {
     private isRunning: boolean = false;
 
     private nodeArrows: Sprite[] = [];
-    private currentSequence: string[] = []; // 當前小節的箭頭順序
-    private currentInputIndex: number = 0;   // 當前輸入到第幾個箭頭
-    private currentProgress: number = 0;     // 當前進度 (0.0 ~ 1.0)
+    private currentSequence: ISequenceData[] = [];  // 當前小節的箭頭順序
+    private currentInputIndex: number = 0;          // 當前輸入到第幾個箭頭
+    private currentProgress: number = 0;            // 當前進度 (0.0 ~ 1.0)
+    private pressedKeys: Set<number> = new Set();   // 紀錄鍵盤按壓按鍵
+
+    private bufferTimer: any = null;
+    private readonly BUFFER_DELAY_MS: number = 35;  // 判定容錯
+
 
     protected onEnable(): void {
         // 註冊鍵盤監聽
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
     }
 
     protected onDisable(): void {
         // 取消鍵盤監聽
         input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
+        input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
     }
 
     public async onOpen(params?: any) {
@@ -77,8 +87,11 @@ export class HitNodeView extends BaseView {
      * 初始化手機 UI 按鈕綁定
      */
     private initPhoneButtons() {
+        // 手機按鈕:簡單以外的才顯示協方向
+        this.reversPhoneBtnsNode.active = RoomData.difficulty === DIFFICULTY_TYPE.EASY;
+
         const isMobile = GameTool.getInstance().isMobileBrowser();
-        const directions = ['UP', 'DOWN', 'LEFT', 'RIGHT'];
+        const directions = ['SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'UP_LEFT', 'UP_RIGHT', 'DOWN_LEFT', 'DOWN_RIGHT'];
 
         this.phoneBtns.forEach((btn, index) => {
             if (!btn) return;
@@ -88,16 +101,17 @@ export class HitNodeView extends BaseView {
 
             btn.node.off(Node.EventType.TOUCH_START);
 
-            if (index < 4) {
-                // 0:UP, 1:DOWN, 2:LEFT, 3:RIGHT
+            if (index == 0) {
+                // 打擊
+                btn.node.on(Node.EventType.TOUCH_START, () => {
+                    this.onSpaceHit();
+                }, this);
+                
+            } else {
+                // 方向鍵
                 const dir = directions[index];
                 btn.node.on(Node.EventType.TOUCH_START, () => {
                     this.handleDirectionInput(dir);
-                }, this);
-            } else if (index === 4) {
-                // 4:打擊 (Space)
-                btn.node.on(Node.EventType.TOUCH_START, () => {
-                    this.onSpaceHit();
                 }, this);
             }
         });
@@ -146,7 +160,7 @@ export class HitNodeView extends BaseView {
     }
 
     /**
-     * 重置狀態與復原組件屬性
+     * 重置狀態
      */
     private resetState() {
         this.isRunning = false;
@@ -171,6 +185,7 @@ export class HitNodeView extends BaseView {
 
         this.currentInputIndex = 0;
         this.currentSequence = [];
+        console.log("重置狀態");
     }
 
     /**
@@ -196,8 +211,8 @@ export class HitNodeView extends BaseView {
     /**
      * 顯示當前譜面
      */
-    public showCurrentNode(sequence: string[]) {
-        this.currentSequence = sequence;
+    public showCurrentNode(datas: ISequenceData[]) {
+        this.currentSequence = datas;
         this.currentInputIndex = 0;
 
         // 移除舊譜面
@@ -211,70 +226,145 @@ export class HitNodeView extends BaseView {
         this.sprite_nodeBar.node.active = true;
 
         // 產生新譜面
-        sequence.forEach((sequenceString) => {
+        datas.forEach((data) => {
             let obj = instantiate(this.nodeArrowPrefab);
             obj.active = true;
             obj.setParent(this.sprite_nodeBar.node);
 
             let sp = obj.getComponent(Sprite);
-            if (sp && this.nodeArrowSprites.length > 0) {
-                sp.spriteFrame = this.nodeArrowSprites[0];
-                sp.color = new Color(255, 255, 255, 255);
-            }
-
-            let angle = 0;
-            switch (sequenceString) {
-                case 'UP': angle = 0; break;
-                case 'DOWN': angle = 180; break;
-                case 'LEFT': angle = 90; break;
-                case 'RIGHT': angle = 270; break;
-            }
-
-            obj.angle = angle;
+            this.setArrow(data, sp);
+            
             if (sp) this.nodeArrows.push(sp);
         });
     }
 
     /**
-     * 鍵盤輸入事件處理
+     * 設置箭頭
+     */
+    private setArrow(data: ISequenceData, sp: Sprite) {
+        if (sp) {
+            if(data.isReversed) { 
+                sp.spriteFrame = this.nodeArrowSprites[1];
+            } else {
+                sp.spriteFrame = this.nodeArrowSprites[0];
+            }
+
+            sp.color = new Color(255, 255, 255, 255);
+        }
+
+        let angle = 0;
+        switch (data.direction) {
+            case 'UP': angle = !data.isReversed ? 0 : 180; break;
+            case 'DOWN': angle = !data.isReversed ? 180 : 0; break;
+            case 'LEFT': angle = !data.isReversed ? 90 : -90; break;
+            case 'RIGHT': angle = !data.isReversed ? 270 : -270; break;
+            case 'UP_LEFT' : angle = !data.isReversed ? 45 : -135; break;
+            case 'UP_RIGHT' : angle = !data.isReversed ? -45 : 135; break;
+            case 'DOWN_RIGHT' : angle = !data.isReversed ? -135 : -45; break;
+            case 'DOWN_LEFT' : angle = !data.isReversed ? 135 : 45; break;
+        }
+
+        sp.node.angle = angle;
+    }
+
+    /**
+     * 鍵盤輸入(按壓)
      */
     private onKeyDown(event: EventKeyboard) {
-        if (!this.isRunning) return;
-
-        // 空白鍵處理 (Space)
-        if (event.keyCode === KeyCode.SPACE) {
+        // 打擊
+        if(event.keyCode == KeyCode.SPACE) {
             this.onSpaceHit();
             return;
         }
 
-        // 判斷的方向鍵
-        let pressedDirection: string | null = null;
-        switch (event.keyCode) {
-            case KeyCode.ARROW_UP:
-            case KeyCode.KEY_W:
-                pressedDirection = 'UP';
-                break;
-            case KeyCode.ARROW_DOWN:
-            case KeyCode.KEY_S:
-                pressedDirection = 'DOWN';
-                break;
-            case KeyCode.ARROW_LEFT:
-            case KeyCode.KEY_A:
-                pressedDirection = 'LEFT';
-                break;
-            case KeyCode.ARROW_RIGHT:
-            case KeyCode.KEY_D:
-                pressedDirection = 'RIGHT';
-                break;
+        // 如果按下的鍵本來就在 Set 裡 (例如按著不放引發的連續 repeat 事件)，直接忽略
+        if (this.pressedKeys.has(event.keyCode)) return;
+
+        this.pressedKeys.add(event.keyCode);
+
+        // 如果原本有在等待判定，先清除，重新重設緩衝計時
+        if (this.bufferTimer) {
+            clearTimeout(this.bufferTimer);
         }
 
-        if (pressedDirection) {
-            this.handleDirectionInput(pressedDirection);
+        // 如果直接按下數字小鍵盤的單鍵斜向 (7, 9, 1, 3)，直接觸發
+        if (this.isSingleDiagonalKey(event.keyCode)) {
+            this.resolveInput();
+            return;
         }
+
+        // 延遲等待第二個按鍵落下的可能
+        this.bufferTimer = setTimeout(() => {
+            this.resolveInput();
+        }, this.BUFFER_DELAY_MS);
     }
 
     /**
-     * 處理方向鍵輸入 (鍵盤與手機按鈕共用)
+     * 鍵盤輸入(方開)
+     * @param event 
+     */
+    private onKeyUp(event: EventKeyboard) {
+        this.pressedKeys.delete(event.keyCode);
+    }
+
+    /**
+     * 緩衝時間到，進行最終方向結算並發送輸入
+     */
+    private resolveInput() {
+        if (this.bufferTimer) {
+            clearTimeout(this.bufferTimer);
+            this.bufferTimer = null;
+        }
+
+        const finalDirection = this.calculateDirection();
+        this.handleDirectionInput(finalDirection)
+
+        this.pressedKeys.clear(); 
+    }
+
+    /**
+     * 斜角按鍵
+     * @param code 
+     * @returns 
+     */
+    private isSingleDiagonalKey(code: number): boolean {
+        return code === KeyCode.NUM_7 || code === KeyCode.NUM_9 || 
+               code === KeyCode.NUM_1 || code === KeyCode.NUM_3;
+    }
+
+    /**
+     * 按鍵方向
+     */
+    private calculateDirection(): string | null {
+        // 檢查基礎 4 個方向
+        const isUp = this.pressedKeys.has(KeyCode.ARROW_UP) || this.pressedKeys.has(KeyCode.KEY_W) || this.pressedKeys.has(KeyCode.NUM_8);
+        const isDown = this.pressedKeys.has(KeyCode.ARROW_DOWN) || this.pressedKeys.has(KeyCode.KEY_S) || this.pressedKeys.has(KeyCode.NUM_2);
+        const isLeft = this.pressedKeys.has(KeyCode.ARROW_LEFT) || this.pressedKeys.has(KeyCode.KEY_A) || this.pressedKeys.has(KeyCode.NUM_4);
+        const isRight = this.pressedKeys.has(KeyCode.ARROW_RIGHT) || this.pressedKeys.has(KeyCode.KEY_D) || this.pressedKeys.has(KeyCode.NUM_6);
+
+        // 判斷 4 個斜角組合 (組合鍵)
+        if (isUp && isLeft) return 'UP_LEFT';
+        if (isUp && isRight) return 'UP_RIGHT';
+        if (isDown && isLeft) return 'DOWN_LEFT';
+        if (isDown && isRight) return 'DOWN_RIGHT';
+
+        // 斜角
+        if (this.pressedKeys.has(KeyCode.NUM_7)) return 'UP_LEFT';
+        if (this.pressedKeys.has(KeyCode.NUM_9)) return 'UP_RIGHT';
+        if (this.pressedKeys.has(KeyCode.NUM_1)) return 'DOWN_LEFT';
+        if (this.pressedKeys.has(KeyCode.NUM_3)) return 'DOWN_RIGHT';
+
+        // 單一方向
+        if (isUp) return 'UP';
+        if (isDown) return 'DOWN';
+        if (isLeft) return 'LEFT';
+        if (isRight) return 'RIGHT';
+
+        return null;
+    }
+
+    /**
+     * 處理方向鍵輸入
      */
     private handleDirectionInput(pressedDirection: string) {
         if (!this.isRunning) return;
@@ -282,8 +372,10 @@ export class HitNodeView extends BaseView {
         // 如果箭頭已經全部輸入完成，忽視多餘的方向輸入
         if (this.currentInputIndex >= this.currentSequence.length) return;
 
+        const data = this.currentSequence[this.currentInputIndex];
+
         // 比對當前位置的箭頭方向
-        const targetDirection = this.currentSequence[this.currentInputIndex];
+        const targetDirection = data.direction;
 
         // 正確輸入
         if (pressedDirection === targetDirection) {
@@ -319,12 +411,11 @@ export class HitNodeView extends BaseView {
      */
     private resetInputSequence() {
         this.currentInputIndex = 0;
+
+        let index: number = 0;
         this.nodeArrows.forEach((sp) => {
-            if (sp && this.nodeArrowSprites[0]) {
-                tween(sp.node).stop();
-                sp.color = new Color(255, 255, 255, 255);
-                sp.spriteFrame = this.nodeArrowSprites[0];
-            }
+            this.setArrow(this.currentSequence[index], sp);
+            index++;
         });
     }
 
@@ -363,6 +454,7 @@ export class HitNodeView extends BaseView {
             }
         };
 
+        // 淡出效果
         const fadeOutSprite = (sprite: Sprite) => {
             if (!sprite || !sprite.node.active) {
                 onFadeComplete();

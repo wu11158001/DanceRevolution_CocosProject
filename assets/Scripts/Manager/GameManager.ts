@@ -14,11 +14,19 @@ import { GameCameraController } from '../Game/GameCameraController';
 const { ccclass, property } = _decorator;
 
 /**
+ * 箭頭資料
+ */
+export interface ISequenceData {
+    direction: string;      // ['UP', 'LEFT', 'DOWN', 'RIGHT']
+    isReversed: boolean;    // 是否反向
+}
+
+/**
  * 譜面資料
  */
 export interface INoteSequenceData {
     barIndex: number;           // 當前小節
-    sequence: string[];         // 箭頭陣列, 例如: ['UP', 'LEFT', 'DOWN', 'RIGHT']
+    sequence: ISequenceData[];         // 箭頭陣列, 例如: ['UP', 'LEFT', 'DOWN', 'RIGHT']
     targetHitTime: number;      // 第 4 拍 Space 鍵的精確伺服器時間點 (ms)
     beatIntervalMs: number;     // 單拍毫秒數 (60000 / BPM)
     barIntervalMs: number;      // 單小節毫秒數 (用於計算表演階段長度)
