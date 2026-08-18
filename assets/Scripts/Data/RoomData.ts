@@ -111,7 +111,7 @@ export class RoomData {
     }
 
     /**
-     * 更新房間資料並觸發監聽
+     * 更新房間資料
      */
     public static update(data: IRoomData) {
         this.roomId = data.roomId;
