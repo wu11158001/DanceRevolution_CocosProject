@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node, UITransform, v3, Vec2, Vec3, HorizontalTextAlignment, Sprite, Button } from 'cc';
+import { _decorator, Component, Label, Node, UITransform, v3, Vec2, Vec3, HorizontalTextAlignment, Sprite, Button, Color } from 'cc';
 import { SpriteFrameManager } from '../../../Manager/SpriteFrameManager';
 import { IChatMessageData } from '../../../Manager/ChatManager';
 import { PlayerData } from '../../../Data/PlayerData';
@@ -8,6 +8,7 @@ import { ViewManager } from '../../../Manager/ViewManager';
 import { RoomView } from '../../LobbyScene/RoomView/RoomView';
 import { LobbyView } from '../../LobbyScene/LobbyView/LobbyView';
 import { MessagePopupView } from '../MessagePopupView';
+import { DIFFICULTY_COLORS } from '../../../Data/RoomData';
 const { ccclass, property } = _decorator;
 
 /**
@@ -48,6 +49,9 @@ export class ChatItemView extends Component {
     private label_recruitRoomName: Label = null;
     @property(Label)
     private label_recruitPlayerCount: Label = null;
+    @property(Label)
+    private label_difficult: Label = null;
+
 
     @property({ tooltip: "文字訊息最大寬度" })
     maxWidth: number = 530;
@@ -127,29 +131,16 @@ export class ChatItemView extends Component {
         this.stickTransform.node.active = false;
         this.btn_recruit.node.active = true;
 
-        this.label_recruitRoomName.string = data.recruitmentData.roomName;
+        this.label_recruitRoomName.string = `房間: ${data.recruitmentData.roomName}`;
         this.label_recruitPlayerCount.string = `人數: ${data.recruitmentData.currentPlayers} / ${data.recruitmentData.maxPlayers}`;
+        this.label_difficult.string = `${data.recruitmentData.difficultyName}`;
+        this.label_difficult.color = new Color(DIFFICULTY_COLORS[data.recruitmentData.difficulty]);
 
         this.btn_recruit.node.targetOff(this);
         this.btn_recruit.node.on(Button.EventType.CLICK, () => {
-            SocketManager.getInstance().sendJoinRoom(
-                { roomId: data.recruitmentData.roomId, characterId: PlayerData.characterId }, 
-                (res: { success: boolean; message?: string }) => {
-                    if (res && res.success) {
-                        ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD').then((roomView) => {
-                        const lobbyView = ViewManager.getInstance().getView<LobbyView>('LobbyView');
-                            if(lobbyView) {
-                                lobbyView.closeSelf();
-                            }
-                        });
-                    } else {
-                        console.warn(`[快速加入失敗]: ${res?.message}`);
-                        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
-                            popup?.setData(res?.message || "加入房間失敗!");
-                        });
-                    }
-                }
-            );
+            SocketManager.getInstance().sendJoinRoom({
+                roomId: data.recruitmentData.roomId, 
+                characterId: PlayerData.characterId })
         }, this);
     }
 

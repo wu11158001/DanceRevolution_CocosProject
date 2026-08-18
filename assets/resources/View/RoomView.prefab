@@ -5860,7 +5860,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 53.09299999999996,
+      "y": 25,
       "z": 0
     },
     "_lrot": {
@@ -5900,8 +5900,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 40,
-      "height": 40
+      "width": 30,
+      "height": 30
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -7912,7 +7912,7 @@
     "richText_currentDiffculty": {
       "__id__": 303
     },
-    "btn_diffculty": {
+    "btn_difficulty": {
       "__id__": 322
     },
     "btn_difficultyIllustrate": {

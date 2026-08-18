@@ -111,19 +111,9 @@ export class RoomListView extends Component {
      * @param roomId 
      */
     private joinRoom(roomId: string) {
-        SocketManager.getInstance().sendJoinRoom(
-            { roomId: roomId, characterId: PlayerData.characterId }, 
-            (res: { success: boolean; message?: string }) => {
-                if (res && res.success) {
-                    ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD');
-                    this.lobbyView?.closeSelf();
-                } else {
-                    console.warn(`[快速加入失敗]: ${res?.message}`);
-                    ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
-                        popup?.setData(res?.message || "加入房間失敗!");
-                    });
-                }
-            }
+        SocketManager.getInstance().sendJoinRoom({ 
+            roomId: roomId, 
+            characterId: PlayerData.characterId }
         );
     }
 }

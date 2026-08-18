@@ -1,5 +1,5 @@
 import { _decorator, Button, Color, Component, Label, Node } from 'cc';
-import { IRoomListData } from '../../../Data/RoomData';
+import { DIFFICULTY_COLORS, IRoomListData } from '../../../Data/RoomData';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 const { ccclass, property } = _decorator;
 
@@ -17,7 +17,8 @@ export class RoomListItem extends Component {
     @property(Label)
     private label_playerCount: Label = null;
     @property(Label)
-
+    private label_difficult: Label = null;
+    @property(Label)
     private label_playState: Label = null;
     @property(Color)
     private startingColor: Color = new Color(255,255,255,255);
@@ -25,9 +26,11 @@ export class RoomListItem extends Component {
     private waitingColor: Color = new Color(255,255,255,255);
 
     public setData(data: IRoomListData, callback?: () => void) {
-        this.label_roomName.string = data.roomName;
+        console.log(`${JSON.stringify(data)}`);
+        this.label_roomName.string = `房間: ${data.roomName}`;
         this.label_playerCount.string = `${data.currentPlayers} / ${data.maxPlayers}`;
-
+        this.label_difficult.string = `${data.difficultyName}`;
+        this.label_difficult.color = new Color(DIFFICULTY_COLORS[data.difficulty]);
         this.label_playState.string = data.isStarting ? "進行中" : "等待";
         this.label_playState.color = data.isStarting ? this.startingColor : this.waitingColor;
 

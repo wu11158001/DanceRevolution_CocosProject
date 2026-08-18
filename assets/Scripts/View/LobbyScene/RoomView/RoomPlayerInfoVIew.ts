@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, Label, Node, tween, Tween, Vec3 } from 'cc';
+import { _decorator, Button, Component, Label, Node, tween, Tween, Vec3, v3 } from 'cc';
 import { PlayerData } from '../../../Data/PlayerData';
 const { ccclass, property } = _decorator;
 
@@ -19,7 +19,7 @@ export class RoomPlayerInfoVIew extends Component {
     private selfNode: Node = null;
 
     // 本地指標移動參數
-    private selfNodeMoveDistance = 20; // 上下移動距離
+    private selfNodeMoveDistance = 10; // 上下移動距離
     private selfNodeDuration = 1.0;    // 單程時間
 
     public setData(data:{playerId: string, isHost: boolean, nickname: string, isReady: boolean, kcikAction: () => void}) {
@@ -43,7 +43,10 @@ export class RoomPlayerInfoVIew extends Component {
             this.btn_kick.node.active = false;
         }
 
+        // 本地玩家標籤
         if(isLocal) {
+            this.selfNode.position = v3(0,25,0);
+
             tween(this.selfNode)
                 .by(this.selfNodeDuration, { position: new Vec3(0, this.selfNodeMoveDistance, 0) }, { easing: 'sineInOut' })
                 .by(this.selfNodeDuration, { position: new Vec3(0, -this.selfNodeMoveDistance, 0) }, { easing: 'sineInOut' })

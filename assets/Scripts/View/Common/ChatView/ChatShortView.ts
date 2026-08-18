@@ -1,5 +1,9 @@
-import { _decorator, Button, Component, Label, Node, RichText, UITransform } from 'cc';
+import { _decorator, Button, color, Color, Component, Label, Node, RichText, UITransform } from 'cc';
 import { CHAT_PLACE, ChatChannel, ChatManager, IChatMessageData, IChatPanelType } from '../../../Manager/ChatManager';
+import { SocketManager } from '../../../Network/SocketManager';
+import { PlayerData } from '../../../Data/PlayerData';
+import { RichTextClickHandler } from '../../../Tools/RichTextClickHandler';
+import { DIFFICULTY_COLORS, DIFFICULTY_TYPE } from '../../../Data/RoomData';
 const { ccclass, property } = _decorator;
 
 /**
@@ -13,8 +17,8 @@ export class ChatShortView extends Component {
     private btn_channel: Button = null;
     @property(Button)
     private btn_expand: Button = null;
-    @property(RichText)
-    private richText_message: RichText = null;
+    @property(RichTextClickHandler)
+    private richTextClickHandler: RichTextClickHandler;
     @property(UITransform)
     private richTextTransform: UITransform = null;
 
@@ -91,9 +95,6 @@ export class ChatShortView extends Component {
      */
     public openSet(targetChannel: ChatChannel) {
         this.SwitchChannel(targetChannel);
-
-        // 獲取招募資料
-        //ChatManager.sendGetRecruitList();
     }
 
     /**
@@ -135,45 +136,42 @@ export class ChatShortView extends Component {
      */
     private showMessage(data: IChatMessageData) {
         if (!data) {
-            this.richText_message.string = '';
+            this.richTextClickHandler.setContent('');
             return;
         }
 
         // 判斷頻道並處理裁切
         if (this.currentChannel === 'recruit' && data.recruitmentData) {
-            const prefix = '<on click><color=#0fffff>房間招募:';
-            const rawText = data.recruitmentData.roomName;
-            const suffix = '</color></on>';
+            // 困難度文字
+            const difficultColor = DIFFICULTY_COLORS[data.recruitmentData.difficulty];
+            const difficultString = `<color=${difficultColor}>[${data.recruitmentData.difficultyName}]</color>`;
+            // 房間名稱文字
+            const roomNameString = `<color=#FFFFFF> 房間: ${data.recruitmentData.roomName}</color>`
+            // 邀請文字
+            const inviteString = `<color=#E9E92D> 邀請!</color>`
+            // 完整文字內容
+            const fullString = `${difficultString}${roomNameString}${inviteString}`
             
-            this.setTruncatedRichText(prefix, rawText, suffix);
+            // 滑入文字
+            const enterRoomNameString = `<color=#797979> 房間: ${data.recruitmentData.roomName}</color>`;
+
+            this.richTextClickHandler.setContent(fullString);
+            this.richTextClickHandler.isCanClick = true;
+            this.richTextClickHandler.enterString = `<on click>${difficultString}${enterRoomNameString}${inviteString}</on>`
+            this.richTextClickHandler.clickAction = () => {
+                SocketManager.getInstance().sendJoinRoom({
+                    roomId: data.recruitmentData.roomId, 
+                    characterId: PlayerData.characterId
+                });
+            }
         } else {
             const prefix = '<color=#FFFFFF>';
             const rawText = data.type === 'sticker' ? '[貼圖]' : data.content || '';
             const suffix = '</color>';
             
-            this.setTruncatedRichText(prefix, rawText, suffix);
-        }
-    }
-
-    /**
-     * 自動裁切RichText
-     */
-    private setTruncatedRichText(prefix: string, content: string, suffix: string) {
-        // 最大允許寬度
-        const maxAllowedWidth = 450; 
-        // 將 RichText 的 maxWidth 設為 0，確保文字呈單行展開以利精確計算寬度
-        this.richText_message.maxWidth = 0;
-        // 完整文字
-        this.richText_message.string = `${prefix}${content}${suffix}`;
-        // 若超出指定寬度，逐字自尾端遞減並補上 '...'
-        if (this.richTextTransform.width > maxAllowedWidth) {
-            let charLength = content.length;
-            
-            while (charLength > 0 && this.richTextTransform.width > maxAllowedWidth) {
-                charLength--;
-                const truncatedText = content.substring(0, charLength) + '...';
-                this.richText_message.string = `${prefix}${truncatedText}${suffix}`;
-            }
+            const fullString = `${prefix}${rawText}${suffix}`;
+            this.richTextClickHandler.setContent(fullString);
+            this.richTextClickHandler.isCanClick = false;
         }
     }
 }

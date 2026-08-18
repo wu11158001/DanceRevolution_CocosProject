@@ -9,6 +9,8 @@ import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupVi
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomData, DIFFICULTY_TYPE } from 'db://assets/Scripts/Data/RoomData';
 import { ChatManager } from '../Manager/ChatManager';
+import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
+import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
 
 const { ccclass, property } = _decorator;
 
@@ -84,7 +86,6 @@ export class SocketManager extends SingletonComponent<SocketManager> {
 
         // 監聽:"room_updated" [房間資訊更新]
         this.socket.on('room_updated', (data: IRoomData) => {
-            console.log(`[Socket 事件] 收到房間更新廣播:`, data);
             // 更新全域房間資料
             RoomData.update(data);
         });
@@ -164,7 +165,6 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         this.socket.emit('update_nickname', { newNickname }, (response: { success: boolean; nickname?: string; message?: string }) => {
             if (response.success && response.nickname) {
                 PlayerData.nickname = response.nickname;
-                console.log(`[暱稱修改成功] 新暱稱: ${PlayerData.nickname}`);
             } else {
                 console.error(`[暱稱修改失敗]: ${response.message}`);
             }
@@ -181,15 +181,29 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     /**
      * 發送:加入指定房間
      */
-    public sendJoinRoom(data: { roomId: string; characterId: number }, callback?: (res: any) => void) {
-        this.socket?.emit('join_room', data, callback);
+    public sendJoinRoom(data: { roomId: string; characterId: number }){
+        this.socket?.emit('join_room', data, (res: { success: boolean; message?: string }) => {
+            if (res && res.success) {
+                ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD').then((roomView) => {
+                const lobbyView = ViewManager.getInstance().getView<LobbyView>('LobbyView');
+                    if(lobbyView) {
+                        lobbyView.closeSelf();
+                    }
+                });
+            } else {
+                console.warn(`[快速加入失敗]: ${res?.message}`);
+                ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+                    popup?.setData(res?.message || "加入房間失敗!");
+                });
+            }
+        });
     }
 
     /**
      * 發送:快速加入房間
      */
     public sendQuickJoin(data: { characterId: number }, callback?: (res: any) => void) {
-        this.socket?.emit('quick_join', data, callback);
+        this.socket?.emit('quick_join', data, (callback));
     }
     /**
      * 發送:切換準備狀態

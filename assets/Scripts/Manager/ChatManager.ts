@@ -1,5 +1,6 @@
 import { _decorator } from 'cc';
 import { SocketManager } from '../Network/SocketManager';
+import { DIFFICULTY_TYPE } from '../Data/RoomData';
 
 const { ccclass } = _decorator;
 
@@ -32,6 +33,8 @@ export type ChatType = 'text' | 'sticker' | 'recruit';
 export interface IRecruitmentData {
     roomId: string;
     roomName: string;
+    difficulty: DIFFICULTY_TYPE;
+    difficultyName: string;
     currentPlayers: number;
     maxPlayers: number;
 }

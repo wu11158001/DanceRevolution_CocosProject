@@ -6,7 +6,7 @@ import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { GameTool } from 'db://assets/Scripts/Tools/GameTool';
 import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
-import { RoomData, IRoomData, DIFFICULTY_TYPE } from 'db://assets/Scripts/Data/RoomData';
+import { RoomData, IRoomData, DIFFICULTY_TYPE, DIFFICULTY_COLORS } from 'db://assets/Scripts/Data/RoomData';
 import { UpdateRoomNameView } from 'db://assets/Scripts/View/LobbyScene/UpdateRoomNameView';
 import { SelectSongView } from '../SelectSongView/SelectSongView';
 import { MessagePopupView } from '../../Common/MessagePopupView';
@@ -73,7 +73,7 @@ export class RoomView extends BaseView {
     @property(RichText)
     private richText_currentDiffculty: RichText = null;
     @property(Button)
-    private btn_diffculty: Button = null;
+    private btn_difficulty: Button = null;
     @property(Button)
     private btn_difficultyIllustrate: Button = null;
 
@@ -137,19 +137,13 @@ export class RoomView extends BaseView {
         }, this);
 
         // 更換困難度按鈕
-        this.btn_diffculty.node.on(Button.EventType.CLICK, () => {
-            // 計算下一個困難度
-            const totalCount = Object.keys(DIFFICULTY_TYPE).length / 2;
-            
-            let currentDiff: number = RoomData.difficulty;
-            
-            if (typeof currentDiff === 'string') {
-                currentDiff = DIFFICULTY_TYPE[currentDiff as keyof typeof DIFFICULTY_TYPE] ?? 0;
-            } else if (typeof currentDiff !== 'number' || isNaN(currentDiff)) {
-                currentDiff = 0;
-            }
-
-            const nextDifficulty: DIFFICULTY_TYPE = (currentDiff + 1) % totalCount;
+        this.btn_difficulty.node.on(Button.EventType.CLICK, () => {
+            // 取得下一個難度 Enum
+            const values = Object.values(DIFFICULTY_TYPE);
+            const currentIndex = values.indexOf(RoomData.difficulty);
+            const safeIndex = currentIndex === -1 ? 0 : currentIndex;
+            const nextIndex = (safeIndex + 1) % values.length;
+            const nextDifficulty = values[nextIndex];
 
             RoomData.difficulty = nextDifficulty;
             SocketManager.getInstance().sendSelectDifficulty(nextDifficulty);
@@ -294,26 +288,7 @@ export class RoomView extends BaseView {
 
         // 困難度文字
         const diffcultyTitle = `<color=#FFFFFF>困難度: </color>`;
-        let diffcultyColor = '#FFFFFF';
-
-        switch (data.difficulty) {
-            case DIFFICULTY_TYPE.EASY:
-                diffcultyColor = '#FFFFFF';
-                break;
-            case DIFFICULTY_TYPE.NORMAL:
-                diffcultyColor = '#44FF20';
-                break;
-            case DIFFICULTY_TYPE.HARD:
-                diffcultyColor = '#FFC920';
-                break;
-            case DIFFICULTY_TYPE.CRAZY:
-                diffcultyColor = '#FF33FF';
-                break;
-            default:
-                diffcultyColor = '#FFFFFF';
-                break;
-        }
-
+        let diffcultyColor = DIFFICULTY_COLORS[data.difficulty];
         this.richText_currentDiffculty.string = `${diffcultyTitle}<color=${diffcultyColor}>${data.difficultyName}</color>`;
 
         // 歌曲跑馬燈
@@ -453,13 +428,13 @@ export class RoomView extends BaseView {
             this.label_readyOrStart.string = "START";
             this.btn_readyOrStart.interactable = isCanStart;
             this.btn_updateRoomName.node.active = true;
-            this.btn_diffculty.node.active = true;
+            this.btn_difficulty.node.active = true;
             this.btn_recruit.node.active = data.players.length < 4;
         } else {
             this.label_readyOrStart.string = PlayerData.isReady ? "CANCEL" : "READY";
             this.btn_readyOrStart.interactable = true;
             this.btn_updateRoomName.node.active = false;
-            this.btn_diffculty.node.active = false;
+            this.btn_difficulty.node.active = false;
             this.btn_recruit.node.active = false;
         }
     }
