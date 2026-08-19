@@ -18,7 +18,7 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('SocketManager')
 export class SocketManager extends SingletonComponent<SocketManager> {
-    private serverUrl: string = 'http://localhost:3000';
+    private serverUrl: string = 'https://dancerevolution-server.onrender.com';
     
     public socket: Socket | null = null;
     public playerId: string = '';
