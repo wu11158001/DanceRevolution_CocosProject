@@ -10,6 +10,7 @@ import { SpriteFrameManager } from './SpriteFrameManager';
 import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
 import { GameTool } from '../Tools/GameTool';
 import { SocketManager } from '../Network/SocketManager';
+import { ChatManager } from './ChatManager';
 
 const { ccclass, property } = _decorator;
 
@@ -20,7 +21,27 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
     @property(Node)
     private loadBg: Node = null;
 
-    private isLoadCharacter: boolean = false;
+    private isInit: boolean = false;
+
+    protected onLoad() {
+        super.onLoad();
+
+        // 監聽:切換場景請求
+        director.on('REQ_LOAD_SCENE', this.onReqLoadScene, this);
+        // 監聽:關閉載入遮罩
+        director.on('REQ_CLOSE_LOAD_BG', this.closeLoadBg, this);
+    }
+
+    protected onDestroy() {
+        director.off('REQ_LOAD_SCENE', this.onReqLoadScene, this);
+        director.off('REQ_CLOSE_LOAD_BG', this.closeLoadBg, this);
+
+        super.onDestroy();
+    }
+
+    private onReqLoadScene(sceneType: SceneType, isGameReturn: boolean = false) {
+        this.loadScene(sceneType, isGameReturn);
+    }
 
     /**
      * 載入場景
@@ -54,13 +75,16 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                 break;
 
             case 'LobbyScene':
-                if(!this.isLoadCharacter) {
-                    this.isLoadCharacter = true;
+                if(!this.isInit) {
+                    this.isInit = true;
 
                     // 載入所有角色3D
                     await CharacterDataManager.getInstance().preloadAllCharacters();
                     // 載入圖片資源
                     await SpriteFrameManager.getInstance().loadSpriteFrameAssets();
+
+                    // 聊天中心初始化
+                    ChatManager.init();
                 }    
 
                 AudioManager.getInstance().playBGM(BGM_TYPE.LobbyBGM)
@@ -95,7 +119,7 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
     /**
      * 關閉遮罩背景
      */
-    public closeLoadBg() {
+    private closeLoadBg() {
         this.loadBg.active = false;
     }
 }

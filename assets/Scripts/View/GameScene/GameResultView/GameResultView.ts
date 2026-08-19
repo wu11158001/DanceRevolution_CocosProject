@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, instantiate, Label, Node, RichText } from 'cc';
+import { _decorator, Button, Component, instantiate, Label, Node, RichText, director } from 'cc';
 import { BaseView } from '../../BaseView';
 import { IGameResult } from '../../../Manager/GameManager';
 import { GameResultItem } from './GameResultItem';
@@ -28,7 +28,7 @@ export class GameResultView extends BaseView {
 
     protected start(): void {
         this.btn_confirm.node.on(Button.EventType.CLICK, () => {
-            SceneLoader.getInstance().loadScene('LobbyScene', true);
+            director.emit('REQ_LOAD_SCENE', 'LobbyScene')
         }, this);
     }
 

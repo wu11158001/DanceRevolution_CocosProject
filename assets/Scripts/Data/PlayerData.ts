@@ -1,5 +1,5 @@
-import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
+import { director } from 'cc';
 
 export type PlayerDataMap = {
     playerId: string;
@@ -46,7 +46,8 @@ export class PlayerData {
     public static get characterId(): number { return this._data.characterId; }
     public static set characterId(val: number) { 
         this.setValue('characterId', val);
-        SocketManager.getInstance().sendChangeCharacter(val);
+
+        director.emit('REQ_CHARACTER_CHANGE', Number(val));
     }
 
     private static setValue<K extends PlayerDataKey>(key: K, val: PlayerDataMap[K]) {

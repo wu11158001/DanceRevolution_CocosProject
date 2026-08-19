@@ -1,9 +1,8 @@
-import { _decorator, Component, Node, find } from 'cc';
+import { _decorator, Component, Node, find, director } from 'cc';
 
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { AudioManager, BGM_TYPE, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { RoomData } from 'db://assets/Scripts/Data/RoomData';
-import { SceneLoader } from './SceneLoader';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
 import { ViewManager } from './ViewManager';
 import { GameView } from '../View/GameScene/GameView/GameView';
@@ -142,7 +141,7 @@ export class GameManager extends Component {
             const overshootMs = currentServerTime - this.targetStartTime;
             const overshootSeconds = overshootMs / 1000;
 
-            SceneLoader.getInstance().closeLoadBg();
+            director.emit('REQ_CLOSE_LOAD_BG');
             
             if (this.gameCameraController) {
                 this.gameCameraController.onGameOpening(this.gameTextTipView);
@@ -203,7 +202,7 @@ export class GameManager extends Component {
         (this.gameCameraController && !this.gameCameraController.isRoutineFinish)) 
         {
             this.isWaitingStart = false;
-            SceneLoader.getInstance().closeLoadBg();
+            director.emit('REQ_CLOSE_LOAD_BG');
             this.gameCameraController.onShowGameUI();
         }
     }

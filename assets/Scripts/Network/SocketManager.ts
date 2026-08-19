@@ -3,12 +3,10 @@ import io from 'socket.io-client/dist/socket.io.js';
 import type { Socket } from 'socket.io-client';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
-import { SceneLoader } from 'db://assets/Scripts/Manager/SceneLoader';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomData, DIFFICULTY_TYPE } from 'db://assets/Scripts/Data/RoomData';
-import { ChatManager } from '../Manager/ChatManager';
 import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
 import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
 
@@ -27,13 +25,24 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     // 伺服器時間 - 本地時間
     public serverTimeOffset: number = 0;
 
+    protected onDestroy(): void {
+        director.off('REQ_CHARACTER_CHANGE', this.sendChangeCharacter, this);
+
+        super.onDestroy();
+    }
+
+    protected onLoad(): void {
+        super.onLoad();
+
+        director.on('REQ_CHARACTER_CHANGE', this.sendChangeCharacter, this);
+    }
+
     /**
      * 初始化完成
      */
     private async onInitComplete() {
-        ChatManager.init();
         // 切換場景
-        SceneLoader.getInstance().loadScene('LobbyScene');
+        director.emit('REQ_LOAD_SCENE', 'LobbyScene');
     }
 
     /**
@@ -59,7 +68,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
             ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
                 popup?.setData(
                     "與伺服器斷開連線!", 
-                    () => SceneLoader.getInstance().loadScene('EntryScene'), 
+                    () => director.emit('REQ_LOAD_SCENE', 'EntryScene'), 
                     null, 
                     false, 
                     "重新連接"
@@ -94,7 +103,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         this.socket.on('prepare_game', (data: any) => {
             console.log("收到準備正式開始遊戲");
             RoomData.updateSongs(data);
-            SceneLoader.getInstance().loadScene('GameScene');
+            director.emit('REQ_LOAD_SCENE', 'GameScene')
         });
     }
 
@@ -105,7 +114,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
             popup?.setData(
                 "連線伺服器失敗!", 
-                () => SceneLoader.getInstance().loadScene('EntryScene'), 
+                () => director.emit('REQ_LOAD_SCENE', 'EntryScene'), 
                 null, 
                 false, 
                 "重新連接"
