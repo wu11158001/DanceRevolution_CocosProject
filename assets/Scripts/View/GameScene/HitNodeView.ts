@@ -440,7 +440,7 @@ export class HitNodeView extends BaseView {
         // sprite_hitZone 寬度放大
         if (this.sprite_hitZone) {
             tween(this.sprite_hitZone.node)
-                .to(0.2, { scale: new Vec3(1.5, 1, 1) })
+                .to(0.15, { scale: new Vec3(1.5, 1, 1) })
                 .start();
         }
 
