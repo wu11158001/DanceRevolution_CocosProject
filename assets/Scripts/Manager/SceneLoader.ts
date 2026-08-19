@@ -2,7 +2,7 @@ import { _decorator, Component, Node, director, UIOpacity, instantiate} from 'cc
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
-import { AudioManager, BGM_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
+import { AudioManager } from 'db://assets/Scripts/Manager/AudioManager';
 import { GameManager } from 'db://assets/Scripts/Manager/GameManager';
 import { CharacterDataManager } from './CharacterDataManager';
 import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
@@ -20,8 +20,6 @@ export type SceneType = 'EntryScene' | 'LobbyScene' | 'GameScene';
 export class SceneLoader extends SingletonComponent<SceneLoader> {
     @property(Node)
     private loadBg: Node = null;
-
-    private isInit: boolean = false;
 
     protected onLoad() {
         super.onLoad();
@@ -51,12 +49,14 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
     public loadScene(sceneType: SceneType, isGameReturn: boolean = false) {
         this.loadBg.active = true;
 
+        const perScene = director.getScene()?.name;
+
         director.loadScene(sceneType, (err) => {
             if (err) {
                 console.error(`跳轉場景失敗:`, err);
                 this.loadBg.active = false;
             } else {
-                this.onLoadComplete(sceneType, isGameReturn);
+                this.onLoadComplete(sceneType, isGameReturn, perScene);
             }
         });
     }
@@ -66,7 +66,7 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
      * @param sceneType 
      * @param isGameReturn 
      */
-    private async onLoadComplete(sceneType: SceneType, isGameReturn: boolean = false) {
+    private async onLoadComplete(sceneType: SceneType, isGameReturn: boolean = false, perScene: string) {
         ViewManager.getInstance().closeAllViews();
 
         switch (sceneType) {
@@ -75,9 +75,7 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                 break;
 
             case 'LobbyScene':
-                if(!this.isInit) {
-                    this.isInit = true;
-
+                if(perScene === 'EntryScene') {
                     // 載入所有角色3D
                     await CharacterDataManager.getInstance().preloadAllCharacters();
                     // 載入圖片資源
@@ -87,7 +85,7 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                     ChatManager.init();
                 }    
 
-                AudioManager.getInstance().playBGM(BGM_TYPE.LobbyBGM)
+                AudioManager.getInstance().playBGM('LobbyBGM')
 
                 if(!isGameReturn) {
                     // 一般進入大廳,開啟大廳介面

@@ -1,5 +1,5 @@
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
-import { BGM_TYPE } from '../Manager/AudioManager';
+
 
 /**
  * 困難度類型
@@ -33,8 +33,8 @@ export interface IRoomPlayer {
 
 // 歌曲資料
 export interface ISongData {
-    id: keyof typeof BGM_TYPE;
-    name: string,               // 歌曲明成
+    id: string;
+    name: string,               // 歌曲名稱
     bpm: number,                // BMP
     duration: number;           // 歌曲長度
     offset: number;             // 譜面開始時間

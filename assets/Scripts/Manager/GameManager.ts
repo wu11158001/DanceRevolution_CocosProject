@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, find, director } from 'cc';
 
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
-import { AudioManager, BGM_TYPE, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
+import { AudioManager, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { RoomData } from 'db://assets/Scripts/Data/RoomData';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
 import { ViewManager } from './ViewManager';
@@ -305,24 +305,15 @@ export class GameManager extends Component {
         const song = RoomData.currentSong;
         if (!song) return;
 
-        const songId = song.id;
-        let bgmType: BGM_TYPE;
-
-        if (typeof songId === 'number') {
-            bgmType = songId as BGM_TYPE;
-        } else {
-            bgmType = BGM_TYPE[songId as keyof typeof BGM_TYPE];
-        }
-
-        if (bgmType !== undefined) {
+        if (song.id !== undefined) {
             AudioManager.getInstance().playBGM(
-                bgmType,
+                song.id,
                 0.85,
                 false,
                 overshootSeconds,            
             );
         } else {
-            console.error(`[GameManager] 無法對應歌曲 BGM_TYPE, songId: ${songId}`);
+            console.error(`[GameManager] 無法對應歌曲 BGM_TYPE, songId: ${song.id}`);
         }
         
         console.log(`[音樂同步啟動] 修正補償時間: ${overshootSeconds.toFixed(3)}s`);

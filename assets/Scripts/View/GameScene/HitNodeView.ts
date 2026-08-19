@@ -259,8 +259,8 @@ export class HitNodeView extends BaseView {
             case 'RIGHT': angle = !data.isReversed ? 270 : -270; break;
             case 'UP_LEFT' : angle = !data.isReversed ? 45 : -135; break;
             case 'UP_RIGHT' : angle = !data.isReversed ? -45 : 135; break;
-            case 'DOWN_RIGHT' : angle = !data.isReversed ? -135 : -45; break;
-            case 'DOWN_LEFT' : angle = !data.isReversed ? 135 : 45; break;
+            case 'DOWN_RIGHT' : angle = !data.isReversed ? -135 : 45; break;
+            case 'DOWN_LEFT' : angle = !data.isReversed ? 135 : -45; break;
         }
 
         sp.node.angle = angle;
@@ -461,7 +461,7 @@ export class HitNodeView extends BaseView {
             }
             const curColor = sprite.color;
             tween(sprite)
-                .to(0.35, { color: new Color(curColor.r, curColor.g, curColor.b, 0) })
+                .to(0.45, { color: new Color(curColor.r, curColor.g, curColor.b, 0) })
                 .call(() => onFadeComplete())
                 .start();
         };

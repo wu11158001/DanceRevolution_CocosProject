@@ -7,19 +7,6 @@ import { ISongData } from '../Data/RoomData';
 const { ccclass, property } = _decorator;
 
 /**
- * 音樂類型
- */
-export enum BGM_TYPE {
-    LobbyBGM = 'LobbyBGM',
-
-    Song_0 = 'Song_0',
-    Song_1 = 'Song_1',
-    Song_2 = 'Song_2',
-    Song_3 = 'Song_3'
-}
-Enum(BGM_TYPE);
-
-/**
  * 音效類型 (與 resources/audio/sfx/ 檔名一致)
  */
 export enum SFX_TYPE {
@@ -88,13 +75,11 @@ export class AudioManager extends SingletonComponent<AudioManager> {
      * 播放BGM
      */
     public playBGM (
-        type: BGM_TYPE, 
+        bgmName: string, 
         volume: number = 0.85, 
         isLoop: boolean = true, 
         currentTime: number = 0, 
     ) {
-        const bgmName = typeof type === 'number' ? BGM_TYPE[type] : String(type);
-
         // 若快取中已有該音樂，直接播放
         if (this.clipCache.has(bgmName)) {
             this.startPlayBGM(this.clipCache.get(bgmName)!, volume, isLoop, currentTime);
@@ -290,7 +275,7 @@ export class AudioManager extends SingletonComponent<AudioManager> {
                 this.bgmSource.stop();
                 if (restoreLobbyBGM) {
                     // 播放大廳 BGM
-                    this.playBGM(BGM_TYPE.LobbyBGM, 1.0, true);
+                    this.playBGM('LobbyBGM', 1.0, true);
                 }
             })
             .start();

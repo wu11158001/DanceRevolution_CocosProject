@@ -28,7 +28,7 @@ export class GameResultView extends BaseView {
 
     protected start(): void {
         this.btn_confirm.node.on(Button.EventType.CLICK, () => {
-            director.emit('REQ_LOAD_SCENE', 'LobbyScene')
+            director.emit('REQ_LOAD_SCENE', 'LobbyScene', true)
         }, this);
     }
 

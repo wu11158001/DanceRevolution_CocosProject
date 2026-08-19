@@ -9,6 +9,7 @@ import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomData, DIFFICULTY_TYPE } from 'db://assets/Scripts/Data/RoomData';
 import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
 import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
+import { AudioManager } from '../Manager/AudioManager';
 
 const { ccclass, property } = _decorator;
 
@@ -65,6 +66,9 @@ export class SocketManager extends SingletonComponent<SocketManager> {
         // 監聽:"disconnect"[斷線]
         this.socket.on('disconnect', (reason: string) => {
             console.warn(`與伺服器斷開連線，原因: ${reason}`);
+
+            AudioManager.getInstance().stopBGM();
+
             ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
                 popup?.setData(
                     "與伺服器斷開連線!", 
@@ -111,6 +115,8 @@ export class SocketManager extends SingletonComponent<SocketManager> {
      * 連線伺服器失敗
      */
     private async onConnectError() {
+        AudioManager.getInstance().stopBGM();
+
         ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
             popup?.setData(
                 "連線伺服器失敗!", 
