@@ -13,33 +13,37 @@ import { GameCameraController } from '../Game/GameCameraController';
 
 const { ccclass, property } = _decorator;
 
+/** 譜面個別資料 */
 export interface ISequenceData {
-    direction: string;
-    isReversed: boolean;
+    direction: string;      // 箭頭方向
+    isReversed: boolean;    // 是否反轉
 }
 
+/** 譜面資料 */
 export interface INoteSequenceData {
-    barIndex: number;
-    sequence: ISequenceData[];
-    targetHitTime: number;
-    beatIntervalMs: number;
-    barIntervalMs: number;
-    progress: number;
+    barIndex: number;               // 當前小節 
+    sequence: ISequenceData[];      // 譜面
+    targetHitTime: number;          // 目標打擊時間
+    beatIntervalMs: number;         // 每拍時間
+    barIntervalMs: number;          // 每小節時間
+    progress: number;               // 當前音樂進度
 }
 
+/** 打擊結果 */
 export interface IPlayHitResult {
-    hitPlayerId: string;
-    nickname: string;
-    rating: string;
-    scoreGained: number;
-    scores: Record<string, number>;
-    totalScore: number;
-    danceAnim: number;
-    animPhase: number;
+    hitPlayerId: string;                // 打擊玩家ID
+    nickname: string;                   // 打擊玩家暱稱
+    rating: string;                     // 打擊結果(PERFECT/ GREAT/GOOD/MISS)
+    scoreGained: number;                // 本次分數
+    scores: Record<string, number>;     // 所有玩家當前總分對照表
+    totalScore: number;                 // 總分
+    danceAnim: number;                  // 舞步動畫
+    animPhase: number;                  // 舞步動畫階段
     perfectCombo: number;
     completedCount: number;
 }
 
+/** 打擊評分 */
 export interface IRatingStats {
     PERFECT: number;
     GREAT: number;
@@ -47,6 +51,7 @@ export interface IRatingStats {
     MISS: number;
 }
 
+/** 玩家遊戲結算資料 */
 export interface IPlayerGameResult {
     playerId: string;
     nickname: string;
@@ -56,6 +61,7 @@ export interface IPlayerGameResult {
     isDisconnected: boolean;
 }
 
+/** 遊戲結算資料 */
 export interface IGameResult {
     roomId: string;
     results: IPlayerGameResult[];
@@ -74,14 +80,12 @@ export class GameManager extends Component {
     private gameTextTipView: GameTextTipView = null;
     private gameCameraController: GameCameraController = null;
 
-    // 保存 visibilitychangeListener 實例以便註銷
     private boundVisibilityHandler: () => void = null;
 
     protected onLoad(): void {
         this.boundVisibilityHandler = this.onVisibilityChange.bind(this);
         document.addEventListener('visibilitychange', this.boundVisibilityHandler);
 
-        // ✅ 使用箭頭函式（Arrow Functions）綁定 Socket 事件，確保 onDestroy 時能精確清理
         const socket = SocketManager.getInstance().socket;
         if (socket) {
             socket.on('game_started', this.handleGameStarted);
@@ -97,7 +101,6 @@ export class GameManager extends Component {
             document.removeEventListener('visibilitychange', this.boundVisibilityHandler);
         }
 
-        // ✅ 精確註銷 Socket 事件監聽器，防止超時/重連時舊元件被調用
         const socket = SocketManager.getInstance().socket;
         if (socket) {
             socket.off('game_started', this.handleGameStarted);
@@ -149,11 +152,18 @@ export class GameManager extends Component {
         }
     }
 
+    /**
+     * 視窗切換
+     */
     private onVisibilityChange() {
-        console.log('[GameManager] 玩家視窗切換，觸發同步與音樂校正...');
+        console.log('[GameManager] 視窗切換，觸發同步與音樂校正...');
         this.resyncGameAndAudio();
     }
 
+    /**
+     * 同步與音樂校正
+     * @returns 
+     */
     private async resyncGameAndAudio() {
         if (!this.isGamePlaying) return;
 
@@ -161,6 +171,10 @@ export class GameManager extends Component {
         this.correctAudioPosition();
     }
 
+    /**
+     * 音樂校正
+     * @returns 
+     */
     private correctAudioPosition() {
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
         const song = RoomData.currentSong;
@@ -177,12 +191,28 @@ export class GameManager extends Component {
 
         console.log(`[切回視窗/強校正] 音樂重置並跳轉至: ${expectedCurrentTimeSec.toFixed(3)}s`);
         this.playMusicSynchronized(expectedCurrentTimeSec);
+
+        this.handleTimeOutBackGame();
     }
 
-    // ==========================================
-    // 網路事件 Handling (防護處理 + 箭頭函式綁定)
-    // ==========================================
+    /**
+     * 超時回到遊戲
+     */
+    private handleTimeOutBackGame() {
+        if(this.isWaitingStart || 
+        (this.gameCameraController && !this.gameCameraController.isRoutineFinish)) 
+        {
+            this.isWaitingStart = false;
+            SceneLoader.getInstance().closeLoadBg();
+            this.gameCameraController.onShowGameUI();
+        }
+    }
 
+    /**
+     * 接收:遊戲開始
+     * @param data 
+     * @returns 
+     */
     private handleGameStarted = (data: { song: any; startTime: number }) => {
         if (!this.node || !this.node.isValid) return;
 
@@ -194,11 +224,16 @@ export class GameManager extends Component {
         console.log(`[GameManager] 收到開始指令，目標伺服器時間: ${this.targetStartTime}`);
     };
 
+    /**
+     * 接收:譜面首次發送倒數
+     * @param data 
+     * @returns 
+     */
     private handleStartCount = (data: { countdownSec: number, sequence: string[] }) => {
         if (!this.node || !this.node.isValid) return;
 
         // 超時或強行開始時，若 Loading 畫面還開著，強制關閉
-        SceneLoader.getInstance().closeLoadBg();
+        this.handleTimeOutBackGame();
 
         // 安全檢查：避免 View 未加載完畢造成 null 報錯
         if (this.gameTextTipView) {
@@ -208,11 +243,16 @@ export class GameManager extends Component {
         }
     };
 
+    /**
+     * 接收:新譜面
+     * @param data 
+     * @returns 
+     */
     private handleNewNodeSequence = (data: INoteSequenceData) => {
         if (!this.node || !this.node.isValid) return;
 
         // 超時或強行開始時，若 Loading 畫面還開著，強制關閉
-        SceneLoader.getInstance().closeLoadBg();
+        this.handleTimeOutBackGame();
 
         this.barIntervalMs = data.barIntervalMs;
         if (this.hitNodeView) {
@@ -220,6 +260,11 @@ export class GameManager extends Component {
         }
     };
 
+    /**
+     * 接收:打擊評分結果
+     * @param data 
+     * @returns 
+     */
     private handleBarHitResults = async (data: IPlayHitResult) => {
         if (!this.node || !this.node.isValid) return;
 
@@ -228,6 +273,11 @@ export class GameManager extends Component {
         }
     };
 
+    /**
+     * 接收:遊戲結束
+     * @param data 
+     * @returns 
+     */
     private handleGameEnd = async (data: IGameResult) => {
         if (!this.node || !this.node.isValid) return;
 
@@ -247,6 +297,11 @@ export class GameManager extends Component {
         }
     };
 
+    /**
+     * 音樂同步
+     * @param overshootSeconds 
+     * @returns 
+     */
     private playMusicSynchronized(overshootSeconds: number) {    
         const song = RoomData.currentSong;
         if (!song) return;

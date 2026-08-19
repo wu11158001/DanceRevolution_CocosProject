@@ -27,6 +27,13 @@ export class GameCameraController extends Component {
     private currentTween: Tween<Node> | null = null;
 
     private bgLayerBit: number = 0;
+    
+    // 是否運鏡結束
+    public isRoutineFinish: boolean = false;
+
+    protected onLoad(): void {
+        this.bgLayerBit = Layers.Enum['3DBg'];
+    }
 
     /**
      * 遊戲開場運鏡
@@ -34,8 +41,7 @@ export class GameCameraController extends Component {
     public onGameOpening(gameTextTipView: GameTextTipView) {
         this.gameTextTipView = gameTextTipView;
 
-        this.camera3DBgNode.active = false;
-        this.bgLayerBit = Layers.Enum['3DBg'];
+        this.camera3DBgNode.active = false;        
         this.camera3D.visibility |= this.bgLayerBit;
 
         this.cameraNode.position = new Vec3(0, 6, 6);
@@ -43,7 +49,7 @@ export class GameCameraController extends Component {
 
         const cameraPoints: CameraCamPoint[] = [
             { position: new Vec3(-3, 8.1, 6), rotation: new Vec3(-55, -9.2, 7.8), duration: 0.75 },
-            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 1.7 },
+            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 30, -9), duration: 1.7 },
             { position: new Vec3(0, 8, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1 },
             { position: new Vec3(0, 2.7, 10),    rotation: new Vec3(-12, 0, 0), duration: 2 },
         ];
@@ -79,12 +85,21 @@ export class GameCameraController extends Component {
         // 鏈結完成後開始執行
         this.currentTween = camTween
             .call(() => {
-                this.camera3DBgNode.active = true;
-                this.camera3DBgNode.position = this.cameraNode.position;
-                this.camera3D.visibility &= ~this.bgLayerBit;
+                this.onShowGameUI();
                 this.gameTextTipView.onReady();
             })
             .start();
+    }
+
+    /**
+     * 顯示遊戲UI
+     */
+    public onShowGameUI() {
+        this.isRoutineFinish = true;
+
+        this.camera3DBgNode.active = true;
+        this.camera3DBgNode.position = this.cameraNode.position;
+        this.camera3D.visibility &= ~this.bgLayerBit;
     }
 }
 
