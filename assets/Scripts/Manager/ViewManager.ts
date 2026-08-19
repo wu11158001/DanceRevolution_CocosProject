@@ -31,7 +31,8 @@ export type ViewType =
 'GameResultView'|
 'GameTextTipView' |
 'ChatView' |
-'DifficultyIllustrateView'
+'DifficultyIllustrateView' |
+'RoomListView'
 
 /**
  * 介面管理中心
@@ -102,7 +103,7 @@ export class ViewManager extends SingletonComponent<ViewManager> {
     }
 
     /**
-     * 預載單一介面 Prefab (可用於 Loading Scene 提前快取)
+     * 預載單一介面 Prefab
      */
     public async preloadView(viewType: ViewType): Promise<boolean> {
         const prefab = await this.loadPrefab(viewType);

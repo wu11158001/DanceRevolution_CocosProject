@@ -185,7 +185,6 @@ export class HitNodeView extends BaseView {
 
         this.currentInputIndex = 0;
         this.currentSequence = [];
-        console.log("重置狀態");
     }
 
     /**

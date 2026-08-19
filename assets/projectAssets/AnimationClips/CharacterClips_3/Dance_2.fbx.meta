@@ -34,7 +34,7 @@
       "name": "Dance_2.animation",
       "userData": {
         "gltfIndex": 1,
-        "wrapMode": 2,
+        "wrapMode": 1,
         "sample": 30,
         "span": {
           "from": 0,
@@ -262,7 +262,7 @@
             "name": "Dance_2",
             "from": 0,
             "to": 17.299999237060547,
-            "wrapMode": 2,
+            "wrapMode": 1,
             "previousId": "18d6f"
           }
         ]

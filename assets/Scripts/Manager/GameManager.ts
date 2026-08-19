@@ -13,43 +13,33 @@ import { GameCameraController } from '../Game/GameCameraController';
 
 const { ccclass, property } = _decorator;
 
-/**
- * 箭頭資料
- */
 export interface ISequenceData {
-    direction: string;      // ['UP', 'LEFT', 'DOWN', 'RIGHT']
-    isReversed: boolean;    // 是否反向
+    direction: string;
+    isReversed: boolean;
 }
 
-/**
- * 譜面資料
- */
 export interface INoteSequenceData {
-    barIndex: number;           // 當前小節
-    sequence: ISequenceData[];         // 箭頭陣列, 例如: ['UP', 'LEFT', 'DOWN', 'RIGHT']
-    targetHitTime: number;      // 第 4 拍 Space 鍵的精確伺服器時間點 (ms)
-    beatIntervalMs: number;     // 單拍毫秒數 (60000 / BPM)
-    barIntervalMs: number;      // 單小節毫秒數 (用於計算表演階段長度)
-    progress: number;           // 歌曲進行進度
+    barIndex: number;
+    sequence: ISequenceData[];
+    targetHitTime: number;
+    beatIntervalMs: number;
+    barIntervalMs: number;
+    progress: number;
 }
 
-/**
- * 打擊判定資料
- */
 export interface IPlayHitResult {
-    hitPlayerId: string;            // 打擊玩家 ID
-    nickname: string;               // 打擊玩家暱稱
-    rating: string;                 // 判定 ('PERFECT' / 'GREAT' / 'GOOD' / 'MISS')
-    scoreGained: number;            // 該玩家此拍獲得的分數
-    scores: Record<string, number>; // 所有玩家的最新總分對照表{ [playerId]: totalScore }
-    totalScore: number;             // 該玩家個人總分
-    danceAnim: number;              // 當前小節舞步動畫index
-    animPhase: number;              // 當前動畫撥放階段
-    perfectCombo: number;           // perfect連續次數
-    completedCount: number;         // 有正確輸入數量
+    hitPlayerId: string;
+    nickname: string;
+    rating: string;
+    scoreGained: number;
+    scores: Record<string, number>;
+    totalScore: number;
+    danceAnim: number;
+    animPhase: number;
+    perfectCombo: number;
+    completedCount: number;
 }
 
-// 單一玩家的判定統計
 export interface IRatingStats {
     PERFECT: number;
     GREAT: number;
@@ -57,31 +47,26 @@ export interface IRatingStats {
     MISS: number;
 }
 
-// 單一玩家的遊戲結算成績
 export interface IPlayerGameResult {
-    playerId: string;         // 玩家 Socket/Player ID
-    nickname: string;         // 玩家暱稱
-    totalScore: number;       // 總分
-    maxPerfectCombo: number;  // 最高 PERFECT 連擊數
-    ratings: IRatingStats;    // 各判定累積次數
-    isDisconnected: boolean;  // 是否斷線了
+    playerId: string;
+    nickname: string;
+    totalScore: number;
+    maxPerfectCombo: number;
+    ratings: IRatingStats;
+    isDisconnected: boolean;
 }
 
-// 遊戲結束事件發送的全體結算資料
 export interface IGameResult {
     roomId: string;
-    results: IPlayerGameResult[]; // 依總分排序後的玩家成績陣列
+    results: IPlayerGameResult[];
 }
-/**
- * 遊戲控制中心
- */
+
 @ccclass('GameManager')
 export class GameManager extends Component {
     private targetStartTime: number = 0;
-    private isWaitingStart: boolean = false;  // 等待音樂倒數啟動標記
-    private isGamePlaying: boolean = false;   // 整場遊戲進行中標記
+    private isWaitingStart: boolean = false;
+    private isGamePlaying: boolean = false;
 
-    // 單小節毫秒數
     private barIntervalMs: number = 0;
 
     private hitNodeView: HitNodeView = null;
@@ -89,35 +74,43 @@ export class GameManager extends Component {
     private gameTextTipView: GameTextTipView = null;
     private gameCameraController: GameCameraController = null;
 
-    protected onDestroy(): void {
-        document.removeEventListener('visibilitychange', this.onVisibilityChange.bind(this));
-
-        SocketManager.getInstance().socket?.off('game_started');
-        SocketManager.getInstance().socket?.off('start_countdown');
-        SocketManager.getInstance().socket?.off('new_note_sequence');
-        SocketManager.getInstance().socket?.off('player_hit_result');
-        SocketManager.getInstance().socket?.off('game_ended');
-    }
+    // 保存 visibilitychangeListener 實例以便註銷
+    private boundVisibilityHandler: () => void = null;
 
     protected onLoad(): void {
-        // 監聽頁面可見性變化
-        document.addEventListener('visibilitychange', this.onVisibilityChange.bind(this));
+        this.boundVisibilityHandler = this.onVisibilityChange.bind(this);
+        document.addEventListener('visibilitychange', this.boundVisibilityHandler);
 
-        // 監聽:"game_started" [正式遊戲開始]
-        SocketManager.getInstance().socket?.on('game_started', this.onGameStarted.bind(this));
-        // 監聽:"start_countdown" [譜面首次發送前的倒數]
-        SocketManager.getInstance().socket?.on('start_countdown', this.onStartCount.bind(this));
-        // 監聽:"new_note_sequence" [譜面與打擊時間]
-        SocketManager.getInstance().socket?.on('new_note_sequence', this.onNewNodeSequence.bind(this));
-        // 監聽:"player_hit_result" [所有玩家打擊判定]
-        SocketManager.getInstance().socket?.on('player_hit_result', this.onBarHitResults.bind(this));
-        // 監聽:"game_ended" [遊戲結束]
-        SocketManager.getInstance().socket?.on('game_ended', this.onGameEnd.bind(this));
+        // ✅ 使用箭頭函式（Arrow Functions）綁定 Socket 事件，確保 onDestroy 時能精確清理
+        const socket = SocketManager.getInstance().socket;
+        if (socket) {
+            socket.on('game_started', this.handleGameStarted);
+            socket.on('start_countdown', this.handleStartCount);
+            socket.on('new_note_sequence', this.handleNewNodeSequence);
+            socket.on('player_hit_result', this.handleBarHitResults);
+            socket.on('game_ended', this.handleGameEnd);
+        }
+    }
+
+    protected onDestroy(): void {
+        if (this.boundVisibilityHandler) {
+            document.removeEventListener('visibilitychange', this.boundVisibilityHandler);
+        }
+
+        // ✅ 精確註銷 Socket 事件監聽器，防止超時/重連時舊元件被調用
+        const socket = SocketManager.getInstance().socket;
+        if (socket) {
+            socket.off('game_started', this.handleGameStarted);
+            socket.off('start_countdown', this.handleStartCount);
+            socket.off('new_note_sequence', this.handleNewNodeSequence);
+            socket.off('player_hit_result', this.handleBarHitResults);
+            socket.off('game_ended', this.handleGameEnd);
+        }
     }
 
     async start() {
-        const gamera3D = find('Camera_3D')
-        if(gamera3D) {
+        const gamera3D = find('Camera_3D');
+        if (gamera3D) {
             this.gameCameraController = gamera3D.getComponent(GameCameraController);
         }
 
@@ -140,11 +133,9 @@ export class GameManager extends Component {
 
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
         
-        // 如果已經到達或超過 Server 設定的播放時間
         if (currentServerTime >= this.targetStartTime) {
-            this.isWaitingStart = false; // 關閉等待
+            this.isWaitingStart = false;
 
-            // 計算因為 Update 幀率 (例如 60FPS) 產生的超時毫秒，進行音訊補償
             const overshootMs = currentServerTime - this.targetStartTime;
             const overshootSeconds = overshootMs / 1000;
 
@@ -154,133 +145,118 @@ export class GameManager extends Component {
                 this.gameCameraController.onGameOpening(this.gameTextTipView);
             }
             
-            // 傳入誤差秒數，精確起播
             this.playMusicSynchronized(overshootSeconds);
         }
     }
 
-    /**
-     * 切回視窗
-     */
     private onVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            console.log('[GameManager] 玩家切回視窗，觸發同步與音樂校正...');
-            this.resyncGameAndAudio();
-        } 
+        console.log('[GameManager] 玩家視窗切換，觸發同步與音樂校正...');
+        this.resyncGameAndAudio();
     }
 
-    /**
-     * 重新校正伺服器時間差
-     * @returns 
-     */
     private async resyncGameAndAudio() {
         if (!this.isGamePlaying) return;
 
-        // 重新同步伺服器時間 (計算最新 RTT 與 timeOffset)
         await SocketManager.getInstance().syncServerTime();
-
-        // 執行音樂與遊戲進度強校正
         this.correctAudioPosition();
     }
 
-    /**
-     * 執行音樂與遊戲進度強校正
-     * @returns 
-     */
     private correctAudioPosition() {
         const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
         const song = RoomData.currentSong;
         if (!song) return;
 
-        // targetStartTime 即為 Server 設定的音樂播放時間 (musicStartTime)
-        // 歌曲理論應播放時間（秒）
         const expectedCurrentTimeSec = (currentServerTime - this.targetStartTime) / 1000;
 
-        // 歌曲尚未開始
-        if (expectedCurrentTimeSec < 0) {
-            return; 
-        }
+        if (expectedCurrentTimeSec < 0) return; 
 
-        // 歌曲已播放完畢
         if (expectedCurrentTimeSec >= song.duration) {
             AudioManager.getInstance().stopBGM();
             return;
         }
 
         console.log(`[切回視窗/強校正] 音樂重置並跳轉至: ${expectedCurrentTimeSec.toFixed(3)}s`);
-        
-        // 跳轉音樂至精確秒數
         this.playMusicSynchronized(expectedCurrentTimeSec);
     }
 
-    /**
-     * 接收:遊戲正式開始
-     * @param data 
-     * countdownSec=歌曲開始播放的時間點
-     */
-    private onGameStarted(data: { song: any; startTime: number}) {
+    // ==========================================
+    // 網路事件 Handling (防護處理 + 箭頭函式綁定)
+    // ==========================================
+
+    private handleGameStarted = (data: { song: any; startTime: number }) => {
+        if (!this.node || !this.node.isValid) return;
+
         RoomData.updateSongs(data.song);
         this.targetStartTime = data.startTime;
         this.isGamePlaying = true;
         this.isWaitingStart = true;
 
         console.log(`[GameManager] 收到開始指令，目標伺服器時間: ${this.targetStartTime}`);
-    }
+    };
 
-    /**
-     * 首個譜面發送前的倒數
-     * @param data 
-     * @param countdownSec 倒數總秒數, 
-     * @param countdownSequence 倒數文字序列'START', '3', '2', '1'
-     */
-    private onStartCount(data: { countdownSec: number, sequence: string[] }) {
-         this.gameTextTipView.onStartCount(data);
-    }
+    private handleStartCount = (data: { countdownSec: number, sequence: string[] }) => {
+        if (!this.node || !this.node.isValid) return;
 
-    /**
-     * 接收:每小節的譜面與打擊時間資訊
-     */
-    private onNewNodeSequence(data: INoteSequenceData) {
+        // 超時或強行開始時，若 Loading 畫面還開著，強制關閉
+        SceneLoader.getInstance().closeLoadBg();
+
+        // 安全檢查：避免 View 未加載完畢造成 null 報錯
+        if (this.gameTextTipView) {
+            this.gameTextTipView.onStartCount(data);
+        } else {
+            console.warn('[GameManager] gameTextTipView 尚未準備完成，略過本次倒數顯示');
+        }
+    };
+
+    private handleNewNodeSequence = (data: INoteSequenceData) => {
+        if (!this.node || !this.node.isValid) return;
+
+        // 超時或強行開始時，若 Loading 畫面還開著，強制關閉
+        SceneLoader.getInstance().closeLoadBg();
+
         this.barIntervalMs = data.barIntervalMs;
-        this.hitNodeView.reciveData(data);
-    }
+        if (this.hitNodeView) {
+            this.hitNodeView.reciveData(data);
+        }
+    };
 
-    /**
-     * 接收:所有玩家打擊判定資料
-     */
-    private async onBarHitResults(data: IPlayHitResult) {
-        this.gameVIew.UpdateScore(data, this.barIntervalMs);               
-    }
+    private handleBarHitResults = async (data: IPlayHitResult) => {
+        if (!this.node || !this.node.isValid) return;
 
-    /**
-     * 接收:遊戲結束
-     * @param data 
-     */
-    private async onGameEnd(data: IGameResult) {
-        this.gameVIew.onGameOver();
+        if (this.gameVIew) {
+            this.gameVIew.UpdateScore(data, this.barIntervalMs);
+        }
+    };
+
+    private handleGameEnd = async (data: IGameResult) => {
+        if (!this.node || !this.node.isValid) return;
+
+        if (this.gameVIew) {
+            this.gameVIew.onGameOver();
+        }
 
         await new Promise(resolve => setTimeout(resolve, 2500));
 
         AudioManager.getInstance().playSFX(SFX_TYPE.Cheer);
         ViewManager.getInstance().openView<GameResultView>('GameResultView', 'Popup').then((view) => {
-            view.setData(data);
+            if (view) view.setData(data);
         });
 
-        this.gameTextTipView.onGameFinish();
-    }
+        if (this.gameTextTipView) {
+            this.gameTextTipView.onGameFinish();
+        }
+    };
 
-    /**
-     * 播放音樂時間校對
-     */
     private playMusicSynchronized(overshootSeconds: number) {    
-        // 安全地取得 BGM_TYPE (確保傳進去的是 Enum 數字而非字串)
-        const songId = RoomData.currentSong.id;
+        const song = RoomData.currentSong;
+        if (!song) return;
+
+        const songId = song.id;
         let bgmType: BGM_TYPE;
 
         if (typeof songId === 'number') {
             bgmType = songId as BGM_TYPE;
         } else {
-            // 若 id 是字串如 "Song_0"，需對應至 Enum 數值
             bgmType = BGM_TYPE[songId as keyof typeof BGM_TYPE];
         }
 

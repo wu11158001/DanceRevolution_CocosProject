@@ -11,6 +11,8 @@ import { UpdateNicknameView } from 'db://assets/Scripts/View/LobbyScene/UpdateNi
 import { RoomView } from '../RoomView/RoomView';
 import { ChatView } from '../../Common/ChatView/ChatView';
 import { CHAT_PLACE } from '../../../Manager/ChatManager';
+import { CharacterControl } from '../../../Game/CharacterControl';
+import { RoomListView } from './RoomListView';
 
 const { ccclass, property } = _decorator;
 
@@ -34,9 +36,13 @@ export class LobbyView extends BaseView {
     private btn_switchCharacterLeft: Button = null;
     @property(Button)
     private btn_switchCharacterRight: Button = null;
+    @property(Button)
+    private btn_changeAnim: Button = null;
 
     private characterObj: Node = null;
+    private characterControl: CharacterControl = null;
     private chatView: ChatView = null;
+    private roomListView: RoomListView = null;
 
     onDestroy() {
         PlayerData.off('nickname', this.showNickname, this);
@@ -49,6 +55,7 @@ export class LobbyView extends BaseView {
 
         this.bgNode.destroy();
         this.chatView?.onClose();
+        this.roomListView?.onClose();
     }
 
     start() {
@@ -98,16 +105,28 @@ export class LobbyView extends BaseView {
 
         // 更換角色按鈕(右)
         this.btn_switchCharacterRight.node.on(Button.EventType.CLICK, () => { PlayerData.switchCharacterId(1) }, this);
+
+        // 切換角色動畫按鈕
+        this.btn_changeAnim.node.on(Button.EventType.CLICK, this.onChangeCharacterAmimation, this);
     }
 
     public async onOpen(params?: any) {
-        // 開啟聊天介面
-        this.chatView = await ViewManager.getInstance().openView<ChatView>(
-            'ChatView', 
-            'Popup', 
-            false, 
-            { chatPlace: CHAT_PLACE.LobbyVIew}
-        );
+        const [roomListView, chatView] = await Promise.all([
+            // 開啟房間列表
+            ViewManager.getInstance().openView<RoomListView>(
+                'RoomListView', 
+                'Popup',
+                false),
+                
+            // 開啟聊天介面
+            ViewManager.getInstance().openView<ChatView>(
+                'ChatView', 
+                'Popup', 
+                false, 
+                { chatPlace: CHAT_PLACE.LobbyVIew})
+        ]);
+        this.roomListView = roomListView;
+        this.chatView = chatView;
 
         // 訂閱:玩家資料變更(暱稱)
         PlayerData.on('nickname', this.showNickname, this);
@@ -147,6 +166,19 @@ export class LobbyView extends BaseView {
                 this.characterObj.setPosition(0, 0, 0);
                 this.characterObj.setScale(1.25, 1.25, 1.25);
             }
+
+            this.characterControl = character.getComponent(CharacterControl);
+        }
+    }
+
+    /**
+     * 隨機更換角色動畫
+     */
+    private onChangeCharacterAmimation() {
+        const randomNum = Math.floor(Math.random() * 14);
+        const animName = `Dance_${randomNum}`;
+        if(this.characterControl) {
+            this.characterControl.playAnimation(animName);
         }
     }
 }

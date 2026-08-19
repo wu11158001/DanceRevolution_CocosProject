@@ -135,7 +135,7 @@
       "name": "Dance_8.animation",
       "userData": {
         "gltfIndex": 0,
-        "wrapMode": 2,
+        "wrapMode": 1,
         "sample": 30,
         "span": {
           "from": 0,
@@ -917,7 +917,7 @@
             "name": "Dance_8",
             "from": 0,
             "to": 19.799999237060547,
-            "wrapMode": 2,
+            "wrapMode": 1,
             "previousId": "18d6f"
           }
         ]

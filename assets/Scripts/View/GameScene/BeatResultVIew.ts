@@ -71,25 +71,25 @@ export class BeatResultVIew extends BaseView {
                 if(perfectCombo > 1) resultStr = `PERFECT x${perfectCombo}`;
                 else resultStr = 'PERFECT';
                 colorIndex = 0;
-                AudioManager.getInstance().playSFX(SFX_TYPE.BeatPerfect);
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatPerfect, 1);
                 break;
 
             case 'GREAT':
                 resultStr = 'GREAT';
                 colorIndex = 1;
-                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.55);
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 1);
                 break;
 
             case 'GOOD':
                 resultStr = 'GOOD';
                 colorIndex = 2
-                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 0.65);
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatNromal, 1);
                 break;
 
             case 'MISS':
                 resultStr = 'MISS';
                 colorIndex = 3;
-                AudioManager.getInstance().playSFX(SFX_TYPE.BeatMiss, 0.75);
+                AudioManager.getInstance().playSFX(SFX_TYPE.BeatMiss, 1);
                 break;
         }
 

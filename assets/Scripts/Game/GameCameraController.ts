@@ -48,7 +48,7 @@ export class GameCameraController extends Component {
             { position: new Vec3(0, 2.7, 10),    rotation: new Vec3(-12, 0, 0), duration: 2 },
         ];
 
-        // 3. 播放運鏡
+        // 播放運鏡
         this.playCameraRoutine(cameraPoints);
     }
 

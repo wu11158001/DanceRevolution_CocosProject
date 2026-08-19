@@ -3,17 +3,15 @@ import { SocketManager } from '../../../Network/SocketManager';
 import { IRoomListData } from '../../../Data/RoomData';
 import { RoomListItem } from './RoomListItem';
 import { PlayerData } from '../../../Data/PlayerData';
-import { ViewManager } from '../../../Manager/ViewManager';
-import { MessagePopupView } from '../../Common/MessagePopupView';
 import { LobbyView } from './LobbyView';
-import { RoomView } from '../RoomView/RoomView';
+import { BaseView } from '../../BaseView';
 const { ccclass, property } = _decorator;
 
 /**
  * 房間列表介面
  */
 @ccclass('RoomListView')
-export class RoomListView extends Component {
+export class RoomListView extends BaseView {
     @property(Button)
     private btn_refresh: Button = null;
 
