@@ -26,7 +26,6 @@
       </div>
     </div>
     <!-- Polyfills bundle. -->
-
 <script src="src/polyfills.bundle.js" charset="utf-8"> </script>    
 
 
@@ -39,5 +38,39 @@
 <script>
     System.import('./index.js').catch(function(err) { console.error(err); })
 </script>
+
+<script>
+  // 畫面保持比例
+  function fixCocosInputScale() {
+    const cc = window.cc;
+    if (cc && cc.view) {
+      const width = document.documentElement.clientWidth || window.innerWidth;
+      const height = document.documentElement.clientHeight || window.innerHeight;
+      
+      // 強制設定 Frame Size
+      cc.view.setFrameSize(width, height);
+      
+      // 強制 Cocos 重新計算 Canvas 與 DOM 的縮放比例矩陣
+      if (typeof cc.view._adjustViewport === 'function') {
+        cc.view._adjustViewport();
+      }
+      
+      // 觸發原生 resize 事件，逼使 EditBox 的 DOM 重新計算位置
+      window.dispatchEvent(new Event('resize'));
+    }
+  }
+
+  // 監聽視窗變化
+  window.addEventListener('resize', () => {
+    setTimeout(fixCocosInputScale, 100);
+    setTimeout(fixCocosInputScale, 300); // 延遲確保動畫完成
+  });
+  
+  window.addEventListener('orientationchange', () => {
+    setTimeout(fixCocosInputScale, 300);
+    setTimeout(fixCocosInputScale, 600);
+  });
+</script>
+
   </body>
 </html>

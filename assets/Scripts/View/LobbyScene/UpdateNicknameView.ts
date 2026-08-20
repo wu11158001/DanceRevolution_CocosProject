@@ -11,14 +11,21 @@ const { ccclass, property } = _decorator;
  */
 @ccclass('UpdateNicknameView')
 export class UpdateNicknameView extends BaseView {
+    @property(Button)
+    private btn_close: Button = null;
     @property(EditBox)
     private editBox_nickname: EditBox = null;
     @property(Button)
     private btn_confirm: Button = null;
 
     start() {
+        // 關閉按鈕
+        this.btn_close.node.on(Button.EventType.CLICK, this.closeSelf, this);
+        // 輸入框內容變更
         this.editBox_nickname.node.on(EditBox.EventType.TEXT_CHANGED, this.onTextChange, this);
+        // 輸入框Enter按下
         this.editBox_nickname.node.on(EditBox.EventType.EDITING_RETURN, this.onConfirmClick, this);
+        // 確認按鈕
         this.btn_confirm.node.on(Button.EventType.CLICK, this.onConfirmClick, this);
     }
 
