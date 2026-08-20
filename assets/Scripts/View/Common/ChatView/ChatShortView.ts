@@ -152,12 +152,15 @@ export class ChatShortView extends Component {
             // 完整文字內容
             const fullString = `${difficultString}${roomNameString}${inviteString}`
             
+            // 點擊文字
+            const clickRoomNameString = `<color=#7C7C7C> 房間: ${data.recruitmentData.roomName}</color>`;
             // 滑入文字
-            const enterRoomNameString = `<color=#797979> 房間: ${data.recruitmentData.roomName}</color>`;
+            const enterRoomNameString = `<color=#D1D1D1> 房間: ${data.recruitmentData.roomName}</color>`;
 
             this.richTextClickHandler.setContent(fullString);
             this.richTextClickHandler.isCanClick = true;
-            this.richTextClickHandler.enterString = `<on click>${difficultString}${enterRoomNameString}${inviteString}</on>`
+            this.richTextClickHandler.clickString = `<on click>${difficultString}${clickRoomNameString}${inviteString}</on>`;
+            this.richTextClickHandler.enterString = `<on click>${difficultString}${enterRoomNameString}${inviteString}</on>`;
             this.richTextClickHandler.clickAction = () => {
                 SocketManager.getInstance().sendJoinRoom({
                     roomId: data.recruitmentData.roomId, 

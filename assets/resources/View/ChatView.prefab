@@ -94,7 +94,7 @@
         "__id__": 369
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 415
@@ -1552,16 +1552,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {
@@ -2026,16 +2026,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {
@@ -6805,16 +6805,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {
@@ -7916,16 +7916,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {
@@ -8585,16 +8585,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 211,
-      "g": 211,
-      "b": 211,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {
@@ -9955,7 +9955,7 @@
         "__id__": 483
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 499
@@ -10340,16 +10340,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {
@@ -11404,16 +11404,16 @@
     },
     "_hoverColor": {
       "__type__": "cc.Color",
-      "r": 124,
-      "g": 124,
-      "b": 124,
+      "r": 209,
+      "g": 209,
+      "b": 209,
       "a": 255
     },
     "_pressedColor": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 124,
+      "g": 124,
+      "b": 124,
       "a": 255
     },
     "_disabledColor": {

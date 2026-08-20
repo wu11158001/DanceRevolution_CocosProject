@@ -41,35 +41,59 @@
 
 <script>
   // 畫面保持比例
-  function fixCocosInputScale() {
+  let resizeTimer = null;
+
+  function safeFixCocosSize() {
     const cc = window.cc;
-    if (cc && cc.view) {
-      const width = document.documentElement.clientWidth || window.innerWidth;
-      const height = document.documentElement.clientHeight || window.innerHeight;
-      
-      // 強制設定 Frame Size
-      cc.view.setFrameSize(width, height);
-      
-      // 強制 Cocos 重新計算 Canvas 與 DOM 的縮放比例矩陣
-      if (typeof cc.view._adjustViewport === 'function') {
-        cc.view._adjustViewport();
-      }
-      
-      // 觸發原生 resize 事件，逼使 EditBox 的 DOM 重新計算位置
-      window.dispatchEvent(new Event('resize'));
+    if (!cc || !cc.view) return;
+
+    // 取得當前真實尺寸
+    const width = document.documentElement.clientWidth || window.innerWidth;
+    const height = document.documentElement.clientHeight || window.innerHeight;
+
+    // 核心防護：尺寸異常（如轉向過渡期的 0）時拒絕更新，防止 WebGL 崩潰
+    if (width <= 0 || height <= 0) return;
+
+    // 設定尺寸並通知引擎
+    cc.view.setFrameSize(width, height);
+    if (typeof cc.view._adjustViewport === 'function') {
+      cc.view._adjustViewport();
     }
   }
 
-  // 監聽視窗變化
-  window.addEventListener('resize', () => {
-    setTimeout(fixCocosInputScale, 100);
-    setTimeout(fixCocosInputScale, 300); // 延遲確保動畫完成
-  });
-  
-  window.addEventListener('orientationchange', () => {
-    setTimeout(fixCocosInputScale, 300);
-    setTimeout(fixCocosInputScale, 600);
-  });
+  function handleResize() {
+    // 清除舊的定時器（防抖），避免連續翻轉時密集觸發 setFrameSize
+    if (resizeTimer) clearTimeout(resizeTimer);
+
+    // 等待轉向動畫與工具列穩定後（250ms）才執行一次
+    resizeTimer = setTimeout(() => {
+      safeFixCocosSize();
+    }, 250);
+  }
+
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('orientationchange', handleResize);
+</script>
+
+<script>
+  // 防護：當 WebGL Context 丟失時嘗試讓瀏覽器重繪
+  const canvas = document.getElementById('GameCanvas');
+  if (canvas) {
+    canvas.addEventListener('webglcontextlost', (event) => {
+      event.preventDefault();
+      console.warn('WebGL Context Lost. Attempting to restore...');
+    }, false);
+
+    canvas.addEventListener('webglcontextrestored', () => {
+      console.log('WebGL Context Restored.');
+      if (window.cc && window.cc.view) {
+        window.cc.view.setFrameSize(
+          document.documentElement.clientWidth,
+          document.documentElement.clientHeight
+        );
+      }
+    }, false);
+  }
 </script>
 
   </body>

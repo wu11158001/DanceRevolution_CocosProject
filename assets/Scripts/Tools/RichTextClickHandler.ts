@@ -11,6 +11,8 @@ export class RichTextClickHandler extends Component {
 
     /**是否可點擊 */
     public isCanClick: boolean  = true;
+    /**點擊文字內容 */
+    public clickString: string = '';
     /**滑入文字內容 */
     public enterString: string = '';
     /** 點擊事件 */
@@ -24,7 +26,8 @@ export class RichTextClickHandler extends Component {
     protected onDestroy(): void {
         this.node.off(Node.EventType.MOUSE_ENTER, this.onEnter, this);
         this.node.off(Node.EventType.MOUSE_LEAVE, this.onLeave, this);
-        this.node.off(Node.EventType.TOUCH_END, this.onTouch, this);
+        this.node.off(Node.EventType.TOUCH_START, this.onTouchStart, this);
+        this.node.off(Node.EventType.TOUCH_END, this.onTouchEnd, this);
     }
 
     protected start(): void {
@@ -32,7 +35,8 @@ export class RichTextClickHandler extends Component {
 
         this.node.on(Node.EventType.MOUSE_ENTER, this.onEnter, this);
         this.node.on(Node.EventType.MOUSE_LEAVE, this.onLeave, this);
-        this.node.on(Node.EventType.TOUCH_END, this.onTouch, this);
+        this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
+        this.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this);
     }
 
     /**
@@ -65,13 +69,28 @@ export class RichTextClickHandler extends Component {
         this.mainRichText.string = content;
         this.contentString = content;
     }
-    
+
     /**
-     * 點擊事件
+     * 點擊開始事件
      * @param event 
      * @param param 
      */
-    public onTouch(event: Event, param: string) {
+    public onTouchStart(event: Event, param: string) {
+        if(this.isCanClick) {
+            this.mainRichText.string = this.clickString;
+        }
+    }
+    
+    /**
+     * 點擊結束事件
+     * @param event 
+     * @param param 
+     */
+    public onTouchEnd(event: Event, param: string) {
+        if(this.isCanClick) {
+            this.mainRichText.string = this.contentString;
+        }
+
         if(this.isCanClick && this.isEnter) {
             this.clickAction?.();
         }       

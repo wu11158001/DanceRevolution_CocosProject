@@ -88,7 +88,7 @@ export class HitNodeView extends BaseView {
      */
     private initPhoneButtons() {
         // 手機按鈕:簡單以外的才顯示協方向
-        this.reversPhoneBtnsNode.active = RoomData.difficulty === DIFFICULTY_TYPE.EASY;
+        this.reversPhoneBtnsNode.active = RoomData.difficulty != DIFFICULTY_TYPE.EASY;
 
         const isMobile = GameTool.getInstance().isMobileBrowser();
         const directions = ['SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'UP_LEFT', 'UP_RIGHT', 'DOWN_LEFT', 'DOWN_RIGHT'];
@@ -99,18 +99,18 @@ export class HitNodeView extends BaseView {
             // 僅在手機網頁顯示按鈕
             btn.node.active = isMobile;
 
-            btn.node.off(Node.EventType.TOUCH_START);
+            btn.node.targetOff(this);
 
             if (index == 0) {
                 // 打擊
-                btn.node.on(Node.EventType.TOUCH_START, () => {
+                btn.node.on(Button.EventType.CLICK, () => {
                     this.onSpaceHit();
                 }, this);
                 
             } else {
                 // 方向鍵
                 const dir = directions[index];
-                btn.node.on(Node.EventType.TOUCH_START, () => {
+                btn.node.on(Button.EventType.CLICK, () => {
                     this.handleDirectionInput(dir);
                 }, this);
             }
@@ -276,7 +276,7 @@ export class HitNodeView extends BaseView {
             return;
         }
 
-        // 如果按下的鍵本來就在 Set 裡 (例如按著不放引發的連續 repeat 事件)，直接忽略
+        // 如果按下的鍵本來就在 Set 裡，直接忽略
         if (this.pressedKeys.has(event.keyCode)) return;
 
         this.pressedKeys.add(event.keyCode);
@@ -444,7 +444,7 @@ export class HitNodeView extends BaseView {
                 .start();
         }
 
-        // sprite_beatBar 與 sprite_nodeBar 淡出至 Alpha 0 後隱藏
+        // 淡出效果完成
         let fadeCompletedCount = 0;
         const onFadeComplete = () => {
             fadeCompletedCount++;
