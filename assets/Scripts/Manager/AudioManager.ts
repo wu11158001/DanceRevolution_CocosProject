@@ -65,6 +65,51 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     }
 
     /**
+     * 預載 BGM 資源
+     */
+    public preloadBGM(bgmName: string): Promise<boolean> {
+        return new Promise((resolve) => {
+            if (this.clipCache.has(bgmName)) {
+                resolve(true);
+                return;
+            }
+
+            resources.load(`audio/bgm/${bgmName}`, AudioClip, (err, clip) => {
+                if (err || !clip) {
+                    console.error(`[AudioManager] 預載 BGM 失敗: audio/bgm/${bgmName}`, err);
+                    resolve(false);
+                    return;
+                }
+                this.clipCache.set(bgmName, clip);
+                resolve(true);
+            });
+        });
+    }
+
+    /**
+     * 預載 SFX 資源
+     */
+    public preloadSFX(type: SFX_TYPE): Promise<boolean> {
+        return new Promise((resolve) => {
+            const sfxName = typeof type === 'number' ? SFX_TYPE[type] : String(type);
+            if (this.clipCache.has(sfxName)) {
+                resolve(true);
+                return;
+            }
+
+            resources.load(`audio/sfx/${sfxName}`, AudioClip, (err, clip) => {
+                if (err || !clip) {
+                    console.error(`[AudioManager] 預載 SFX 失敗: audio/sfx/${sfxName}`, err);
+                    resolve(false);
+                    return;
+                }
+                this.clipCache.set(sfxName, clip);
+                resolve(true);
+            });
+        });
+    }
+
+    /**
      * 音樂停止
      */
     public stopBGM() {
@@ -74,31 +119,36 @@ export class AudioManager extends SingletonComponent<AudioManager> {
     /**
      * 播放BGM
      */
-    public playBGM (
+    public playBGM(
         bgmName: string, 
         volume: number = 0.85, 
         isLoop: boolean = true, 
         currentTime: number = 0, 
     ) {
-        // 若快取中已有該音樂，直接播放
         if (this.clipCache.has(bgmName)) {
             this.startPlayBGM(this.clipCache.get(bgmName)!, volume, isLoop, currentTime);
             return;
         }
 
-        // 若快取無資源，從 resources/audio/bgm/ 動態下載並解碼
+        // 防禦性處理：若未預載成功，上記錄開始載入的時間點，載入完畢後自動扣除下載耗時
+        const loadStartTime = Date.now();
+
         resources.load(`audio/bgm/${bgmName}`, AudioClip, (err, clip) => {
             if (err || !clip) {
                 console.error(`[AudioManager] Web 載入音樂失敗: audio/bgm/${bgmName}`, err);
                 return;
             }
 
-            // 寫入快取並播放
             this.clipCache.set(bgmName, clip);
-            this.startPlayBGM(clip, volume, isLoop, currentTime);
+            
+            // 補償因為下載/解碼所消耗的時間
+            const loadDurationSec = (Date.now() - loadStartTime) / 1000;
+            const adjustedTime = currentTime + loadDurationSec;
+
+            this.startPlayBGM(clip, volume, isLoop, adjustedTime);
         });
     }
-
+    
     /**
      * 開始播放BGM
      */

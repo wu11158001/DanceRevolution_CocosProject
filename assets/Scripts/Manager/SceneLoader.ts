@@ -76,11 +76,12 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
 
             case 'LobbyScene':
                 if(perScene === 'EntryScene') {
-                    // 載入所有角色3D
+                    // 預載所有角色3D
                     await CharacterDataManager.getInstance().preloadAllCharacters();
-                    // 載入圖片資源
+                    // 預載圖片資源
                     await SpriteFrameManager.getInstance().loadSpriteFrameAssets();
-
+                    // 預載介面
+                    await ViewManager.getInstance().preloadViews(['LobbyView', 'RoomView', 'RoomListView', 'ChatView']);
                     // 聊天中心初始化
                     ChatManager.init();
                 }    

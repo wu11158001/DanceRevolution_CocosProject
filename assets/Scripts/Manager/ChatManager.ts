@@ -144,7 +144,6 @@ export class ChatManager{
         } else {
             this.recruitMessage = datas;
         }
-        console.log(`更新招募列表資料:${JSON.stringify(datas)}`);
         this.emit('ON_RECRUIT_LIST_RECEIVED', datas)
     }
 

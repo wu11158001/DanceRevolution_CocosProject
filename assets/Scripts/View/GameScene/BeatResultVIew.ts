@@ -1,4 +1,4 @@
-import { _decorator, bezier, Camera, Color, Component, Label, Node, find, v3, CCFloat } from 'cc';
+import { _decorator, Camera, Color, Label, Node, find, v3, CCFloat } from 'cc';
 import { BaseView } from '../BaseView';
 import { GameTool } from '../../Tools/GameTool';
 import { AudioManager, SFX_TYPE } from '../../Manager/AudioManager';

@@ -23,7 +23,7 @@ html, body {
     justify-content: center !important;
     align-items: center !important;
 
-    /* 防黑屏關鍵：確保渲染區域不被瀏覽器優化掉 */
+    /* 防黑屏：確保渲染區域不被瀏覽器優化掉 */
     contain: layout style;
 }
 
@@ -41,4 +41,28 @@ html, body {
 
     /* 提示瀏覽器此元素會頻繁變動，保留 GPU 上下文 */
     will-change: transform;
+}
+
+/* 全域強制消除點擊高亮、選取與 Focus 邊框 */
+#GameDiv, 
+#Cocos3dGameContainer, 
+#GameCanvas, 
+canvas {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent !important; /* 消除 iOS/Android 點擊高亮 */
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none; /* 防止點擊時出現長按選取區塊 */
+}
+
+/* 針對所有狀態*/
+#GameDiv:focus, #GameDiv:active,
+#Cocos3dGameContainer:focus, #Cocos3dGameContainer:active,
+#GameCanvas:focus, #GameCanvas:focus-visible, #GameCanvas:active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    touch-action: manipulation !important;
 }

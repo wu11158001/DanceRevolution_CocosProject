@@ -118,6 +118,7 @@ export class GameManager extends Component {
 
         await SocketManager.getInstance().syncServerTime();
 
+        // 開啟介面
         const [hitNodeView, gameVIew, gameTextTipView] = await Promise.all([
             ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup'),
             ViewManager.getInstance().openView<GameView>('GameView', 'HUD'),
@@ -127,7 +128,35 @@ export class GameManager extends Component {
         this.gameVIew = gameVIew;
         this.gameTextTipView = gameTextTipView;        
 
+        // 預先載入當前歌曲與常用打擊音效
+        await this.preloadGameAudio();
+
+        // 發送:本地玩家準備完成
         SocketManager.getInstance().sendPrepareGame();
+    }
+
+    /**
+     * 預先載入遊戲本局所需的音樂與打擊音效
+     */
+    private async preloadGameAudio(): Promise<void> {
+        const song = RoomData.currentSong;
+        const preloadTasks: Promise<boolean>[] = [];
+
+        // 預載歌曲 BGM
+        if (song && song.id) {
+            preloadTasks.push(AudioManager.getInstance().preloadBGM(song.id));
+        }
+
+        // 預載遊戲核心打擊音效
+        preloadTasks.push(AudioManager.getInstance().preloadSFX(SFX_TYPE.BeatPerfect));
+        preloadTasks.push(AudioManager.getInstance().preloadSFX(SFX_TYPE.BeatNromal));
+        preloadTasks.push(AudioManager.getInstance().preloadSFX(SFX_TYPE.BeatMiss));
+        preloadTasks.push(AudioManager.getInstance().preloadSFX(SFX_TYPE.Cheer));
+        preloadTasks.push(AudioManager.getInstance().preloadSFX(SFX_TYPE.Ready));
+
+        console.log('[GameManager] 開始預載遊戲音訊資源...');
+        await Promise.all(preloadTasks);
+        console.log('[GameManager] 遊戲音訊資源預載完成！');
     }
 
     update(deltaTime: number) {
@@ -301,7 +330,7 @@ export class GameManager extends Component {
      * @param overshootSeconds 
      * @returns 
      */
-    private playMusicSynchronized(overshootSeconds: number) {    
+    private playMusicSynchronized(overshootSeconds: number) {
         const song = RoomData.currentSong;
         if (!song) return;
 
