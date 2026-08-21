@@ -20,8 +20,6 @@ export class RichTextClickHandler extends Component {
 
     // 紀錄文字內容
     private contentString: string = '';
-    // 判斷是否停留在元件
-    private isEnter: boolean = false;
 
     protected onDestroy(): void {
         this.node.off(Node.EventType.MOUSE_ENTER, this.onEnter, this);
@@ -43,8 +41,6 @@ export class RichTextClickHandler extends Component {
      * 滑入事件
      */
     private onEnter() {
-        this.isEnter = true;
-
         if(this.isCanClick) {
             this.mainRichText.string = this.enterString;
         }
@@ -54,8 +50,6 @@ export class RichTextClickHandler extends Component {
      * 滑出事件
      */
     private onLeave() {
-        this.isEnter = false;
-
         if(this.isCanClick) {
             this.mainRichText.string = this.contentString;
         }
@@ -78,6 +72,8 @@ export class RichTextClickHandler extends Component {
     public onTouchStart(event: Event, param: string) {
         if(this.isCanClick) {
             this.mainRichText.string = this.clickString;
+
+            this.clickAction?.();
         }
     }
     
@@ -89,11 +85,7 @@ export class RichTextClickHandler extends Component {
     public onTouchEnd(event: Event, param: string) {
         if(this.isCanClick) {
             this.mainRichText.string = this.contentString;
-        }
-
-        if(this.isCanClick && this.isEnter) {
-            this.clickAction?.();
-        }       
+        }     
     }
 }
 
