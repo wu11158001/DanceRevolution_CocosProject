@@ -8,8 +8,8 @@ import { PlayerData } from '../../../Data/PlayerData';
 import { GameTool } from '../../../Tools/GameTool';
 import { CharacterDataManager } from '../../../Manager/CharacterDataManager';
 import { CharacterControl } from '../../../Game/CharacterControl';
-import { ViewManager } from '../../../Manager/ViewManager';
-import { BeatResultVIew } from '../BeatResultVIew';
+import { ViewManager, ViewType } from '../../../Manager/ViewManager';
+import { BeatResultView } from '../BeatResultVIew';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
 
 const { ccclass, property } = _decorator;
@@ -319,7 +319,7 @@ export class GameView extends BaseView {
         });
 
         // 顯示打擊結果介面        
-        ViewManager.getInstance().openView<BeatResultVIew>('BeatResultVIew', 'Popup', false).then(beatResultVIew => {
+        ViewManager.getInstance().openView<BeatResultView>(ViewType.BeatResultView, 'Popup', false).then(beatResultVIew => {
             const isSelf = data.hitPlayerId === PlayerData.playerId;
             if (hitCharacter && beatResultVIew) {
                 beatResultVIew.showResult(data.rating, data.perfectCombo, isSelf, hitCharacter.node);

@@ -2,7 +2,7 @@ import { _decorator, director, Component, Node, Label, Button, Vec3 } from 'cc';
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
-import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
+import { ViewManager, ViewType } from 'db://assets/Scripts/Manager/ViewManager';
 import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, ICreateRoomResponse } from 'db://assets/Scripts/Data/RoomData';
@@ -62,7 +62,7 @@ export class LobbyView extends BaseView {
         // 修改暱稱按鈕
         this.btn_updateNickname.node.on(Button.EventType.CLICK, 
             () => {
-                ViewManager.getInstance().openView<UpdateNicknameView>('UpdateNicknameView', 'Popup');
+                ViewManager.getInstance().openView<UpdateNicknameView>(ViewType.UpdateNicknameView, 'Popup');
             }, this);
 
         // 創建房間按鈕
@@ -72,11 +72,11 @@ export class LobbyView extends BaseView {
                 characterId: PlayerData.characterId
             }, (res: ICreateRoomResponse) => {
                 if (res.success) {
-                    ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD');
+                    ViewManager.getInstance().openView<RoomView>(ViewType.RoomView, 'HUD');
                     this.closeSelf();
                 } else {
                     console.error(`[創建房間失敗]: ${res.message}`);
-                    ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+                    ViewManager.getInstance().openView<MessagePopupView>(ViewType.MessagePopupView, "Highest").then(popup => {
                         popup?.setData("創建房間失敗!");
                     });
                 }
@@ -89,11 +89,11 @@ export class LobbyView extends BaseView {
                 characterId: PlayerData.characterId
             }, (res: { success: boolean; message?: string }) => {
                 if (res && res.success) {
-                    ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD');
+                    ViewManager.getInstance().openView<RoomView>(ViewType.RoomView, 'HUD');
                     this.closeSelf();
                 } else {
                     console.warn(`[快速加入失敗]: ${res?.message}`);
-                    ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+                    ViewManager.getInstance().openView<MessagePopupView>(ViewType.MessagePopupView, "Highest").then(popup => {
                         popup?.setData(res?.message || "加入房間失敗!");
                     });
                 }
@@ -114,13 +114,13 @@ export class LobbyView extends BaseView {
         const [roomListView, chatView] = await Promise.all([
             // 開啟房間列表
             ViewManager.getInstance().openView<RoomListView>(
-                'RoomListView', 
+                ViewType.RoomListView, 
                 'Popup',
                 false),
                 
             // 開啟聊天介面
             ViewManager.getInstance().openView<ChatView>(
-                'ChatView', 
+                ViewType.ChatView, 
                 'Popup', 
                 false, 
                 { chatPlace: CHAT_PLACE.LobbyVIew})

@@ -3,7 +3,7 @@ import io from 'socket.io-client/dist/socket.io.js';
 import type { Socket } from 'socket.io-client';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
-import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
+import { ViewManager, ViewType } from 'db://assets/Scripts/Manager/ViewManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
 import { RoomData, IRoomData, DIFFICULTY_TYPE, IRoomListData } from 'db://assets/Scripts/Data/RoomData';
@@ -69,7 +69,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
 
             AudioManager.getInstance().stopBGM();
 
-            ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+            ViewManager.getInstance().openView<MessagePopupView>(ViewType.MessagePopupView, "Highest").then(popup => {
                 popup?.setData(
                     "與伺服器斷開連線!", 
                     () => director.emit('REQ_LOAD_SCENE', 'EntryScene'), 
@@ -117,7 +117,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     private async onConnectError() {
         AudioManager.getInstance().stopBGM();
 
-        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+        ViewManager.getInstance().openView<MessagePopupView>(ViewType.MessagePopupView, "Highest").then(popup => {
             popup?.setData(
                 "連線伺服器失敗!", 
                 () => director.emit('REQ_LOAD_SCENE', 'EntryScene'), 
@@ -199,8 +199,8 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     public sendJoinRoom(data: { roomId: string; characterId: number }){
         this.socket?.emit('join_room', data, (res: { success: boolean; message?: string }) => {
             if (res && res.success) {
-                ViewManager.getInstance().openView<RoomView>('RoomView', 'HUD').then((roomView) => {
-                const lobbyView = ViewManager.getInstance().getView<LobbyView>('LobbyView');
+                ViewManager.getInstance().openView<RoomView>(ViewType.RoomView, 'HUD').then((roomView) => {
+                const lobbyView = ViewManager.getInstance().getView<LobbyView>(ViewType.LobbyView);
                     if(lobbyView) {
                         lobbyView.closeSelf();
                     }
@@ -208,7 +208,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
             } else {
                 console.warn(`[快速加入失敗]: ${res?.message}`);
                 // 顯示錯誤訊息
-                ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+                ViewManager.getInstance().openView<MessagePopupView>(ViewType.MessagePopupView, "Highest").then(popup => {
                     popup?.setData(res?.message || "加入房間失敗!");
                 });
             }

@@ -7,8 +7,8 @@ const { ccclass, property } = _decorator;
 /**
  * 打擊結果介面
  */
-@ccclass('BeatResultVIew')
-export class BeatResultVIew extends BaseView {
+@ccclass('BeatResultView')
+export class BeatResultView extends BaseView {
     @property(Label)
     private label_result: Label = null;
     @property([Color])

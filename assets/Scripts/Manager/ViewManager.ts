@@ -17,22 +17,23 @@ export type CanvasType =
 /**
  * 介面類型
  */
-export type ViewType = 
-'BackgroundMaskView' |
-'MessagePopupView' |
-'LobbyView' |
-'UpdateNicknameView' |
-'RoomView' |
-'UpdateRoomNameView' |
-'SelectSongView'|
-'HitNodeView' |
-'GameView' |
-'BeatResultVIew' |
-'GameResultView'|
-'GameTextTipView' |
-'ChatView' |
-'DifficultyIllustrateView' |
-'RoomListView'
+export enum ViewType {
+    BackgroundMaskView = 'BackgroundMaskView',
+    MessagePopupView = 'MessagePopupView',
+    LobbyView = 'LobbyView',
+    UpdateNicknameView = 'UpdateNicknameView',
+    RoomView = 'RoomView',
+    UpdateRoomNameView = 'UpdateRoomNameView',
+    SelectSongView = 'SelectSongView',
+    HitNodeView = 'HitNodeView',
+    GameView = 'GameView',
+    BeatResultView = 'BeatResultView',
+    GameResultView = 'GameResultView',
+    GameTextTipView = 'GameTextTipView',
+    ChatView = 'ChatView',
+    DifficultyIllustrateView = 'DifficultyIllustrateView',
+    RoomListView = 'RoomListView'
+}
 
 /**
  * 介面管理中心
@@ -100,6 +101,18 @@ export class ViewManager extends SingletonComponent<ViewManager> {
 
         this.loadingPromises.set(viewType, loadPromise);
         return loadPromise;
+    }
+
+    /**
+     * 預載所有介面 Prefab
+     */
+    public async preloadAllViews(): Promise<void> {
+        // 自動提取 Enum 裡所有的 View 名稱
+        const allViewTypes = Object.values(ViewType) as ViewType[];
+        
+        console.log(`[ViewManager] 開始預載 ${allViewTypes.length} 個 UI Prefab...`);
+        await this.preloadViews(allViewTypes);
+        console.log('[ViewManager] 所有 UI Prefab 預載完成！');
     }
 
     /**

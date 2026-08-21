@@ -2,7 +2,7 @@ import { _decorator, director, Button, Component, Label, Node, Vec3, v3, Camera,
 
 import { BaseView } from 'db://assets/Scripts/View/BaseView';
 import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
-import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
+import { ViewManager, ViewType } from 'db://assets/Scripts/Manager/ViewManager';
 import { GameTool } from 'db://assets/Scripts/Tools/GameTool';
 import { CharacterDataManager } from 'db://assets/Scripts/Manager/CharacterDataManager';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
@@ -128,12 +128,12 @@ export class RoomView extends BaseView {
         // 更新房間名稱按鈕
         this.btn_updateRoomName.node.on(Button.EventType.CLICK, 
             () =>{
-                ViewManager.getInstance().openView<UpdateRoomNameView>('UpdateRoomNameView', 'Popup');
+                ViewManager.getInstance().openView<UpdateRoomNameView>(ViewType.UpdateRoomNameView, 'Popup');
             }, this);
 
         // 困難度說明按鈕
         this.btn_difficultyIllustrate.node.on(Button.EventType.CLICK, () => {
-            ViewManager.getInstance().openView<DifficultyIllustrateView>('DifficultyIllustrateView', 'Popup');
+            ViewManager.getInstance().openView<DifficultyIllustrateView>(ViewType.DifficultyIllustrateView, 'Popup');
         }, this);
 
         // 更換困難度按鈕
@@ -152,14 +152,14 @@ export class RoomView extends BaseView {
         // 選擇歌曲按鈕
         this.btn_selectSong.node.on(Button.EventType.CLICK,
             () => {
-                ViewManager.getInstance().openView<SelectSongView>('SelectSongView', 'Popup');
+                ViewManager.getInstance().openView<SelectSongView>(ViewType.SelectSongView, 'Popup');
             }, this);
 
         // 離開按鈕
         this.btn_exit.node.on(Button.EventType.CLICK, 
             () =>{
                 SocketManager.getInstance().sendLeaveRoom();
-                ViewManager.getInstance().openView<LobbyView>('LobbyView', 'HUD').then(lobbyView => {
+                ViewManager.getInstance().openView<LobbyView>(ViewType.LobbyView, 'HUD').then(lobbyView => {
                     // 清除房間聊天訊息
                     ChatManager.clearRoomMessageData();
                     this.closeSelf();
@@ -188,7 +188,7 @@ export class RoomView extends BaseView {
 
         // 開啟聊天介面
         this.chatView = await ViewManager.getInstance().openView<ChatView>(
-            'ChatView', 
+            ViewType.ChatView, 
             'Popup',
             false, 
             { chatPlace: CHAT_PLACE.RoomView }
@@ -254,11 +254,11 @@ export class RoomView extends BaseView {
         ChatManager.clearRoomMessageData();
 
         // 彈出提示並切換回大廳 View
-        ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
+        ViewManager.getInstance().openView<MessagePopupView>(ViewType.MessagePopupView, "Highest").then(popup => {
             popup?.setData(
                 data.message, 
                 () => {
-                    ViewManager.getInstance().openView<LobbyView>('LobbyView', 'HUD');
+                    ViewManager.getInstance().openView<LobbyView>(ViewType.LobbyView, 'HUD');
                     this.closeSelf();
                 }, 
                 null, 

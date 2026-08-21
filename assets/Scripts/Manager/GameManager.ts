@@ -4,7 +4,7 @@ import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { AudioManager, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { RoomData } from 'db://assets/Scripts/Data/RoomData';
 import { HitNodeView } from '../View/GameScene/HitNodeView';
-import { ViewManager } from './ViewManager';
+import { ViewManager, ViewType } from './ViewManager';
 import { GameView } from '../View/GameScene/GameView/GameView';
 import { GameResultView } from '../View/GameScene/GameResultView/GameResultView';
 import { GameTextTipView } from '../View/GameScene/GameView/GameTextTipView';
@@ -120,9 +120,9 @@ export class GameManager extends Component {
 
         // 開啟介面
         const [hitNodeView, gameVIew, gameTextTipView] = await Promise.all([
-            ViewManager.getInstance().openView<HitNodeView>('HitNodeView', 'Popup'),
-            ViewManager.getInstance().openView<GameView>('GameView', 'HUD'),
-            ViewManager.getInstance().openView<GameTextTipView>('GameTextTipView', 'Popup'),
+            ViewManager.getInstance().openView<HitNodeView>(ViewType.HitNodeView, 'Popup'),
+            ViewManager.getInstance().openView<GameView>(ViewType.GameView, 'HUD'),
+            ViewManager.getInstance().openView<GameTextTipView>(ViewType.GameTextTipView, 'Popup'),
         ]);
         this.hitNodeView = hitNodeView;
         this.gameVIew = gameVIew;
@@ -325,7 +325,7 @@ export class GameManager extends Component {
         await new Promise(resolve => setTimeout(resolve, 2500));
 
         AudioManager.getInstance().playSFX(SFX_TYPE.Cheer);
-        ViewManager.getInstance().openView<GameResultView>('GameResultView', 'Popup').then((view) => {
+        ViewManager.getInstance().openView<GameResultView>(ViewType.GameResultView, 'Popup').then((view) => {
             if (view) view.setData(data);
         });
 

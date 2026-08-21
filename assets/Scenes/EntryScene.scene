@@ -281,7 +281,7 @@
     "_priority": 0,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8897637795276,
+    "_orthoHeight": 622.6506024096385,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -434,7 +434,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -705,7 +705,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -757,7 +757,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -985,7 +985,7 @@
     "_priority": 100,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8897637795276,
+    "_orthoHeight": 622.6506024096385,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1029,7 +1029,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -1199,7 +1199,7 @@
     "_priority": 200,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8897637795276,
+    "_orthoHeight": 622.6506024096385,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1243,7 +1243,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -1413,7 +1413,7 @@
     "_priority": 400,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8897637795276,
+    "_orthoHeight": 622.6506024096385,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1457,7 +1457,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -1627,7 +1627,7 @@
     "_priority": 1000,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8897637795276,
+    "_orthoHeight": 622.6506024096385,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1671,7 +1671,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -1754,7 +1754,7 @@
   {
     "__type__": "cc.Node",
     "_name": "AudioManager",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
       "__id__": 1
@@ -1806,7 +1806,7 @@
   {
     "__type__": "cc.Node",
     "_name": "sfx_pool",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
       "__id__": 48
@@ -2044,7 +2044,7 @@
     "_priority": 800,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 601.8897637795276,
+    "_orthoHeight": 622.6506024096385,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -2281,7 +2281,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {
@@ -2384,7 +2384,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1920,
+      "width": 1919.9999999999998,
       "height": 911
     },
     "_anchorPoint": {

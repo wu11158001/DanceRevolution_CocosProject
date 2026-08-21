@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, director, UIOpacity, instantiate} from 'cc';
 
 import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComponent';
-import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
+import { ViewManager, ViewType } from 'db://assets/Scripts/Manager/ViewManager';
 import { AudioManager } from 'db://assets/Scripts/Manager/AudioManager';
 import { GameManager } from 'db://assets/Scripts/Manager/GameManager';
 import { CharacterDataManager } from './CharacterDataManager';
@@ -81,7 +81,7 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
                     // 預載圖片資源
                     await SpriteFrameManager.getInstance().loadSpriteFrameAssets();
                     // 預載介面
-                    await ViewManager.getInstance().preloadViews(['LobbyView', 'RoomView', 'RoomListView', 'ChatView']);
+                    await ViewManager.getInstance().preloadAllViews();
                     // 聊天中心初始化
                     ChatManager.init();
                 }    
@@ -90,11 +90,11 @@ export class SceneLoader extends SingletonComponent<SceneLoader> {
 
                 if(!isGameReturn) {
                     // 一般進入大廳,開啟大廳介面
-                    await ViewManager.getInstance().openView<LobbyView>('LobbyView', "HUD"); 
+                    await ViewManager.getInstance().openView<LobbyView>(ViewType.LobbyView, "HUD"); 
                 } else {
                     // 遊戲進入大廳,開啟房間介面
                     await GameTool.getInstance().waitFrames(1);
-                    await ViewManager.getInstance().openView<RoomView>('RoomView', "HUD");
+                    await ViewManager.getInstance().openView<RoomView>(ViewType.RoomView, "HUD");
                 }
 
                 this.closeLoadBg();
