@@ -67,9 +67,10 @@ export class HitNodeView extends BaseView {
     private currentSequence: ISequenceData[] = [];  
     private currentInputIndex: number = 0;          
     private currentProgress: number = 0;            
-    private pressedKeys: Set<number> = new Set();   
+    private pressedKeys: Set<number> = new Set();
 
-    private readonly BUFFER_DELAY_SEC: number = 0.035;  
+    /** 同時按下多個方向鍵緩衝時間(秒) */
+    private readonly BUFFER_DELAY_SEC: number = 0.035;
 
     protected onEnable(): void {
         input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -100,7 +101,31 @@ export class HitNodeView extends BaseView {
         this.sprite_beatBar.node.active = false;
     }
 
-/**
+        protected update(deltaTime: number) {
+        if (!this.isRunning || this.barIntervalMs <= 0) return;
+
+        // 取得校正後的伺服器當前毫秒
+        const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
+        
+        // 進度算式
+        this.currentProgress = (currentServerTime - this.barStartTime) / this.barIntervalMs;
+        
+        // 限縮在 0~1 
+        const clampedProgress = math.clamp01(this.currentProgress);
+        
+        // 更新光標位置
+        TEMP_VEC3.set(clampedProgress * this.barWidth, 0, 0);
+        this.cursor.setPosition(TEMP_VEC3);
+
+        // 更新打擊區域透明度
+        this.updateHitZoneAlpha(currentServerTime);
+
+        if (this.currentProgress >= 1.0) {
+            this.resetState();
+        }
+    }
+
+    /**
      * 初始化手機按鈕事件
      */
     private initPhoneButtons() {
@@ -189,28 +214,6 @@ export class HitNodeView extends BaseView {
             .to(0.08, { scale: Vec3.ONE })
             .start();
     }
-
-    protected update(deltaTime: number) {
-        if (!this.isRunning || this.barIntervalMs <= 0) return;
-
-        // 取得校正後的伺服器當前毫秒
-        const currentServerTime = SocketManager.getInstance().getCorrectedServerTime();
-        
-        // 進度算式
-        this.currentProgress = (currentServerTime - this.barStartTime) / this.barIntervalMs;
-        
-        // 限縮在 0~1 
-        const clampedProgress = math.clamp01(this.currentProgress);
-        
-        TEMP_VEC3.set(clampedProgress * this.barWidth, 0, 0);
-        this.cursor.setPosition(TEMP_VEC3);
-
-        this.updateHitZoneAlpha(currentServerTime);
-
-        if (this.currentProgress >= 1.0) {
-            this.resetState();
-        }
-    }
     
     /**
      * 更新打擊區域透明度
@@ -238,7 +241,10 @@ export class HitNodeView extends BaseView {
      */
     private resetState() {
         this.isRunning = false;
+        
+        // 清除排程與按鍵快取
         this.clearBufferTimer();
+        this.pressedKeys.clear();
 
         this.resetSpriteAlpha(this.sprite_beatBar);
         this.resetSpriteAlpha(this.sprite_nodeBar);
@@ -341,6 +347,11 @@ export class HitNodeView extends BaseView {
     }
 
     private onKeyDown(event: EventKeyboard) {
+        if (!this.isRunning) {
+            if (this.pressedKeys.size > 0) this.pressedKeys.clear();
+            return;
+        }
+
         if (event.keyCode === KeyCode.SPACE) {
             this.onSpaceHit();
             return;
@@ -369,6 +380,12 @@ export class HitNodeView extends BaseView {
 
     private resolveInput() {
         this.clearBufferTimer();
+
+        // 如果計時器觸發時已非運行狀態，清空按鍵並中斷
+        if (!this.isRunning) {
+            this.pressedKeys.clear();
+            return;
+        }
 
         const finalDirection = this.calculateDirection();
         if (finalDirection) {
@@ -418,6 +435,7 @@ export class HitNodeView extends BaseView {
         const data = this.currentSequence[this.currentInputIndex];
 
         if (pressedDirection === data.direction) {
+            // 輸入正確
             const currentArrow = this.nodeArrows[this.currentInputIndex];
             if (currentArrow) {
                 Tween.stopAllByTarget(currentArrow.node);
@@ -433,6 +451,7 @@ export class HitNodeView extends BaseView {
             }
             this.currentInputIndex++;
         } else {
+            // 輸入錯誤重製所有箭頭
             this.nodeArrows.forEach((sp) => {
                 if (sp && sp.node) Tween.stopAllByTarget(sp.node);
             });
