@@ -167,9 +167,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 16,
-      "g": 187,
-      "b": 112,
+      "r": 187,
+      "g": 78,
+      "b": 16,
       "a": 255
     },
     "_string": "FINISH",
@@ -321,7 +321,7 @@
     "countDownColor": {
       "__type__": "cc.Color",
       "r": 187,
-      "g": 16,
+      "g": 78,
       "b": 16,
       "a": 255
     },
@@ -402,6 +402,7 @@
       "__id__": 0
     },
     "fileId": "a0tBah+rVF3prg9v1HCGEr",
+    "instance": null,
     "targetOverrides": null
   }
 ]

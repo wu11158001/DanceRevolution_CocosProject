@@ -31,6 +31,14 @@ export class GameCameraController extends Component {
     // 是否運鏡結束
     public isRoutineFinish: boolean = false;
 
+    // 開場運鏡點位
+    private cameraPoints: CameraCamPoint[] = [
+        { position: new Vec3(-3, 8.1, 6), rotation: new Vec3(-55, -9.2, 7.8), duration: 0.7 },
+        { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 2 },
+        { position: new Vec3(0, 8, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1.3 },
+        { position: new Vec3(0, 2.7, 10),    rotation: new Vec3(-12, 0, 0), duration: 2 },
+    ];
+
     protected onLoad(): void {
         this.bgLayerBit = Layers.Enum['3DBg'];
     }
@@ -47,15 +55,8 @@ export class GameCameraController extends Component {
         this.cameraNode.position = new Vec3(0, 6, 6);
         this.cameraNode.eulerAngles = new Vec3(-50, 0, 0);
 
-        const cameraPoints: CameraCamPoint[] = [
-            { position: new Vec3(-3, 8.1, 6), rotation: new Vec3(-55, -9.2, 7.8), duration: 0.7 },
-            { position: new Vec3(7, 14, 4.5), rotation: new Vec3(-60, 28, -9), duration: 2 },
-            { position: new Vec3(0, 8, 5.6), rotation: new Vec3(-65, 0, 0), duration: 1.3 },
-            { position: new Vec3(0, 2.7, 10),    rotation: new Vec3(-12, 0, 0), duration: 2 },
-        ];
-
         // 播放運鏡
-        this.playCameraRoutine(cameraPoints);
+        this.playCameraRoutine(this.cameraPoints);
     }
 
     /**
@@ -86,7 +87,7 @@ export class GameCameraController extends Component {
         this.currentTween = camTween
             .call(() => {
                 this.onShowGameUI();
-                this.gameTextTipView.onReady();
+                this.gameTextTipView?.onReady();
             })
             .start();
     }
@@ -95,6 +96,13 @@ export class GameCameraController extends Component {
      * 顯示遊戲UI
      */
     public onShowGameUI() {
+        if (this.currentTween) {
+            this.currentTween.stop();
+        }
+
+        this.cameraNode.position = this.cameraPoints[this.cameraPoints.length - 1].position;
+        this.cameraNode.eulerAngles = this.cameraPoints[this.cameraPoints.length - 1].rotation;
+
         this.isRoutineFinish = true;
 
         this.camera3DBgNode.active = true;

@@ -16,7 +16,7 @@ export class FixEditBoxPosition extends Component {
     }
 
     fixDomPosition(editBox: EditBox) {
-        // 延遲 20ms 確保 Cocos 已將 DOM input 插入頁面
+        // 延遲 30ms 確保 Cocos 已將 DOM input 插入頁面
         setTimeout(() => {
             const impl = (editBox as any)._impl;
             if (!impl || !impl._elem) return;
@@ -27,14 +27,14 @@ export class FixEditBoxPosition extends Component {
 
             if (!uiTransform || !canvas) return;
 
-            // 1. 取得 Canvas 在瀏覽器視埠 (Viewport) 中的實際渲染位置與尺寸
+            // 取得 Canvas 在瀏覽器視埠 (Viewport) 中的實際渲染位置與尺寸
             const rect = canvas.getBoundingClientRect();
 
-            // 2. 取得 EditBox 節點在 Cocos 世界座標中的位置 (以 Canvas 左下角為 0,0)
+            // 取得 EditBox 節點在 Cocos 世界座標中的位置 (以 Canvas 左下角為 0,0)
             const worldPos = this.node.getWorldPosition();
             const visibleSize = view.getVisibleSize();
 
-            // 3. 計算比例 (Node世界座標 -> Canvas DOM 實際像素)
+            // 計算比例 (Node世界座標 -> Canvas DOM 實際像素)
             const scaleX = rect.width / visibleSize.width;
             const scaleY = rect.height / visibleSize.height;
 
@@ -45,7 +45,7 @@ export class FixEditBoxPosition extends Component {
             const left = rect.left + (worldPos.x - uiTransform.width * uiTransform.anchorX) * scaleX;
             const top = rect.top + (visibleSize.height - worldPos.y - uiTransform.height * (1 - uiTransform.anchorY)) * scaleY;
 
-            // 4. 強制覆寫 DOM input 的 CSS 絕對定位
+            // 強制覆寫 DOM input 的 CSS 絕對定位
             inputStyle.position = 'fixed';
             inputStyle.left = `${left}px`;
             inputStyle.top = `${top}px`;

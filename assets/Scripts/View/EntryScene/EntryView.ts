@@ -8,7 +8,13 @@ const { ccclass, property } = _decorator;
 export class EntryView extends Component {
 
     protected onLoad(): void {
+        // 保持比例顯示
         view.setDesignResolutionSize(1920, 911, ResolutionPolicy.SHOW_ALL);
+
+        // 阻擋背景自動 pause
+        game.pause = () => {};
+        //阻擋切回時 restore
+        game.resume = () => {};
     }
 
     start() {

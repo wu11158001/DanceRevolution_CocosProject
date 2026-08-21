@@ -3,7 +3,6 @@ import { SocketManager } from '../../../Network/SocketManager';
 import { IRoomListData } from '../../../Data/RoomData';
 import { RoomListItem } from './RoomListItem';
 import { PlayerData } from '../../../Data/PlayerData';
-import { LobbyView } from './LobbyView';
 import { BaseView } from '../../BaseView';
 const { ccclass, property } = _decorator;
 
@@ -19,9 +18,6 @@ export class RoomListView extends BaseView {
     private itemParent: Node = null;
     @property(Node)
     private roomListItemPrefab: Node = null;
-
-    @property(LobbyView)
-    private lobbyView: LobbyView = null;
 
     @property(Node)
     private emptyNode: Node = null;
@@ -47,7 +43,7 @@ export class RoomListView extends BaseView {
      * 獲取房間列表
      */
     private getRoomList() {
-        SocketManager.getInstance().socket?.emit('get_room_list', (res: { success: boolean; rooms: IRoomListData[] }) => {
+        SocketManager.getInstance().sendGetRoomList((res: { success: boolean; rooms: IRoomListData[] }) => {
             if (res && res.success && Array.isArray(res.rooms)) {
                 this.onUpdateList(res.rooms);
             } else {
@@ -61,7 +57,7 @@ export class RoomListView extends BaseView {
      * @param datas 
      */
     private onUpdateList(datas: IRoomListData[]) {
-        // 先將所有舊列表項目隱藏
+        // 所有舊列表項目隱藏
         this.roomListItems.forEach((item) => {
             if (item && item.node) {
                 item.node.active = false;
@@ -97,7 +93,10 @@ export class RoomListView extends BaseView {
 
             if (item) {
                 item.node.active = true;
-                item.setData(data, () => this.joinRoom(data.roomId));
+                item.setData(data, () =>  {
+                    this.getRoomList();
+                    this.joinRoom(data.roomId);
+                });
             }
         });
 

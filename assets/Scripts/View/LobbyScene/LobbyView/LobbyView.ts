@@ -164,7 +164,7 @@ export class LobbyView extends BaseView {
             if (currentScene) {
                 currentScene.addChild(this.characterObj);
                 this.characterObj.setPosition(0, 0, 0);
-                this.characterObj.setScale(1.25, 1.25, 1.25);
+                this.characterObj.setScale(1.15, 1.15, 1.15);
             }
 
             this.characterControl = character.getComponent(CharacterControl);

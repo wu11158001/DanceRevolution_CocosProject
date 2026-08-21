@@ -5,7 +5,7 @@ import { SocketManager } from 'db://assets/Scripts/Network/SocketManager';
 import { ISongData, RoomData } from 'db://assets/Scripts/Data/RoomData';
 import { SongBtnItem } from './SongBtnItem';
 import { FixedMarqueeText } from '../../../Tools/FixedMarqueeText';
-import { AudioManager } from 'db://assets/Scripts/Manager/AudioManager'; // 引用 AudioManager
+import { AudioManager, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 import { GameTool } from '../../../Tools/GameTool';
 
 const { ccclass, property } = _decorator;
@@ -69,26 +69,23 @@ export class SelectSongView extends BaseView {
 
         // 作者篩選按鈕
         this.tog_aothorFilter.node.on('toggle', (toggle: Toggle) => {
-            if (toggle.isChecked) {
-                this.currentSortType = SortType.AUTHOR;
-                this.refreshSongList();
-            }
+            AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+            this.currentSortType = SortType.AUTHOR;
+            this.refreshSongList();
         }, this);
 
         // BMP篩選按鈕
         this.tog_bpmFilter.node.on('toggle', (toggle: Toggle) => {
-            if (toggle.isChecked) {
-                this.currentSortType = SortType.BPM;
-                this.refreshSongList();
-            }
+            AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+            this.currentSortType = SortType.BPM;
+            this.refreshSongList();
         }, this);
 
         // 時間篩選按鈕
-        this.tog_timeFilter.node.on('toggle', (toggle: Toggle) => {
-            if (toggle.isChecked) {
-                this.currentSortType = SortType.TIME;
-                this.refreshSongList();
-            }
+        this.tog_timeFilter.node.on('toggle', (toggle: Toggle) => {                
+            AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+            this.currentSortType = SortType.TIME;
+            this.refreshSongList();
         }, this);
     }
 

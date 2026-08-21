@@ -133,7 +133,6 @@ export class GameTool extends SingletonComponent<GameTool> {
      * @returns // true=在手機瀏覽器 
      */
     public isMobileBrowser() :boolean {
-        return true;
         if (sys.isBrowser) {
             return sys.isMobile;
         }

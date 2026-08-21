@@ -18,7 +18,9 @@ export enum SFX_TYPE {
     BeatMiss,
 
     Cheer,
-    Ready
+    Ready,
+
+    None
 }
 Enum(SFX_TYPE);
 

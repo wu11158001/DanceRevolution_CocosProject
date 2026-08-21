@@ -58,8 +58,6 @@ export class UpdateRoomNameView extends BaseView {
         const roomName = this.editBox_roomName.string.trim();
 
         if(roomName.length == 0) return;
-
-        AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
         SocketManager.getInstance().sendUpdateRoomName(roomName);
         this.closeSelf();
     }

@@ -185,7 +185,14 @@ export class GameManager extends Component {
      */
     private onVisibilityChange() {
         console.log('[GameManager] 視窗切換，觸發同步與音樂校正...');
-        this.resyncGameAndAudio();
+
+        if (document.hidden) {
+            console.log('[GameManager] 頁面切到背景');
+        } else {
+            console.log('[GameManager] 頁面回到前景，觸發同步與音樂校正...');
+            this.resyncGameAndAudio();
+        }
+
     }
 
     /**
@@ -245,6 +252,8 @@ export class GameManager extends Component {
         if (!this.node || !this.node.isValid) return;
 
         RoomData.updateSongs(data.song);
+
+        // update開始對校server時間
         this.targetStartTime = data.startTime;
         this.isGamePlaying = true;
         this.isWaitingStart = true;

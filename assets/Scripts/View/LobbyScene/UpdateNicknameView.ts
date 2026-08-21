@@ -59,7 +59,6 @@ export class UpdateNicknameView extends BaseView {
 
         if(newNickname.length == 0) return;
 
-        AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
         SocketManager.getInstance().sendUpdateNickname(newNickname);
         this.closeSelf();
     }

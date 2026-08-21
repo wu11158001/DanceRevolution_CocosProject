@@ -4,6 +4,7 @@ import { SocketManager } from '../../../Network/SocketManager';
 import { PlayerData } from '../../../Data/PlayerData';
 import { RichTextClickHandler } from '../../../Tools/RichTextClickHandler';
 import { DIFFICULTY_COLORS, DIFFICULTY_TYPE } from '../../../Data/RoomData';
+import { AudioManager, SFX_TYPE } from '../../../Manager/AudioManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -162,6 +163,9 @@ export class ChatShortView extends Component {
             this.richTextClickHandler.clickString = `<on click>${difficultString}${clickRoomNameString}${inviteString}</on>`;
             this.richTextClickHandler.enterString = `<on click>${difficultString}${enterRoomNameString}${inviteString}</on>`;
             this.richTextClickHandler.clickAction = () => {
+                // 撥放音效
+                AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+                // 加入房間
                 SocketManager.getInstance().sendJoinRoom({
                     roomId: data.recruitmentData.roomId, 
                     characterId: PlayerData.characterId

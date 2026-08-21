@@ -6,7 +6,7 @@ import { SingletonComponent } from 'db://assets/Scripts/Extensions/SingletonComp
 import { ViewManager } from 'db://assets/Scripts/Manager/ViewManager';
 import { MessagePopupView } from 'db://assets/Scripts/View/Common/MessagePopupView';
 import { PlayerData } from 'db://assets/Scripts/Data/PlayerData';
-import { RoomData, IRoomData, DIFFICULTY_TYPE } from 'db://assets/Scripts/Data/RoomData';
+import { RoomData, IRoomData, DIFFICULTY_TYPE, IRoomListData } from 'db://assets/Scripts/Data/RoomData';
 import { RoomView } from '../View/LobbyScene/RoomView/RoomView';
 import { LobbyView } from '../View/LobbyScene/LobbyView/LobbyView';
 import { AudioManager } from '../Manager/AudioManager';
@@ -207,6 +207,7 @@ export class SocketManager extends SingletonComponent<SocketManager> {
                 });
             } else {
                 console.warn(`[快速加入失敗]: ${res?.message}`);
+                // 顯示錯誤訊息
                 ViewManager.getInstance().openView<MessagePopupView>("MessagePopupView", "Highest").then(popup => {
                     popup?.setData(res?.message || "加入房間失敗!");
                 });
@@ -220,6 +221,15 @@ export class SocketManager extends SingletonComponent<SocketManager> {
     public sendQuickJoin(data: { characterId: number }, callback?: (res: any) => void) {
         this.socket?.emit('quick_join', data, (callback));
     }
+
+    /**
+     * 發送:獲取房間列表
+     * @param callback 
+     */
+    public sendGetRoomList(callback?: (res: { success: boolean; rooms: IRoomListData[] }) => void) {
+        this.socket?.emit('get_room_list', callback);
+    }
+
     /**
      * 發送:切換準備狀態
      * @param callback 

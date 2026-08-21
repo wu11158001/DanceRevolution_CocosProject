@@ -4,6 +4,7 @@ import { ChatItemView } from './ChatItemView';
 import { GameTool } from '../../../Tools/GameTool';
 import { SpriteFrameManager } from '../../../Manager/SpriteFrameManager';
 import { StickItemView } from './StickItemView';
+import { AudioManager, SFX_TYPE } from 'db://assets/Scripts/Manager/AudioManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -87,10 +88,29 @@ export class ChatFullView extends Component {
         // 發送按鈕
         this.btn_send.node.on(Button.EventType.CLICK, this.sendTextMessage, this);     
         
-        // 頻道標籤Toggle
-        this.tag_global.node.on(Toggle.EventType.TOGGLE, (tog) => { this.onChannelChange('global') }, this);
-        this.tag_room.node.on(Toggle.EventType.TOGGLE, (tog) => { this.onChannelChange('room') }, this);
-        this.tag_recruit.node.on(Toggle.EventType.TOGGLE, (tog) => { this.onChannelChange('recruit') }, this);
+        // 頻道標籤(global)
+        this.tag_global.node.on(Toggle.EventType.TOGGLE, (tog) => {
+            if(tog.isChecked) {
+                AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+                this.onChannelChange('global');
+            }            
+        }, this);
+
+        // 頻道標籤(room)
+        this.tag_room.node.on(Toggle.EventType.TOGGLE, (tog) => { 
+            if(tog.isChecked) {
+                AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+                this.onChannelChange('room');
+            }   
+        }, this);
+
+        // 頻道標籤(recruit)
+        this.tag_recruit.node.on(Toggle.EventType.TOGGLE, (tog) => { 
+            if(tog.isChecked) {
+                AudioManager.getInstance().playSFX(SFX_TYPE.ButtonClick);
+                this.onChannelChange('recruit');
+            }
+        }, this);
 
         // 新訊息按鈕
         this.btn_newMessage.node.on(Button.EventType.CLICK, this.toBottom, this);

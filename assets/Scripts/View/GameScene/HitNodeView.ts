@@ -23,17 +23,6 @@ const DIRECTION_ANGLES: Record<string, { normal: number, reversed: number }> = {
     'DOWN_LEFT':  { normal: 135, reversed: -45 },
 };
 
-const REVERSE_DIR_MAP: Record<string, string> = {
-    'UP': 'DOWN', 
-    'DOWN': 'UP', 
-    'LEFT': 'RIGHT', 
-    'RIGHT': 'LEFT',
-    'UP_LEFT': 'DOWN_RIGHT', 
-    'UP_RIGHT': 'DOWN_LEFT',
-    'DOWN_LEFT': 'UP_RIGHT',
-    'DOWN_RIGHT': 'UP_LEFT'
-};
-
 const PHONE_DIRECTIONS = ['SPACE', 'UP', 'DOWN', 'LEFT', 'RIGHT', 'UP_LEFT', 'UP_RIGHT', 'DOWN_LEFT', 'DOWN_RIGHT'];
 
 const TEMP_VEC3 = new Vec3();

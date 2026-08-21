@@ -176,9 +176,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 111,
-      "g": 157,
-      "b": 255,
+      "r": 204,
+      "g": 189,
+      "b": 19,
       "a": 255
     },
     "_string": "100,000",
@@ -210,7 +210,7 @@
       "a": 255
     },
     "_outlineWidth": 2,
-    "_enableShadow": false,
+    "_enableShadow": true,
     "_shadowColor": {
       "__type__": "cc.Color",
       "r": 0,
@@ -940,8 +940,8 @@
     "_string": "暱稱最多八個字阿",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 16,
-    "_fontSize": 22,
+    "_actualFontSize": 20,
+    "_fontSize": 35,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
     "_overflow": 2,
@@ -1238,8 +1238,8 @@
     "_string": "100,000",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 13,
-    "_fontSize": 22,
+    "_actualFontSize": 21,
+    "_fontSize": 35,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
     "_overflow": 2,
@@ -1371,8 +1371,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 101.3119999999999,
-      "y": 24.19600000000014,
+      "x": 108.47299999999996,
+      "y": 24.196000000000026,
       "z": 0
     },
     "_lrot": {
@@ -1600,7 +1600,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 5.2169999999999845,
-      "y": 54.22900000000004,
+      "y": 43.52800000000002,
       "z": 0
     },
     "_lrot": {
@@ -1640,8 +1640,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 23,
-      "height": 25
+      "width": 18,
+      "height": 19
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3279,8 +3279,8 @@
     "_string": "00:00",
     "_horizontalAlign": 2,
     "_verticalAlign": 1,
-    "_actualFontSize": 21,
-    "_fontSize": 36,
+    "_actualFontSize": 27,
+    "_fontSize": 45,
     "_fontFamily": "Arial",
     "_lineHeight": 50,
     "_overflow": 2,

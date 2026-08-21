@@ -30,9 +30,9 @@
       "alphaThreshold": 0,
       "startColor": {
         "__type__": "cc.Color",
-        "r": 14,
+        "r": 81,
         "g": 255,
-        "b": 226,
+        "b": 14,
         "a": 255
       },
       "fadeMargin": 0
