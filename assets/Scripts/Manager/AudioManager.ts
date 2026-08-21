@@ -336,8 +336,8 @@ export class AudioManager extends SingletonComponent<AudioManager> {
 
         // 解析試聽參數
         const bgmName = songData.id;
-        this.previewStartTime = songData.preview_start || 10;       // 預設從 10 秒開始
-        const duration = songData.preview_duration || 15;           // 預設試聽 15 秒
+        this.previewStartTime = songData.preview_start || 10;      // 預設從 10 秒開始
+        const duration = songData.preview_duration || 15;          // 預設試聽 15 秒
         this.previewEndTime = this.previewStartTime + duration;
 
         // 停止之前的淡入淡出動畫
@@ -345,13 +345,16 @@ export class AudioManager extends SingletonComponent<AudioManager> {
             this.bgmTween.stop();
         }
 
+        // 標記進入試聽狀態
+        this.isPreviewing = true;
+
         /**
          * 開始試聽循環播放（內部函數）
          * @param clip 音訊資源
          */
         const startPreviewLoop = (clip: AudioClip) => {
-            // 進入試聽模式
-            this.isPreviewing = true;
+            // 如果非同步載入期間外部呼叫了 stopSongPreview (isPreviewing 被設為 false)，則不播放
+            if (!this.isPreviewing) return;
             
             // 設定 AudioSource
             this.bgmSource.stop();
@@ -369,11 +372,17 @@ export class AudioManager extends SingletonComponent<AudioManager> {
 
         // 先淡出當前音樂，再播放新試聽
         this.fadeBGM(0.2, 0, () => {
+            // 如果在淡出過程中已經取消試聽，直接中斷
+            if (!this.isPreviewing) return;
+
             // 淡出完成後的回調
             if (this.clipCache.has(bgmName)) {
                 startPreviewLoop(this.clipCache.get(bgmName)!);
             } else {
                 resources.load(`audio/bgm/${bgmName}`, AudioClip, (err, clip) => {
+                    // 如果載入完成時玩家已關閉介面，中止播放
+                    if (!this.isPreviewing) return;
+
                     if (err || !clip) {
                         console.error(`[AudioManager] 載入試聽音樂失敗: audio/bgm/${bgmName}`, err);
                         return;

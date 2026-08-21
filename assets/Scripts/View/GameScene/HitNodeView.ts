@@ -1,6 +1,7 @@
 import { 
     _decorator, Component, instantiate, Node, Sprite, SpriteFrame, UITransform, Vec3, math,
-    input, Input, EventKeyboard, KeyCode, Color, tween, Tween, Button
+    input, Input, EventKeyboard, KeyCode, Color, tween, Tween, Button,
+    EventTouch
 } from 'cc';
 
 import { BaseView } from '../BaseView';
@@ -99,7 +100,7 @@ export class HitNodeView extends BaseView {
         this.sprite_beatBar.node.active = false;
     }
 
-    /**
+/**
      * 初始化手機按鈕事件
      */
     private initPhoneButtons() {
@@ -112,16 +113,22 @@ export class HitNodeView extends BaseView {
         this.phoneBtns.forEach((btn, index) => {
             if (!btn || !btn.node) return;
 
+            // 僅在手機端啟用顯示
             btn.node.active = isMobile;
-            
-            // 先清理避免重複監聽
+
+            // 清除過往監聽，避免重複綁定
+            btn.node.off(Node.EventType.TOUCH_START);
             btn.node.off(Button.EventType.CLICK);
 
             if (index === 0) {
-                btn.node.on(Button.EventType.CLICK, this.onSpaceHit, this);
+                // 空格/打擊按鈕
+                btn.node.on(Node.EventType.TOUCH_START, this.onTouchSpaceHit, this);
             } else {
+                // 方向按鈕
                 const dir = PHONE_DIRECTIONS[index];
-                btn.node.on(Button.EventType.CLICK, () => this.handleDirectionInput(dir), this);
+                btn.node.on(Node.EventType.TOUCH_START, (event: EventTouch) => {
+                    this.onTouchDirectionInput(event, dir);
+                }, this);
             }
         });
     }
@@ -133,8 +140,54 @@ export class HitNodeView extends BaseView {
         this.phoneBtns.forEach((btn) => {
             if (btn && btn.node) {
                 btn.node.off(Node.EventType.TOUCH_START);
+                btn.node.off(Button.EventType.CLICK);
             }
         });
+    }
+
+    /**
+     * 手機 Touch 專用：觸發方向按鍵
+     */
+    private onTouchDirectionInput(event: EventTouch, direction: string) {
+        if (event) {
+            // 阻止 Cocos UI 事件繼續向外/向上傳播
+            event.propagationStopped = true;
+
+            // 觸發自訂按鈕的按壓動畫/音效
+            const targetNode = event.currentTarget as Node;
+            if (targetNode) {
+                this.playButtonFeedback(targetNode);
+            }
+        }
+        this.handleDirectionInput(direction);
+    }
+
+    /**
+     * 手機 Touch 專用：觸發 Space 打擊
+     */
+    private onTouchSpaceHit(event?: EventTouch) {
+        if (event) {
+            event.propagationStopped = true;
+
+            // 觸發自訂按鈕的按壓動畫/音效
+            const targetNode = event.currentTarget as Node;
+            if (targetNode) {
+                this.playButtonFeedback(targetNode);
+            }
+        }
+        this.onSpaceHit();
+    }
+
+    /**
+     * 手機 Touch 專用: 播放按鈕點擊反饋動畫與音效
+     */
+    private playButtonFeedback(btnNode: Node) {
+        // 按鈕微縮放反饋
+        Tween.stopAllByTarget(btnNode);
+        btnNode.setScale(0.9, 0.9, 1);
+        tween(btnNode)
+            .to(0.08, { scale: Vec3.ONE })
+            .start();
     }
 
     protected update(deltaTime: number) {

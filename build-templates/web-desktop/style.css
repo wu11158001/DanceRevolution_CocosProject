@@ -54,7 +54,9 @@ canvas {
     -webkit-tap-highlight-color: transparent !important; /* 消除 iOS/Android 點擊高亮 */
     -webkit-touch-callout: none;
     user-select: none;
-    -webkit-user-select: none; /* 防止點擊時出現長按選取區塊 */
+    touch-action: manipulation; /* 禁用雙擊縮放，降低觸控延遲 */
+    -webkit-user-select: none;   /* 阻止選取文字 */
+    -webkit-touch-callout: none; /* 阻止長按彈出選單 */
 }
 
 /* 針對所有狀態*/
